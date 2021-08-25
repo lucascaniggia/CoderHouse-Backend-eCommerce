@@ -1,3 +1,5 @@
+import { Request } from 'express';
+
 export const isEmpty = (item: string | number | unknown): boolean => {
   switch (typeof item) {
     case 'string':
@@ -14,4 +16,12 @@ export const isEmpty = (item: string | number | unknown): boolean => {
       return false;
   }
   return true;
+};
+
+export const permissionError = (req: Request): Error => {
+  throw {
+    error: '-1',
+    description: `Unauthorized route. Route ${req.originalUrl} method ${req.method}`,
+    message: 'User has no permission to perform this action.'
+  };
 };
