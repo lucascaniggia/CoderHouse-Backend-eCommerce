@@ -1,16 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 
-declare module 'express-serve-static-core' {
-  interface Request {
-    admin: boolean
-  }
-}
-
-const admin = false;
+const admin = true;
 
 export const isAdmin = (req: Request, res: Response, next: NextFunction):void => {
   if (admin) {
-    req.admin = admin;
-  } 
-  next();
+    next();
+  } else {
+    res.status(401).send({
+      error: '-1',
+      description: `Unauthorized error on route ${req.originalUrl} method ${req.method}`,
+      message: 'User has no permissions to perform this action.'
+    });
+  }
 };
