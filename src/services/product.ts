@@ -5,11 +5,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { IntItem } from '../common/interfaces';
 import { isValidProduct } from '../utils/validations';
 
-const ProductsPath = path.resolve(__dirname, '../../products.json');
+const productsPath = path.resolve(__dirname, '../../products.json');
 class Products {
   async getServiceProducts(): Promise<IntItem[]> {
     try {
-      const products = await fsPromises.readFile(ProductsPath, 'utf-8');
+      const products = await fsPromises.readFile(productsPath, 'utf-8');
       return JSON.parse(products);
     } catch (e) {
       throw { error: e, message: 'An error ocurred when loading products.' };
@@ -18,7 +18,7 @@ class Products {
 
   async getServiceProduct(id: string): Promise<IntItem> {
     try {
-      const products = await fsPromises.readFile(ProductsPath, 'utf-8');
+      const products = await fsPromises.readFile(productsPath, 'utf-8');
       const productsJSON = JSON.parse(products);
       const product = productsJSON.find((item: IntItem) => item.id === id);
       return product;
@@ -29,7 +29,7 @@ class Products {
 
   async saveServiceProduct(product: IntItem): Promise<IntItem> {
     try {
-      const products = await fsPromises.readFile(ProductsPath, 'utf-8');
+      const products = await fsPromises.readFile(productsPath, 'utf-8');
       const productsJSON = JSON.parse(products);
 
       product.id = uuidv4();
@@ -40,10 +40,10 @@ class Products {
       // check if all fields in product are valid and not empty
       isValidProduct(product);
 
-      if (fs.existsSync(ProductsPath)) {
+      if (fs.existsSync(productsPath)) {
         productsJSON.push(product);
         await fsPromises.writeFile(
-          ProductsPath,
+          productsPath,
           JSON.stringify(productsJSON, null, '\t')
         );
         return product;
@@ -61,7 +61,7 @@ class Products {
 
   async updateServiceProduct(id: string, product: IntItem): Promise<IntItem> {
     try {
-      const products = await fsPromises.readFile(ProductsPath, 'utf-8');
+      const products = await fsPromises.readFile(productsPath, 'utf-8');
       const productsJSON = JSON.parse(products);
 
       product.price = Number(product.price);
@@ -76,15 +76,14 @@ class Products {
         ...product,
       };
 
-      const newProductList = productsJSON.filter(
-        (item: IntItem) => item.id !== id
-      );
-      newProductList.push(productToUpdate);
+      const productToUpdateByIndex = productsJSON.map(
+        (item: IntItem) => item.id).indexOf(id);
+        productsJSON.splice(productToUpdateByIndex, 1, productToUpdate);
 
-      if (fs.existsSync(ProductsPath)) {
+      if (fs.existsSync(productsPath)) {
         await fsPromises.writeFile(
-          ProductsPath,
-          JSON.stringify(newProductList, null, '\t')
+          productsPath,
+          JSON.stringify(productsJSON, null, '\t')
         );
         return productToUpdate;
       } else {
@@ -104,16 +103,16 @@ class Products {
 
   async deleteServiceProduct(id: string): Promise<IntItem> {
     try {
-      const products = await fsPromises.readFile(ProductsPath, 'utf-8');
+      const products = await fsPromises.readFile(productsPath, 'utf-8');
       const productsJSON = JSON.parse(products);
 
       const newProductList = productsJSON.filter(
         (item: IntItem) => item.id !== id
       );
 
-      if (fs.existsSync(ProductsPath)) {
+      if (fs.existsSync(productsPath)) {
         await fsPromises.writeFile(
-          ProductsPath,
+          productsPath,
           JSON.stringify(newProductList, null, '\t')
         );
         return newProductList;

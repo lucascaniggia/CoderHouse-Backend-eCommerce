@@ -18,5 +18,3 @@ export const isEmpty = (item: string | number | unknown): boolean => {
   }
   return true;
 };
-
-// commit: "refactoring checkAdmin middleware routes. Add route's additional layer"
