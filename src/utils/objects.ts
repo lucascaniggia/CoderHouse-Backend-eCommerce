@@ -1,6 +1,9 @@
 import { IntObject } from '../common/interfaces';
 import { isEmpty } from './others';
 
+// @parameter -> Object
+// Returns object's empty properties 
+
 export const getEmptyFields = (object: IntObject): unknown[] => {
   const keysValues = Object.entries(object);
   const empty: unknown[] = [];

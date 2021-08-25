@@ -2,6 +2,10 @@ import { isUrl, isValidCode } from './regEx';
 import { IntItem } from '../common/interfaces';
 import { getEmptyFields } from './objects';
 
+// @parameter -> product item
+// Check if product contains any invalid getEmptyFields. If having,
+// returns proper error
+
 export const isValidProduct = (product: IntItem): boolean | Error => {
   const emptyFields = getEmptyFields(product);
 

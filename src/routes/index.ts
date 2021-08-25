@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { IntItem } from '../common/interfaces';
 import { isAdmin } from '../middlewares/checkAdmin';
-import { Products } from '../services/product';
+import { servicesProduct } from '../services/product';
 import { permissionError } from '../utils/others';
 
 const routes = express.Router();
@@ -12,7 +12,7 @@ const {
   saveProduct,
   updateProduct,
   deleteProduct,
-} = new Products();
+} = servicesProduct;
 
 routes.get(
   '/products/list',
