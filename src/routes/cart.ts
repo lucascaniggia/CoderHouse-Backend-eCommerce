@@ -1,5 +1,10 @@
 import express from 'express';
-import { getCart, getCartProduct, saveCartProduct, deleteCartProduct } from '../persistence/cart';
+import {
+  getCart,
+  getCartProduct,
+  saveCartProduct,
+  deleteCartProduct,
+} from '../persistence/cart';
 
 const cartRoutes = express.Router();
 

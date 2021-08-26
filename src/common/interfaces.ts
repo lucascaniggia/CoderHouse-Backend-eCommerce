@@ -3,12 +3,12 @@ export interface IntObject {
 }
 
 export interface IntItem extends IntObject {
-  id: string
-  name: string
-  description: string
-  code: string
-  price: number
-  photo: string
-  timestamp: string
-  stock: number
+  id: string;
+  name: string;
+  description: string;
+  code: string;
+  price: number;
+  photo: string;
+  timestamp: string;
+  stock: number;
 }

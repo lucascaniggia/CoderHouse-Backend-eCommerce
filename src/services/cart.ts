@@ -2,6 +2,7 @@ import { promises as fsPromises } from 'fs';
 import path from 'path';
 import { IntItem } from '../common/interfaces';
 import { servicesProduct } from './product';
+import { EnumErrorCodes } from '../common/enums';
 
 const { getServiceProducts } = servicesProduct;
 
@@ -31,7 +32,7 @@ class Cart {
   async saveServicesCartProduct(id: string): Promise<IntItem> {
     try {
       const allProducts = await getServiceProducts();
-      const productToAdd = allProducts.find(item => item.id === id);
+      const productToAdd = allProducts.find((item) => item.id === id);
 
       if (productToAdd) {
         const cart = await fsPromises.readFile(cartPath, 'utf-8');
@@ -43,7 +44,10 @@ class Cart {
         );
         return cartJSON.products;
       } else {
-        throw new Error('Product to add does not exist.');
+        throw {
+          error: `-${EnumErrorCodes.ProductNotFound}`,
+          message: 'Product to add does not exist.',
+        };
       }
     } catch (e) {
       if (e.code) {
@@ -52,25 +56,31 @@ class Cart {
         throw { error: e.error, message: e.message };
       }
     }
-
   }
 
   async deleteServicesCartProduct(id: string): Promise<IntItem[]> {
     try {
       const cart = await fsPromises.readFile(cartPath, 'utf-8');
       const cartJSON = JSON.parse(cart);
-      const productToDelete = cartJSON.products.find((item: IntItem) => item.id === id);
+      const productToDelete = cartJSON.products.find(
+        (item: IntItem) => item.id === id
+      );
 
       if (productToDelete) {
-        const newCartProducts = cartJSON.products.filter((item: IntItem) => item.id !== id);
-        cartJSON.products = newCartProducts;
+        const productToDeleteIndex = cartJSON.products
+          .filter((item: IntItem) => item.id !== id)
+          .indexOf(id);
+        cartJSON.products.splice(productToDeleteIndex, 1);
         await fsPromises.writeFile(
           cartPath,
           JSON.stringify(cartJSON, null, '\t')
         );
-        return newCartProducts;
+        return cartJSON.products;
       } else {
-        throw new Error('Product to delete does not exist on cart.');
+        throw {
+          error: `-${EnumErrorCodes.ProductNotFound}`,
+          message: 'Product to delete does not exist on cart.',
+        };
       }
     } catch (e) {
       if (e.code) {
@@ -82,4 +92,4 @@ class Cart {
   }
 }
 
-export const servicesCart = new Cart;
+export const servicesCart = new Cart();

@@ -1,8 +1,9 @@
-import fs, { promises as fsPromises } from 'fs';
+import { promises as fsPromises } from 'fs';
 import moment from 'moment';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { IntItem } from '../common/interfaces';
+import { EnumErrorCodes } from '../common/enums';
 import { isValidProduct } from '../utils/validations';
 
 const productsPath = path.resolve(__dirname, '../../products.json');
@@ -40,21 +41,21 @@ class Products {
       // check if all fields in product are valid and not empty
       isValidProduct(product);
 
-      if (fs.existsSync(productsPath)) {
-        productsJSON.push(product);
-        await fsPromises.writeFile(
-          productsPath,
-          JSON.stringify(productsJSON, null, '\t')
-        );
-        return product;
-      } else {
-        throw new Error('Product could not be saved');
-      }
+      productsJSON.push(product);
+      await fsPromises.writeFile(
+        productsPath,
+        JSON.stringify(productsJSON, null, '\t')
+      );
+      return product;
     } catch (e) {
       if (e.code) {
         throw { error: e, message: 'Product could not be saved' };
       } else {
-        throw {error: e.error, message: e.message};
+        throw {
+          error: e.error,
+          description: e.description,
+          message: e.message,
+        };
       }
     }
   }
@@ -70,33 +71,36 @@ class Products {
       // check if all fields in product are valid and not empty
       isValidProduct(product);
 
-      let productToUpdate = productsJSON.find((item: IntItem) => item.id === id);
-      productToUpdate = {
-        ...productToUpdate,
-        ...product,
-      };
+      let productToUpdate = productsJSON.find(
+        (item: IntItem) => item.id === id
+      );
+      if (productToUpdate) {
+        productToUpdate = {
+          ...productToUpdate,
+          ...product,
+        };
 
-      const productToUpdateByIndex = productsJSON.map(
-        (item: IntItem) => item.id).indexOf(id);
-        productsJSON.splice(productToUpdateByIndex, 1, productToUpdate);
+        const productToUpdateIndex = productsJSON
+          .map((item: IntItem) => item.id)
+          .indexOf(id);
+        productsJSON.splice(productToUpdateIndex, 1, productToUpdate);
 
-      if (fs.existsSync(productsPath)) {
         await fsPromises.writeFile(
           productsPath,
           JSON.stringify(productsJSON, null, '\t')
         );
         return productToUpdate;
       } else {
-        throw new Error('Product could not be updated');
+        throw {
+          error: `-${EnumErrorCodes.ProductNotFound}`,
+          message: 'Product to update does not exist.',
+        };
       }
     } catch (e) {
       if (e.code) {
-        throw {
-          error: e,
-          message: 'Product could not be updated',
-        };
+        throw { error: e, message: 'Product could not be updated.' };
       } else {
-        throw {error: e.error, message: e.message};
+        throw { error: e.error, message: e.message };
       }
     }
   }
@@ -106,18 +110,25 @@ class Products {
       const products = await fsPromises.readFile(productsPath, 'utf-8');
       const productsJSON = JSON.parse(products);
 
-      const newProductList = productsJSON.filter(
-        (item: IntItem) => item.id !== id
+      const productToDelete = productsJSON.find(
+        (item: IntItem) => item.id === id
       );
 
-      if (fs.existsSync(productsPath)) {
+      if (productToDelete) {
+        const newProductList = productsJSON.filter(
+          (item: IntItem) => item.id !== id
+        );
+
         await fsPromises.writeFile(
           productsPath,
           JSON.stringify(newProductList, null, '\t')
         );
         return newProductList;
       } else {
-        throw new Error('Product could not be deleted');
+        throw {
+          error: `-${EnumErrorCodes.ProductNotFound}`,
+          message: 'Product to delete does not exist.',
+        };
       }
     } catch (e) {
       if (e.code) {
@@ -126,10 +137,10 @@ class Products {
           message: 'Product could not be deleted',
         };
       } else {
-        throw Error(e.message);
+        throw { error: e.error, message: e.message };
       }
     }
   }
 }
 
-export const servicesProduct = new Products;
+export const servicesProduct = new Products();
