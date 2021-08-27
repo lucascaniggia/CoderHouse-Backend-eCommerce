@@ -1,10 +1,10 @@
 import express from 'express';
-import productRoutes from './product';
-import cartRoutes from './cart';
+import productRouter from './product';
+import cartRouter from './cart';
 
-const routes = express.Router();
+const Router = express.Router();
 
-routes.use('/products', productRoutes);
-routes.use('/cart', cartRoutes);
+Router.use('/products', productRouter);
+Router.use('/cart', cartRouter);
 
-export default routes;
+export default Router;

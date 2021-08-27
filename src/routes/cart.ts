@@ -4,13 +4,13 @@ import {
   getCartProduct,
   saveCartProduct,
   deleteCartProduct,
-} from '../persistence/cart';
+} from '../controllers/cart';
 
-const cartRoutes = express.Router();
+const cartRouter = express.Router();
 
-cartRoutes.get('/list', getCart);
-cartRoutes.get('/list/:id', getCartProduct);
-cartRoutes.get('/save/:id', saveCartProduct);
-cartRoutes.get('/delete/:id', deleteCartProduct);
+cartRouter.get('/list', getCart);
+cartRouter.get('/list/:id', getCartProduct);
+cartRouter.get('/save/:id', saveCartProduct);
+cartRouter.get('/delete/:id', deleteCartProduct);
 
-export default cartRoutes;
+export default cartRouter;
