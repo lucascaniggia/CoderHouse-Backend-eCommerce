@@ -1,17 +1,10 @@
 import { Request, Response } from 'express';
-import { cart } from '../persistence/cart';
-import { EnumErrorCodes } from '../common/enums';
-
-const {
-  getCartPersist,
-  getCartProductPersist,
-  saveCartProductPersist,
-  deleteCartProductPersist,
-} = cart;
+import { cartModel } from 'models/cart';
+import { EnumErrorCodes } from 'common/enums';
 
 export const getCart = async (req: Request, res: Response): Promise<void> => {
   try {
-    const products = await getCartPersist();
+    const products = await cartModel.getAll();
     if (products.length !== 0) res.json({ data: products });
     else
       throw {
@@ -28,7 +21,7 @@ export const getCartProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    const product = await getCartProductPersist(req.params.id);
+    const product = await cartModel.get(req.params.id);
     if (product) res.json({ data: product });
     else
       throw {
@@ -45,7 +38,7 @@ export const saveCartProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    const newProduct = await saveCartProductPersist(req.params.id);
+    const newProduct = await cartModel.save(req.params.id);
     res.json({ data: newProduct });
   } catch (e) {
     res.status(400).json({ error: e.error, message: e.message });
@@ -57,7 +50,7 @@ export const deleteCartProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    const newCartProductList = await deleteCartProductPersist(req.params.id);
+    const newCartProductList = await cartModel.delete(req.params.id);
     res.json({ data: newCartProductList });
   } catch (e) {
     res.status(404).json({ error: e.error, message: e.message });

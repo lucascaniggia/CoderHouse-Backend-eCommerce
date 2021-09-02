@@ -1,22 +1,17 @@
 import { Request, Response } from 'express';
-import { IntItem } from '../common/interfaces';
-import { products } from '../persistence/product';
-import { EnumErrorCodes } from '../common/enums';
-
-const {
-  getProductsPersist,
-  getProductPersist,
-  saveProductPersist,
-  updateProductPersist,
-  deleteProductPersist,
-} = products;
+import { v4 as uuidv4 } from 'uuid';
+import moment from 'moment';
+import { isValidProduct } from 'utils/validations';
+import { IntItem } from 'common/interfaces';
+import { products } from 'persistence/product';
+import { EnumErrorCodes } from 'common/enums';
 
 export const getProducts = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const products = await getProductsPersist();
+    const products = await productsModel.getAll();
     if (products.length !== 0) res.json({ data: products });
     else
       throw {
@@ -33,7 +28,7 @@ export const getProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    const product = await getProductPersist(req.params.id);
+    const product = await productsModel.get(req.params.id);
     if (product) res.json({ data: product });
     else
       throw {
@@ -51,7 +46,15 @@ export const saveProduct = async (
 ): Promise<void> => {
   try {
     const product = req.body;
-    const newProduct: IntItem = await saveProductPersist(product);
+    
+    product.id = uuidv4();
+    product.price = Number(product.price);
+    product.stock = Number(product.stock);
+    product.timestamp = moment().format('DD/MM/YYYY HH:mm:ss');
+
+    isValidProduct(product);
+
+    const newProduct: IntItem = await productsModel.save(product);
     res.json({ data: newProduct });
   } catch (e) {
     if (e.error.errno) {
@@ -71,7 +74,14 @@ export const updateProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    const product = await updateProductPersist(req.params.id, req.body);
+    const dataToUpdate = req.body;
+
+    dataToUpdate.price = Number(dataToUpdate.price);
+    dataToUpdate.stock = Number(dataToUpdate.stock);
+
+    isValidProduct(dataToUpdate);
+
+    const product = await productsModel.update(req.params.id, dataToUpdate);
     res.json({ data: product });
   } catch (e) {
     if (e.error.errno) {
@@ -91,7 +101,7 @@ export const deleteProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    await deleteProductPersist(req.params.id);
+    await productsModel.delete(req.params.id);
     res.json({ data: 'Product deleted.' });
   } catch (e) {
     res.status(404).json({ error: e.error, message: e.message });

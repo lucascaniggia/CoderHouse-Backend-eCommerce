@@ -1,4 +1,4 @@
-import { IntObject } from '../common/interfaces';
+import { IntObject } from 'common/interfaces';
 import { isEmpty } from './others';
 
 // @parameter -> Object

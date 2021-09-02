@@ -1,7 +1,7 @@
 import { isUrl, isValidCode } from './regEx';
-import { IntItem } from '../common/interfaces';
+import { IntItem } from 'common/interfaces';
 import { getEmptyFields } from './objects';
-import { EnumErrorCodes } from '../common/enums';
+import { EnumErrorCodes } from 'common/enums';
 
 // @parameter -> product item
 // Check if product contains any invalid getEmptyFields. If having,

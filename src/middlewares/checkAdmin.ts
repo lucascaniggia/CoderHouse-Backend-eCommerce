@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { EnumErrorCodes } from '../common/enums';
+import { EnumErrorCodes } from 'common/enums';
 
-const admin = false;
+const admin = true;
 
 export const isAdmin = (
   req: Request,
