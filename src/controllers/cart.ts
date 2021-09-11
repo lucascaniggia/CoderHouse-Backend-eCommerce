@@ -1,18 +1,18 @@
 import { Request, Response } from 'express';
-import { cartModel } from 'models/cart';
-import { EnumErrorCodes } from 'common/enums';
+import { cartModel } from '/models/cart';
+import { NotFound } from '/errors';
 
 export const getCart = async (req: Request, res: Response): Promise<void> => {
   try {
     const products = await cartModel.getAll();
     if (products.length !== 0) res.json({ data: products });
-    else
-      throw {
-        error: `-${EnumErrorCodes.ProductNotFound}`,
-        message: 'There is no products in cart.',
-      };
+    else throw new NotFound('There is no products on cart.');
   } catch (e) {
-    res.status(404).json({ error: e.error, message: e.message });
+    if (e instanceof NotFound) {
+      res.status(404).json({ error: e.error, message: e.message });
+    } else {
+      res.status(4040).json(e);
+    }
   }
 };
 
@@ -23,13 +23,13 @@ export const getCartProduct = async (
   try {
     const product = await cartModel.get(req.params.id);
     if (product) res.json({ data: product });
-    else
-      throw {
-        error: `-${EnumErrorCodes.ProductNotFound}`,
-        message: 'Product does not exist on cart.',
-      };
+    else throw new NotFound('Products does not exist on cart.');
   } catch (e) {
-    res.status(404).json({ error: e.error, message: e.message });
+    if (e instanceof NotFound) {
+      res.status(404).json({ error: e.error, message: e.message });
+    } else {
+      res.status(404).json(e);
+    }
   }
 };
 
@@ -40,8 +40,11 @@ export const saveCartProduct = async (
   try {
     const newProduct = await cartModel.save(req.params.id);
     res.json({ data: newProduct });
-  } catch (e) {
+  } catch (e) {if (e instanceof NotFound) {
     res.status(400).json({ error: e.error, message: e.message });
+  } else {
+    res.status(404).json(e);
+  }
   }
 };
 
@@ -53,6 +56,10 @@ export const deleteCartProduct = async (
     const newCartProductList = await cartModel.delete(req.params.id);
     res.json({ data: newCartProductList });
   } catch (e) {
-    res.status(404).json({ error: e.error, message: e.message });
+    if (e instanceof NotFound) {
+      res.status(404).json({ error: e.error, message: e.message });
+    } else {
+      res.status(404).json(e);
+    }
   }
 };

@@ -1,7 +1,7 @@
 import { promises as fsPromises } from 'fs';
 import path from 'path';
-import { IntItem } from '../common/interfaces';
-import { EnumErrorCodes } from '../common/enums';
+import { IntItem } from '/common/interfaces';
+import { NotFound } from '/errors';
 
 const productsPath = path.resolve(__dirname, '../../products.json');
 
@@ -38,15 +38,7 @@ class ProductsModel {
       );
       return product;
     } catch (e) {
-      if (e.code) {
-        throw { error: e, message: 'Product could not be saved.' };
-      } else {
-        throw {
-          error: e.error,
-          description: e.description,
-          message: e.message,
-        };
-      }
+      throw { error: e, message: 'Product could not be saved.' };
     }
   }
 
@@ -76,20 +68,13 @@ class ProductsModel {
         );
         return productToUpdate;
       } else {
-        throw {
-          error: `-${EnumErrorCodes.ProductNotFound}`,
-          message: 'Product to update does not exist.',
-        };
-      }
+        throw new NotFound('Product to update does not exist.');
+        }
     } catch (e) {
-      if (e.code) {
-        throw { error: e, message: 'An error occurred when updating product.' };
+      if (e instanceof NotFound) {
+        throw e;
       } else {
-        throw {
-          error: e.error,
-          description: e.description,
-          message: e.message,
-        };
+        throw { error: e, message: 'An error occurred when updating the product.'};
       }
     }
   }
@@ -113,16 +98,13 @@ class ProductsModel {
           JSON.stringify(newProductList, null, '\t')
         );
       } else {
-        throw {
-          error: `-${EnumErrorCodes.ProductNotFound}`,
-          message: 'Product to delete does not exist.',
-        };
+        throw new NotFound('Product to delete does not exist.');
       }
     } catch (e) {
-      if (e.code) {
-        throw { error: e, message: 'Product could not be deleted.' };
+      if (e instanceof NotFound) {
+        throw e;
       } else {
-        throw { error: e.error, message: e.message };
+        throw { error: e, message: 'Product could not be deleted.' };
       }
     }
   }

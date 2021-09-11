@@ -1,5 +1,5 @@
-import { IntObject } from 'common/interfaces';
-import { isEmpty } from './others';
+import { IntObject } from '/common/interfaces';
+import { isEmpty } from '/utils/others';
 
 // @parameter -> Object
 // Returns object's empty properties

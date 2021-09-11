@@ -12,3 +12,8 @@ export interface IntItem extends IntObject {
   timestamp: string;
   stock: number;
 }
+
+export interface IntMessage {
+  email: string
+  text: string
+}

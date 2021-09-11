@@ -1,8 +1,8 @@
 import { promises as fsPromises } from 'fs';
 import path from 'path';
-import { IntItem } from 'common/interfaces';
-import { EnumErrorCodes } from 'common/enums';
-import { productsModel } from 'models/product';
+import { IntItem } from '/common/interfaces';
+import { NotFound } from '/errors';
+import { productsModel } from '/models/product';
 
 const cartPath = path.resolve(__dirname, '../../cart.json');
 
@@ -42,16 +42,13 @@ class CartModel {
         );
         return cartJSON.products;
       } else {
-        throw {
-          error: `-${EnumErrorCodes.ProductNotFound}`,
-          message: 'Product to add does not exist.',
-        };
+        throw new NotFound('Product to add does not exist.');
       }
     } catch (e) {
-      if (e.code) {
-        throw { error: e, message: 'An error occurred when saving product.' };
+      if (e instanceof NotFound) {
+        throw e;
       } else {
-        throw { error: e.error, message: e.message };
+        throw { error: e.error, message: 'An error occurred when adding the product.' };
       }
     }
   }
@@ -75,16 +72,13 @@ class CartModel {
         );
         return cartJSON.products;
       } else {
-        throw {
-          error: `-${EnumErrorCodes.ProductNotFound}`,
-          message: 'Product to delete does not exist on cart.',
-        };
+        throw new NotFound('Product to delete does not exist on cart.');
       }
     } catch (e) {
-      if (e.code) {
-        throw { error: e, message: 'An error occurred when deleting product.' };
+      if (e instanceof NotFound) {
+        throw e;
       } else {
-        throw { error: e.error, message: e.message };
+        throw { error: e.error, message: 'An error occurred when deleting the product.' };
       }
     }
   }
