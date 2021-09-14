@@ -1,6 +1,6 @@
 import * as socketIO from 'socket.io';
 import * as http from 'http';
-import { messagesModel } from '/models/sqliteMessages';
+import { messagesModel } from '/models/mongoMessages';
 
 export const wsServerInit = (server: http.Server): void => {
   const io: socketIO.Server = new socketIO.Server();

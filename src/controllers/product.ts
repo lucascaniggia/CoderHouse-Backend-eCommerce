@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { isValidProduct } from '/utils/validations';
-import { IntItem } from '/common/interfaces';
-import { productsModel } from '/models/mySqlProduct';
+// import { productsModel } from '/models/mySqlProduct';
+import { productsModel } from '/models/mongoProduct';
 import { MissingFieldsProduct, NotFound, ProductValidation } from '/errors';
 
 export const getProducts = async (
@@ -26,7 +26,7 @@ export const getProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    const product = await productsModel.get(Number(req.params.id));
+    const product = await productsModel.get(req.params.id);
     if (product) res.json({ data: product });
     else throw new NotFound('Product not found.');
   } catch (e) {
@@ -52,7 +52,7 @@ export const saveProduct = async (
 
     isValidProduct(product);
 
-    const newProduct: IntItem = await productsModel.save(product);
+    const newProduct = await productsModel.save(product);
     res.json({ data: newProduct });
   } catch (e) {
     if (e instanceof MissingFieldsProduct) {
@@ -85,7 +85,7 @@ export const updateProduct = async (
     isValidProduct(dataToUpdate);
 
     const product = await productsModel.update(
-      Number(req.params.id),
+      req.params.id,
       dataToUpdate
     );
     res.json({ data: product });
@@ -112,7 +112,7 @@ export const deleteProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    await productsModel.delete(Number(req.params.id));
+    await productsModel.delete(req.params.id);
     res.json({ data: 'Product deleted.' });
   } catch (e) {
     if (e instanceof NotFound) {
