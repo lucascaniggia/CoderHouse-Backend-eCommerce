@@ -2,26 +2,26 @@ import { promises as fsPromises } from 'fs';
 import path from 'path';
 import { IntItem } from '/common/interfaces';
 import { NotFound } from '/errors';
-import { productsModel } from '/models/product';
+import { productsModel } from '/models/fs/product';
 
 const cartPath = path.resolve(__dirname, '../../cart.json');
 
 class CartModel {
-  async getAll(): Promise<IntItem[]> {
-    try {
-      const cart = await fsPromises.readFile(cartPath, 'utf-8');
-      return JSON.parse(cart).products;
-    } catch (e) {
-      throw { error: e, message: 'An error occurred when loading cart.' };
-    }
-  }
+  // async getAll(): Promise<IntItem[]> {
+  //   try {
+  //     const cart = await fsPromises.readFile(cartPath, 'utf-8');
+  //     return JSON.parse(cart).products;
+  //   } catch (e) {
+  //     throw { error: e, message: 'An error occurred when loading cart.' };
+  //   }
+  // }
 
-  async get(id: string): Promise<IntItem> {
+  async get(id?: string): Promise<IntItem> {
     try {
       const cart = await fsPromises.readFile(cartPath, 'utf-8');
       const products = JSON.parse(cart).products;
-      const product = products.find((item: IntItem) => item.id === id);
-      return product;
+      if (id) return products.find((item: IntItem) => item.id === id);
+      return products;
     } catch (e) {
       throw { error: e, message: 'An error occurred when loading product.' };
     }
@@ -29,8 +29,8 @@ class CartModel {
 
   async save(id: string): Promise<IntItem> {
     try {
-      const allProducts = await productsModel.getAll();
-      const productToAdd = allProducts.find((item) => item.id === id);
+      const allProducts = await productsModel.get();
+      const productToAdd = (allProducts as IntItem[]).find((item: IntItem) => item.id === id);
 
       if (productToAdd) {
         const cart = await fsPromises.readFile(cartPath, 'utf-8');

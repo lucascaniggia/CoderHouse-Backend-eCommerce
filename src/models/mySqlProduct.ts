@@ -38,10 +38,10 @@ class ProductsModel {
 
   async update(id: number, product: IntItem): Promise<IntItem> {
     try {
-      const productUpdated = await mySqlDbServ.update('products', id, product);
+      const updatedProduct = await mySqlDbServ.update('products', id, product);
 
-      if (productUpdated[0]) {
-        return productUpdated[0];
+      if (updatedProduct[0]) {
+        return updatedProduct[0];
       } else {
         throw {
           error: `-${EnumErrorCodes.ProductNotFound}`,
@@ -62,8 +62,8 @@ class ProductsModel {
 
   async delete(id: number): Promise<void> {
     try {
-      const productDeleted = await mySqlDbServ.delete('products', id);
-      if (!productDeleted) {
+      const deletedProduct = await mySqlDbServ.delete('products', id);
+      if (!deletedProduct) {
         throw {
           error: `-${EnumErrorCodes.ProductNotFound}`,
           message: 'Product to delete does not exist.',

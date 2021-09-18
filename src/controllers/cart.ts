@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
-import { cartModel } from '/models/cart';
+import { CartModelFactory } from '../models/factory/cart';
 import { NotFound } from '/errors';
+
+const factoryModel = new CartModelFactory(0);
 
 export const getCart = async (req: Request, res: Response): Promise<void> => {
   try {
-    const products = await cartModel.getAll();
+    const products = await factoryModel.model().get();
     if (products.length !== 0) res.json({ data: products });
     else throw new NotFound('There is no products on cart.');
   } catch (e) {
@@ -21,7 +23,7 @@ export const getCartProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    const product = await cartModel.get(req.params.id);
+    const product = await factoryModel.model().get(req.params.id);
     if (product) res.json({ data: product });
     else throw new NotFound('Products does not exist on cart.');
   } catch (e) {
@@ -38,7 +40,7 @@ export const saveCartProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    const newProduct = await cartModel.save(req.params.id);
+    const newProduct = await factoryModel.model().save(req.params.id);
     res.json({ data: newProduct });
   } catch (e) {if (e instanceof NotFound) {
     res.status(400).json({ error: e.error, message: e.message });
@@ -53,7 +55,7 @@ export const deleteCartProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    const newCartProductList = await cartModel.delete(req.params.id);
+    const newCartProductList = await factoryModel.model().delete(req.params.id);
     res.json({ data: newCartProductList });
   } catch (e) {
     if (e instanceof NotFound) {
