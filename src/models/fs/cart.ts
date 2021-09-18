@@ -2,7 +2,7 @@ import { promises as fsPromises } from 'fs';
 import path from 'path';
 import { IntItem } from '/common/interfaces';
 import { NotFound } from '/errors';
-import { productsModel } from '/models/fs/product';
+import { ProductsModel } from '/models/fs/product';
 
 const cartPath = path.resolve(__dirname, '../../cart.json');
 
@@ -29,6 +29,7 @@ class CartModel {
 
   async save(id: string): Promise<IntItem> {
     try {
+      const productsModel = new ProductsModel();
       const allProducts = await productsModel.get();
       const productToAdd = (allProducts as IntItem[]).find((item: IntItem) => item.id === id);
 

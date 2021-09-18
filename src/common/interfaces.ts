@@ -1,7 +1,31 @@
-import { Document, ObjectId, Model } from 'mongoose';
+// import { Document, ObjectId, Model } from 'mongoose';
 
 export interface IntObject {
   [key: string]: string | number | boolean | unknown;
+}
+
+export interface IntKnex {
+  [key: string]: {
+    client: string,
+    connection: {
+      host?: string,
+      user?: string,
+      password?: string,
+      database?: string,
+      filename?: string
+    },
+    migrations?: {
+      directory: string,
+    },
+    seeds?: {
+      directory: string,
+    },
+    pool?: {
+      min?: number,
+      max?: number
+    },
+    useNullAsDefault?: boolean
+  },
 }
 
 export interface BaseIntItem {
@@ -18,20 +42,19 @@ export interface IntItem extends BaseIntItem, IntObject {
   id: string;
 }
 
-export interface MongoDocIntItem extends BaseIntItem, Document {
-  _id: ObjectId
-}
+// export interface MongoDocIntItem extends BaseIntItem, Document {
+//   _id: ObjectId
+// }
 
-export interface MongoModelIntItem extends Model<MongoDocIntItem> {
-  get: (id?: string) => Promise<MongoDocIntItem[]>
-}
+// export interface MongoModelIntItem extends Model<MongoDocIntItem> {
+//   get: (id?: string) => Promise<MongoDocIntItem[]>
+// }
 
 export interface IntMessage {
   email: string
   text: string
-  date: string
 }
 
-export interface DocumentIntMessage extends Document {
-  _id: ObjectId
-}
+// export interface DocumentIntMessage extends Document {
+//   _id: ObjectId
+// }

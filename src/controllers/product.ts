@@ -1,17 +1,16 @@
 import { Request, Response } from 'express';
 import { isValidProduct } from '/utils/validations';
 // import { productsModel } from '/models/mySqlProduct';
-import { ProductsModelFactory } from '../models/factory/products';
+import { productsAPI } from '/api/products';
 import { MissingFieldsProduct, NotFound, ProductValidation } from '/errors';
 
-const factoryModel = new ProductsModelFactory(0);
 
 export const getProducts = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const products = await factoryModel.model().get();
+    const products = await productsAPI.get();
     if (products.length !== 0) res.json({ data: products });
     else throw new NotFound('There is no products!');
   } catch (e) {
@@ -28,7 +27,7 @@ export const getProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    const product = await factoryModel.model().get(req.params.id);
+    const product = await productsAPI.get(req.params.id);
     if (product) res.json({ data: product });
     else throw new NotFound('Product not found.');
   } catch (e) {
@@ -54,7 +53,7 @@ export const saveProduct = async (
 
     isValidProduct(product);
 
-    const newProduct = await factoryModel.model().save(product);
+    const newProduct = await productsAPI.save(product);
     res.json({ data: newProduct });
   } catch (e) {
     if (e instanceof MissingFieldsProduct) {
@@ -86,7 +85,7 @@ export const updateProduct = async (
 
     isValidProduct(dataToUpdate);
 
-    const product = await factoryModel.model().update(
+    const product = await productsAPI.update(
       req.params.id,
       dataToUpdate
     );
@@ -114,7 +113,7 @@ export const deleteProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    await factoryModel.model().delete(req.params.id);
+    await productsAPI.delete(req.params.id);
     res.json({ data: 'Product deleted.' });
   } catch (e) {
     if (e instanceof NotFound) {

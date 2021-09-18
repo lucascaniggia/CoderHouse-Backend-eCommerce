@@ -4,12 +4,12 @@ const defaults = {
   connection: {
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: '0000',
     database: 'ecommerce-coderhouse',
   },
   pool: { min: 0, max: 7 },
   migrations: {
-    directory: __dirname + './db/migrations',
+    directory: __dirname + '/db/migrations',
   },
   seeds: {
     directory: __dirname + '/db/seeds',
@@ -21,13 +21,13 @@ const defaults = {
 // };
 
 const KnexConfig = {
-  local: {
+  development: {
     client: 'sqlite3',
-    connection: { filename: './messages.sqlite' },
+    connection: { filename: './ecommerce-coderhouse.sqlite' },
     useNullAsDefault: true,
   },
 
-  development: {
+  development2: {
     ...defaults,
     debug: true,
     useNullAsDefault: true

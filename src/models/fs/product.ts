@@ -1,11 +1,13 @@
 import { promises as fsPromises } from 'fs';
+import { v4 as uuidv4 } from 'uuid';
+import moment from 'moment';
 import path from 'path';
 import { IntItem } from '../../common/interfaces';
 import { NotFound } from '/errors';
 
 const productsPath = path.resolve(__dirname, '../products.json');
 
-class ProductsModel {
+export class ProductsModel {
   // async getAll(): Promise<IntItem[]> {
   //   try {
   //     const products = await fsPromises.readFile(productsPath, 'utf-8');
@@ -19,6 +21,8 @@ class ProductsModel {
     try {
       const products = await fsPromises.readFile(productsPath, 'utf-8');
       const productsJSON = JSON.parse(products);
+      product.id = uuidv4();
+      product.timestamp = moment().format('DD/MM/YYYY HH:mm:ss');
       if (id) return productsJSON.find((item: IntItem) => item.id === id);
       return productsJSON;
     } catch (e) {
@@ -109,5 +113,3 @@ class ProductsModel {
     }
   }
 }
-
-export const productsModel = new ProductsModel();
