@@ -1,7 +1,7 @@
 import { IntItem } from '/common/interfaces';
 import { ModelType, ProductsModelFactory } from '/models/factory/products';
 
-const type = ModelType.sqlite;
+const type = ModelType.mongoAtlas;
 
 class ProductsAPI {
   private factory;

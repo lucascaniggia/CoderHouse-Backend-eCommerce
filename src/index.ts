@@ -1,7 +1,8 @@
 import express from 'express';
+import 'dotenv/config.js';
 import cors from 'cors';
 import path from 'path';
-import http from 'http';
+// import http from 'http';
 import routes from '/routes';
 // import { wsServerInit } from '/services/socket';
 import { unknownEndpoint } from '/middlewares/unknownEndpoint';

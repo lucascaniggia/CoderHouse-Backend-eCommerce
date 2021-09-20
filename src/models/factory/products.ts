@@ -1,7 +1,7 @@
 import { IntItem } from '/common/interfaces';
 import { ProductsModel } from '../../models/fs/product';
+import { ProductsModelMongoDB } from '/models/mongodb/product';
 import { ProductsModelMySQL } from '/models/mysql/product';
-// import { ProductsModelSQLite } from '/models/sqlite/product';
 
 interface IntModel {
   get: (id?: string) => Promise<IntItem | IntItem[]>
@@ -26,6 +26,10 @@ export class ProductsModelFactory {
         return new ProductsModelMySQL('mysql');
       case ModelType.sqlite:
         return new ProductsModelMySQL('sqlite');
+      case ModelType.localMongo:
+        return new ProductsModelMongoDB('local');
+      case ModelType.mongoAtlas:
+      return new ProductsModelMongoDB('atlas');
       default:
         return new ProductsModel();
     }
