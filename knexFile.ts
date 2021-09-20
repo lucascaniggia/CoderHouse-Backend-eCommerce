@@ -22,15 +22,15 @@ const defaults = {
 
 const KnexConfig = {
   development: {
-    client: 'sqlite3',
-    connection: { filename: './ecommerce-coderhouse.sqlite' },
-    useNullAsDefault: true,
-  },
-
-  development2: {
     ...defaults,
     debug: true,
     useNullAsDefault: true
+  },
+
+  development2: {
+    client: 'sqlite3',
+    connection: { filename: './ecommerce-coderhouse.sqlite' },
+    useNullAsDefault: true,
   },
 
   production: {

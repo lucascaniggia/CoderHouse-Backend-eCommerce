@@ -1,7 +1,7 @@
 import { IntItem } from '/common/interfaces';
 import { ProductsModel } from '../../models/fs/product';
 import { ProductsModelMySQL } from '/models/mysql/product';
-import { ProductsModelSQLite } from '/models/sqlite/product';
+// import { ProductsModelSQLite } from '/models/sqlite/product';
 
 interface IntModel {
   get: (id?: string) => Promise<IntItem | IntItem[]>
@@ -23,9 +23,9 @@ export class ProductsModelFactory {
   static model(type: number): IntModel {
     switch (type) {
       case ModelType.mySql:
-        return new ProductsModelMySQL();
+        return new ProductsModelMySQL('mysql');
       case ModelType.sqlite:
-        return new ProductsModelSQLite();
+        return new ProductsModelMySQL('sqlite');
       default:
         return new ProductsModel();
     }

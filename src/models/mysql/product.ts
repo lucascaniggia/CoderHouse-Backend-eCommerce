@@ -6,8 +6,8 @@ import { productsMock } from '/mocks/products';
 
 export class ProductsModelMySQL {
   private connection: Knex;
-  constructor() {
-    const environment = process.env.NODE_ENV || 'development';
+  constructor(dbType: 'mysql' | 'sqlite') {
+    const environment = dbType === 'mysql' ? process.env.NODE_ENV || 'development' : 'development2';
     const configDb: IntKnex = dbConfig;
     const options = configDb[environment];
     this.connection = knex(options);
