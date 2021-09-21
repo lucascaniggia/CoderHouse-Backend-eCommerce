@@ -1,7 +1,7 @@
 import { IntItem } from '/common/interfaces';
 import { ModelType, ProductsModelFactory } from '/models/factory/products';
 
-const type = ModelType.mongoAtlas;
+const type = ModelType.firebase;
 
 class ProductsAPI {
   private factory;

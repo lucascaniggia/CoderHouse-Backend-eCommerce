@@ -38,7 +38,7 @@ export class ProductsModelMySQL {
     try {
       if (id) {
         const product = await this.connection('products').where('id', Number(id));
-        return product;
+        return product[0];
       }
       return this.connection('products');
     } catch (e) {
