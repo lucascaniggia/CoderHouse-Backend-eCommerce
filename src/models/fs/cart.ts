@@ -6,7 +6,7 @@ import { ProductsModel } from '/models/fs/product';
 
 const cartPath = path.resolve(__dirname, '../../cart.json');
 
-class CartModel {
+export class CartModel {
   // async getAll(): Promise<IntItem[]> {
   //   try {
   //     const cart = await fsPromises.readFile(cartPath, 'utf-8');
@@ -23,7 +23,7 @@ class CartModel {
       if (id) return products.find((item: IntItem) => item.id === id);
       return products;
     } catch (e) {
-      throw { error: e, message: 'An error occurred when loading product.' };
+      throw { error: e, message: 'An error occurred when loading products.' };
     }
   }
 
@@ -84,5 +84,3 @@ class CartModel {
     }
   }
 }
-
-export const cartModel = new CartModel();

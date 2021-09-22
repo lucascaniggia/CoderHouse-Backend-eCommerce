@@ -1,13 +1,14 @@
 import { IntItem } from '/common/interfaces';
-import { ModelType, ProductsModelFactory } from '/models/factory/products';
+import { ProductsModelFactory } from '/models/factory/products';
+import { modelTypeToUse } from './modelType';
 
-const type = ModelType.firebase;
+// const type = ModelType.firebase;
 
 class ProductsAPI {
   private factory;
 
   constructor() {
-    this.factory = ProductsModelFactory.model(type);
+    this.factory = ProductsModelFactory.model(modelTypeToUse);
   }
 
   async get(id?: string) {

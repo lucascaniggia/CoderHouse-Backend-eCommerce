@@ -4,3 +4,12 @@ export enum EnumErrorCodes {
   ProductValidation,
   ProductNotFound,
 }
+
+export enum ModelType {
+  fs = 1,
+  mySql,
+  sqlite,
+  localMongo,
+  mongoAtlas,
+  firebase
+}

@@ -1,5 +1,7 @@
 import { IntItem } from '/common/interfaces';
-import { cartModel } from '/models/fs/cart';
+import { ModelType } from '/common/enums';
+import { CartModel } from '/models/fs/cart';
+import { CartModelMySQL } from '/models/mysql/cart';
 
 interface IntModel {
   get: (id?: string) => Promise<IntItem | IntItem[]>
@@ -7,15 +9,17 @@ interface IntModel {
   delete: (id: string) => Promise<IntItem[]>
 }
 
-const models = [cartModel];
+// const models = [cartModel];
 
 export class CartModelFactory {
-  public modelNumber: number;
-  constructor(modelNumber: number) {
-    this.modelNumber = modelNumber;
-  }
-
-  model(): IntModel {
-    return models[this.modelNumber];
+  static model(type: number): IntModel {
+    switch (type) {
+      case ModelType.mySql:
+        return new CartModelMySQL('mysql');
+      case ModelType.sqlite:
+        return new CartModelMySQL('sqlite');
+      default:
+        return new CartModel();
+    }
   }
 }
