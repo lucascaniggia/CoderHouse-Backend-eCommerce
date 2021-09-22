@@ -2,6 +2,8 @@ import { IntItem } from '/common/interfaces';
 import { ModelType } from '/common/enums';
 import { CartModel } from '/models/fs/cart';
 import { CartModelMySQL } from '/models/mysql/cart';
+import { CartModelMongoDB } from '/models/mongodb/cart';
+import { CartModelFirebase } from '/models/firebase/cart';
 
 interface IntModel {
   get: (id?: string) => Promise<IntItem | IntItem[]>
@@ -18,6 +20,12 @@ export class CartModelFactory {
         return new CartModelMySQL('mysql');
       case ModelType.sqlite:
         return new CartModelMySQL('sqlite');
+      case ModelType.localMongo:
+        return new CartModelMongoDB('local');
+      case ModelType.mongoAtlas:
+        return new CartModelMongoDB('atlas');
+      case ModelType.firebase:
+        return new CartModelFirebase();
       default:
         return new CartModel();
     }
