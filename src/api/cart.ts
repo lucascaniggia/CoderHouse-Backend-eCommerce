@@ -1,4 +1,4 @@
-import { CartModelFactory } from '/models/factory/cart';
+import { CartModelFactory } from 'models/factory/cart';
 import { modelTypeToUse } from './modelType';
 
 class CartAPI {

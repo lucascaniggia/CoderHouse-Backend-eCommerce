@@ -1,6 +1,6 @@
-import { IntItem } from '/common/interfaces';
+import { IntItem } from 'common/interfaces';
 import admin from 'firebase-admin';
-import { NotFound } from '/errors';
+import { NotFound } from 'errors';
 
 export class CartModelFirebase {
   public cartDb;

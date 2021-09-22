@@ -1,7 +1,7 @@
-import { IntItem } from '/common/interfaces';
+import { IntItem } from 'common/interfaces';
 import admin, { ServiceAccount } from 'firebase-admin';
-import { NotFound } from '/errors';
-import { productsMock } from '/mocks/products';
+import { NotFound } from 'errors';
+import { productsMock } from 'mocks/products';
 import moment from 'moment';
 import serviceAccount from './../../../firebase.json';
 

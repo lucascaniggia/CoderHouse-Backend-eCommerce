@@ -1,5 +1,5 @@
-import { IntItem } from '/common/interfaces';
-import { ProductsModelFactory } from '/models/factory/products';
+import { IntItem } from 'common/interfaces';
+import { ProductsModelFactory } from 'models/factory/products';
 import { modelTypeToUse } from './modelType';
 
 // const type = ModelType.firebase;

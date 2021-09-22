@@ -1,4 +1,4 @@
-import { BaseIntItem, IntMessage } from '../../common/interfaces';
+import { BaseIntItem, IntMessage } from 'common/interfaces';
 import moment from 'moment';
 import mongoose from 'mongoose';
 

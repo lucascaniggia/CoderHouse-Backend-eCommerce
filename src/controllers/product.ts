@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { isValidProduct } from '/utils/validations';
+import { isValidProduct } from 'utils/validations';
 // import { productsModel } from '/models/mySqlProduct';
-import { productsAPI } from '/api/products';
-import { MissingFieldsProduct, NotFound, ProductValidation } from '/errors';
+import { productsAPI } from 'api/products';
+import { MissingFieldsProduct, NotFound, ProductValidation } from 'errors';
 
 
 export const getProducts = async (

@@ -1,6 +1,6 @@
 import knex, { Knex } from 'knex';
-import { IntItem, IntKnex } from '/common/interfaces';
-import { NotFound } from '/errors';
+import { IntItem, IntKnex } from 'common/interfaces';
+import { NotFound } from 'errors';
 import dbConfig from './../../../knexFile';
 
 export class CartModelMySQL {

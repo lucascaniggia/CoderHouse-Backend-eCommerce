@@ -1,8 +1,8 @@
 import knex, { Knex } from 'knex';
-import { IntItem, IntKnex } from '/common/interfaces';
-import { NotFound } from '/errors';
+import { IntItem, IntKnex } from 'common/interfaces';
+import { NotFound } from 'errors';
 import dbConfig from './../../../knexFile';
-import { productsMock } from '/mocks/products';
+import { productsMock } from 'mocks/products';
 
 export class ProductsModelMySQL {
   private connection: Knex;

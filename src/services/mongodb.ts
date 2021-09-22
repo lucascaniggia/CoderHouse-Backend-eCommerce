@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import { Product, Message } from '/models/schemas';
-import { IntItem, MongoDocIntItem, IntMessage, DocumentIntMessage } from '/common/interfaces';
+import { Product, Message } from 'models/schemas';
+import { IntItem, MongoDocIntItem, IntMessage, DocumentIntMessage } from 'common/interfaces';
 
 class MongoDB {
   private DbUrl: string;

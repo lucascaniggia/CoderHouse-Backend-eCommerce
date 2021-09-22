@@ -1,9 +1,9 @@
-import { IntItem } from '/common/interfaces';
-import { ModelType } from '/common/enums';
+import { IntItem } from 'common/interfaces';
+import { ModelType } from 'common/enums';
 import { ProductsModel } from '../../models/fs/product';
 import { ProductsModelFirebase } from '../../models/firebase/product';
-import { ProductsModelMongoDB } from '/models/mongodb/product';
-import { ProductsModelMySQL } from '/models/mysql/product';
+import { ProductsModelMongoDB } from 'models/mongodb/product';
+import { ProductsModelMySQL } from 'models/mysql/product';
 
 interface IntModel {
   get: (id?: string) => Promise<IntItem | IntItem[]>

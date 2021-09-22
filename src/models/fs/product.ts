@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 import path from 'path';
 import { IntItem } from '../../common/interfaces';
-import { NotFound } from '/errors';
+import { NotFound } from 'errors';
 
 const productsPath = path.resolve(__dirname, '../products.json');
 
@@ -21,8 +21,6 @@ export class ProductsModel {
     try {
       const products = await fsPromises.readFile(productsPath, 'utf-8');
       const productsJSON = JSON.parse(products);
-      product.id = uuidv4();
-      product.timestamp = moment().format('DD/MM/YYYY HH:mm:ss');
       if (id) return productsJSON.find((item: IntItem) => item.id === id);
       return productsJSON;
     } catch (e) {
@@ -34,7 +32,8 @@ export class ProductsModel {
     try {
       const products = await fsPromises.readFile(productsPath, 'utf-8');
       const productsJSON = JSON.parse(products);
-
+      product.id = uuidv4();
+      product.timestamp = moment().format('DD/MM/YYYY HH:mm:ss');
       productsJSON.push(product);
       await fsPromises.writeFile(
         productsPath,

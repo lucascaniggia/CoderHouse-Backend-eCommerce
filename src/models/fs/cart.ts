@@ -1,8 +1,8 @@
 import { promises as fsPromises } from 'fs';
 import path from 'path';
-import { IntItem } from '/common/interfaces';
-import { NotFound } from '/errors';
-import { ProductsModel } from '/models/fs/product';
+import { IntItem } from 'common/interfaces';
+import { NotFound } from 'errors';
+import { ProductsModel } from 'models/fs/product';
 
 const cartPath = path.resolve(__dirname, '../../cart.json');
 

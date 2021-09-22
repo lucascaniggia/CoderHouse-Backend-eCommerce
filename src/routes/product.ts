@@ -1,12 +1,12 @@
 import express from 'express';
-import { isAdmin } from '/middlewares/checkAdmin';
+import { isAdmin } from 'middlewares/checkAdmin';
 import {
   deleteProduct,
   getProduct,
   getProducts,
   saveProduct,
   updateProduct,
-} from '/controllers/product';
+} from 'controllers/product';
 
 const productRouter = express.Router();
 

@@ -1,4 +1,4 @@
-import { EnumErrorCodes } from '/common/enums';
+import { EnumErrorCodes } from 'common/enums';
 
 export class ProductValidation extends Error {
   public error: string;

@@ -3,12 +3,12 @@ import 'dotenv/config.js';
 import cors from 'cors';
 import path from 'path';
 // import http from 'http';
-import routes from '/routes';
+import routes from 'routes';
 // import { wsServerInit } from '/services/socket';
-import { unknownEndpoint } from '/middlewares/unknownEndpoint';
+import { unknownEndpoint } from 'middlewares/unknownEndpoint';
 // import { mySqlDbServ } from '/services/mySqlDB';
 // import { sqLiteDbService } from '/services/sqlite';
-import { mongoDBServ } from '/services/mongodb';
+import { mongoDBServ } from 'services/mongodb';
 
 const app: express.Application = express();
 const PORT = process.env.PORT || 8080;

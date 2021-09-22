@@ -1,9 +1,9 @@
-import { IntItem } from '/common/interfaces';
-import { ModelType } from '/common/enums';
-import { CartModel } from '/models/fs/cart';
-import { CartModelMySQL } from '/models/mysql/cart';
-import { CartModelMongoDB } from '/models/mongodb/cart';
-import { CartModelFirebase } from '/models/firebase/cart';
+import { IntItem } from 'common/interfaces';
+import { ModelType } from 'common/enums';
+import { CartModel } from 'models/fs/cart';
+import { CartModelMySQL } from 'models/mysql/cart';
+import { CartModelMongoDB } from 'models/mongodb/cart';
+import { CartModelFirebase } from 'models/firebase/cart';
 
 interface IntModel {
   get: (id?: string) => Promise<IntItem | IntItem[]>

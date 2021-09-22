@@ -1,8 +1,8 @@
 import { promises as fsPromises } from 'fs';
 import path from 'path';
-import { IntItem } from '../common/interfaces';
+import { IntItem } from 'common/interfaces';
 import { servicesProduct } from './product';
-import { EnumErrorCodes } from '../common/enums';
+import { EnumErrorCodes } from 'common/enums';
 
 const { getServiceProducts } = servicesProduct;
 

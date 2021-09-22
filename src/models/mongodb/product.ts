@@ -1,9 +1,9 @@
-import Config from '/config';
-import { IntItem, BaseIntItem } from '/common/interfaces';
+import Config from 'config';
+import { IntItem, BaseIntItem } from 'common/interfaces';
 import moment from 'moment';
 import mongoose from 'mongoose';
-import { NotFound } from '/errors';
-import { productsMock } from '/mocks/products';
+import { NotFound } from 'errors';
+import { productsMock } from 'mocks/products';
 
 const ProductSchema = new mongoose.Schema<BaseIntItem>({
   name: { type: String, require: true, max: 100 },

@@ -1,7 +1,7 @@
-import { isUrl, isValidCode } from '/utils/regEx';
-import { IntItem } from '/common/interfaces';
-import { getEmptyFields } from '/utils/objects';
-import { MissingFieldsProduct, ProductValidation } from '/errors';
+import { isUrl, isValidCode } from 'utils/regEx';
+import { IntItem } from 'common/interfaces';
+import { getEmptyFields } from 'utils/objects';
+import { MissingFieldsProduct, ProductValidation } from 'errors';
 
 // @parameter -> product item
 // Check if product contains any invalid getEmptyFields. If having,

@@ -2,9 +2,9 @@ import { promises as fsPromises } from 'fs';
 import moment from 'moment';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { IntItem } from '../common/interfaces';
-import { EnumErrorCodes } from '../common/enums';
-import { isValidProduct } from '../utils/validations';
+import { IntItem } from 'common/interfaces';
+import { EnumErrorCodes } from 'common/enums';
+import { isValidProduct } from 'utils/validations';
 
 const productsPath = path.resolve(__dirname, '../../products.json');
 class Products {

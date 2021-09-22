@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 // import { CartModelFactory } from '../models/factory/cart';
-import { cartAPI } from  '/api/cart';
-import { NotFound } from '/errors';
+import { cartAPI } from  'api/cart';
+import { NotFound } from 'errors';
 
 // const factoryModel = new CartModelFactory(0);
 
