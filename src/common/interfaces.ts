@@ -6,26 +6,26 @@ export interface IntObject {
 
 export interface IntKnex {
   [key: string]: {
-    client: string,
+    client: string;
     connection: {
-      host?: string,
-      user?: string,
-      password?: string,
-      database?: string,
-      filename?: string
-    },
+      host?: string;
+      user?: string;
+      password?: string;
+      database?: string;
+      filename?: string;
+    };
     migrations?: {
-      directory: string,
-    },
+      directory: string;
+    };
     seeds?: {
-      directory: string,
-    },
+      directory: string;
+    };
     pool?: {
-      min?: number,
-      max?: number
-    },
-    useNullAsDefault?: boolean
-  },
+      min?: number;
+      max?: number;
+    };
+    useNullAsDefault?: boolean;
+  };
 }
 
 export interface BaseIntItem extends IntObject {
@@ -43,11 +43,20 @@ export interface IntItem extends BaseIntItem, IntObject {
 }
 
 export interface MongoDocIntItem extends BaseIntItem, Document {
-  _id: ObjectId
+  _id: ObjectId;
 }
 
 export interface MongoModelIntItem extends Model<MongoDocIntItem> {
-  get: (id?: string) => Promise<MongoDocIntItem[]>
+  get: (id?: string) => Promise<MongoDocIntItem[]>;
+}
+
+export interface QueryIntItem {
+  name?: string;
+  code?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minStock?: number;
+  maxStock?: number;
 }
 
 // export interface IntMessage {

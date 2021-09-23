@@ -12,31 +12,34 @@ export const isValidProduct = (product: IntItem): boolean | Error => {
 
   if (emptyFields.length !== 0) {
     throw new MissingFieldsProduct(
+      400,
       'All fields are required, except from "Stock"',
-      `Missing fields: ${emptyFields.join(', ')}`
+      `Missing fields: ${emptyFields.join(', ')}`,
     );
   }
 
   if (product.price === 0 || isNaN(product.price)) {
     throw new ProductValidation(
-      'Please check data, price must be a non-zero number.'
+      400,
+      'Please check data, price must be a non-zero number.',
     );
   }
 
   if (!isUrl(product.photo)) {
     throw new ProductValidation(
-      'Please check data, photo URL must be valid.'
+      400,
+      'Please check data, photo URL must be valid.',
     );
   }
 
   if (!isValidCode(product.code)) {
-    throw new ProductValidation(
-      'Please check data, code must be valid.'
-    );
+    throw new ProductValidation(400, 'Please check data, code must be valid.');
   }
 
   if (isNaN(product.stock)) {
-    throw new ProductValidation('Please check data, stock must be a number.',
+    throw new ProductValidation(
+      400,
+      'Please check data, stock must be a number.',
     );
   }
 

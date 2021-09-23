@@ -20,7 +20,7 @@ ProductSchema.set('toJSON', {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
     delete returnedObject.__v;
-  }
+  },
 });
 
 export class CartModelMongoDB {
@@ -33,12 +33,14 @@ export class CartModelMongoDB {
     if (type === 'local') {
       this.dbURL = 'mongodb://0.0.0.0:27017/ecommerce';
     } else {
-      this.dbURL = `mongodb+srv://${Config.MONGO_ATLAS_USER}:${Config.MONGO_ATLAS_PASSWORD}@${Config.MONGO_ATLAS_CLUSTER}/${Config.MONGO_ATLAS_DB}?retryWrites=true&w=majority`;
+      this.dbURL = `mongodb+srv://${Config.MONGO_ATLAS_USER}:${Config.MONGO_ATLAS_PASSWORD}@${Config.MONGO_ATLAS_CLUSTER}/${Config.MONGO_ATLAS_DBNAME}?retryWrites=true&w=majority`;
     }
-    mongoose.connect(this.dbURL)
-      .then(() => { console.log('Mongo DB connected!');
+    mongoose
+      .connect(this.dbURL)
+      .then(() => {
+        console.log('Mongo DB connected!');
       })
-      .catch((e) => console.log(e));
+      .catch(e => console.log(e));
   }
 
   async get(id?: string): Promise<IntItem | IntItem[]> {
@@ -46,16 +48,16 @@ export class CartModelMongoDB {
       let output: IntItem | IntItem[] = [];
       if (id) {
         const document = await this.cart.findById(id);
-        if (document) output = ((document as unknown) as IntItem);
-        else throw new NotFound('Product does not exist on cart.');
+        if (document) output = document as unknown as IntItem;
+        else throw new NotFound(404, 'Product does not exist on cart.');
       } else {
         const products = await this.cart.find();
-        output = (products as unknown) as IntItem[];
+        output = products as unknown as IntItem[];
       }
       return output;
     } catch (e) {
       if (e instanceof mongoose.Error.CastError) {
-        throw new NotFound('Product not found.');
+        throw new NotFound(404, 'Product not found.');
       } else {
         throw { error: e, message: 'An error occurred when loading products.' };
       }
@@ -74,13 +76,13 @@ export class CartModelMongoDB {
         await newProduct.save();
         return newProduct as IntItem;
       } else {
-        throw new NotFound('Product to add does not exist on cart.');
+        throw new NotFound(404, 'Product to add does not exist on cart.');
       }
     } catch (e) {
       if (e instanceof NotFound) {
         throw e;
       } else if (e instanceof mongoose.Error.CastError) {
-        throw new NotFound('Product to add does not exist on cart.');
+        throw new NotFound(404, 'Product to add does not exist on cart.');
       } else {
         throw { error: e, message: 'An error occurred when loading products.' };
       }
@@ -94,7 +96,7 @@ export class CartModelMongoDB {
       return cartProducts as IntItem[];
     } catch (e) {
       if (e instanceof mongoose.Error.CastError) {
-        throw new NotFound('Product to delete does not exist.');
+        throw new NotFound(404, 'Product to delete does not exist.');
       } else {
         throw { error: e, message: 'Product could not be deleted.' };
       }

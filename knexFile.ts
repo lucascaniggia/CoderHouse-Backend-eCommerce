@@ -13,7 +13,7 @@ const defaults = {
   },
   seeds: {
     directory: __dirname + '/db/seeds',
-  }
+  },
 };
 
 // interface KnexConfig {
@@ -24,7 +24,7 @@ const KnexConfig = {
   development: {
     ...defaults,
     debug: true,
-    useNullAsDefault: true
+    useNullAsDefault: true,
   },
 
   development2: {
@@ -34,8 +34,8 @@ const KnexConfig = {
   },
 
   production: {
-    ...defaults
-  }
+    ...defaults,
+  },
 };
 
 export default KnexConfig;
@@ -62,4 +62,4 @@ export default KnexConfig;
 //     connection: { filename: './messages.sqlite' },
 //     useNullAsDefault: true,
 //   },
-// };
+// }

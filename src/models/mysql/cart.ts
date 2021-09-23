@@ -7,27 +7,33 @@ export class CartModelMySQL {
   private connection: Knex;
 
   constructor(dbType: 'mysql' | 'sqlite') {
-    const environment = dbType === 'mysql' ? process.env.NODE_ENV || 'development' : 'development2';
+    const environment =
+      dbType === 'mysql'
+        ? process.env.NODE_ENV || 'development'
+        : 'development2';
     const configDB: IntKnex = dbConfig;
     const options = configDB[environment];
     this.connection = knex(options);
     console.log(`MySQL DB ${environment} set up successfully`);
-    this.connection.schema.hasTable('cart').then((exists) => {
+    this.connection.schema.hasTable('cart').then(exists => {
       if (!exists) {
-        this.connection.schema.createTable('cart', (cartTable) => {
-          cartTable.increments();
-          cartTable.string('name').notNullable();
-          cartTable.string('description').notNullable();
-          cartTable.string('code').notNullable();
-          cartTable.decimal('price', 5, 2).notNullable();
-          cartTable.string('photo').notNullable();
-          cartTable.timestamp('timestamp').defaultTo(this.connection.fn.now());
-          cartTable.integer('stock').notNullable();
-        })
-        .then(() => {
-          console.log('Cart Table created successfully');
-        })
-        .catch(e => console.log(e));
+        this.connection.schema
+          .createTable('cart', cartTable => {
+            cartTable.increments();
+            cartTable.string('name').notNullable();
+            cartTable.string('description').notNullable();
+            cartTable.string('code').notNullable();
+            cartTable.decimal('price', 5, 2).notNullable();
+            cartTable.string('photo').notNullable();
+            cartTable
+              .timestamp('timestamp')
+              .defaultTo(this.connection.fn.now());
+            cartTable.integer('stock').notNullable();
+          })
+          .then(() => {
+            console.log('Cart Table created successfully');
+          })
+          .catch(e => console.log(e));
       }
     });
   }
@@ -46,13 +52,20 @@ export class CartModelMySQL {
 
   async save(id: string): Promise<IntItem> {
     try {
-      const productToAdd = await this.connection('products').where('id', Number(id));
+      const productToAdd = await this.connection('products').where(
+        'id',
+        Number(id),
+      );
       if (productToAdd.length) {
-        const addedProductID = await this.connection('cart').insert(productToAdd[0]);
-        const newProductAdded = await this.get((addedProductID[0] as unknown) as string);
-        return (newProductAdded as unknown) as IntItem;
+        const addedProductID = await this.connection('cart').insert(
+          productToAdd[0],
+        );
+        const newProductAdded = await this.get(
+          addedProductID[0] as unknown as string,
+        );
+        return newProductAdded as unknown as IntItem;
       } else {
-        throw new NotFound('Product to add does not exist.');
+        throw new NotFound(404, 'Product to add does not exist.');
       }
     } catch (e) {
       if (e instanceof NotFound) {
@@ -65,9 +78,11 @@ export class CartModelMySQL {
 
   async delete(id: string): Promise<IntItem[]> {
     try {
-      const deletedProduct = await this.connection('cart').where('id', Number(id)).del();
+      const deletedProduct = await this.connection('cart')
+        .where('id', Number(id))
+        .del();
       if (!deletedProduct) {
-        throw new NotFound('Product to delete does not exist on cart.');
+        throw new NotFound(404, 'Product to delete does not exist on cart.');
       } else {
         const productsInCart = await this.get();
         return productsInCart as IntItem[];

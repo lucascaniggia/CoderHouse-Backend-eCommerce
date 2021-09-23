@@ -21,23 +21,23 @@ export class CartModelFirebase {
         if (product) {
           output = {
             id: data.id,
-            ...product
+            ...product,
           } as IntItem;
         } else {
           return output[0];
         }
       } else {
-      const result = await this.cartDb.get();
-      const products = result.docs;
-      output = products.map(product => {
-        const productData = product.data();
-        return {
-          id: product.id,
-          ...productData
-        };
-      }) as IntItem[];
-    }
-    return output;
+        const result = await this.cartDb.get();
+        const products = result.docs;
+        output = products.map(product => {
+          const productData = product.data();
+          return {
+            id: product.id,
+            ...productData,
+          };
+        }) as IntItem[];
+      }
+      return output;
     } catch (e) {
       throw { error: e, message: 'An error occurred when loading products.' };
     }
@@ -49,14 +49,14 @@ export class CartModelFirebase {
       const addedProduct = productToAddData.data();
       if (addedProduct) {
         await this.cartDb.doc(id).set({
-          ...addedProduct
+          ...addedProduct,
         });
         return {
           id,
-          ...addedProduct
+          ...addedProduct,
         } as IntItem;
       } else {
-        throw new NotFound('Product to add does not exist.');
+        throw new NotFound(404, 'Product to add does not exist.');
       }
     } catch (e) {
       if (e instanceof NotFound) {
@@ -75,13 +75,13 @@ export class CartModelFirebase {
         const productsInCart = await this.get();
         return productsInCart as IntItem[];
       } else {
-        throw new NotFound('Product to delete does not exist.');
+        throw new NotFound(404, 'Product to delete does not exist.');
       }
     } catch (e) {
       if (e instanceof NotFound) {
         throw e;
       } else {
-        throw { error: e, message: 'Product could not be deleted.'};
+        throw { error: e, message: 'Product could not be deleted.' };
       }
     }
   }

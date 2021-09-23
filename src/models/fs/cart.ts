@@ -2,11 +2,11 @@ import { promises as fsPromises } from 'fs';
 import path from 'path';
 import { IntItem } from 'common/interfaces';
 import { NotFound } from 'errors';
-import { ProductsModel } from 'models/fs/product';
+import { ProductsModelFs } from 'models/fs/product';
 
 const cartPath = path.resolve(__dirname, '../../cart.json');
 
-export class CartModel {
+export class CartModelFs {
   // async getAll(): Promise<IntItem[]> {
   //   try {
   //     const cart = await fsPromises.readFile(cartPath, 'utf-8');
@@ -16,7 +16,7 @@ export class CartModel {
   //   }
   // }
 
-  async get(id?: string): Promise<IntItem> {
+  async get(id?: string): Promise<IntItem | IntItem[]> {
     try {
       const cart = await fsPromises.readFile(cartPath, 'utf-8');
       const products = JSON.parse(cart).products;
@@ -29,9 +29,11 @@ export class CartModel {
 
   async save(id: string): Promise<IntItem> {
     try {
-      const productsModel = new ProductsModel();
+      const productsModel = new ProductsModelFs();
       const allProducts = await productsModel.get();
-      const productToAdd = (allProducts as IntItem[]).find((item: IntItem) => item.id === id);
+      const productToAdd = (allProducts as IntItem[]).find(
+        (item: IntItem) => item.id === id,
+      );
 
       if (productToAdd) {
         const cart = await fsPromises.readFile(cartPath, 'utf-8');
@@ -39,17 +41,20 @@ export class CartModel {
         cartJSON.products.push(productToAdd);
         await fsPromises.writeFile(
           cartPath,
-          JSON.stringify(cartJSON, null, '\t')
+          JSON.stringify(cartJSON, null, '\t'),
         );
         return cartJSON.products;
       } else {
-        throw new NotFound('Product to add does not exist.');
+        throw new NotFound(404, 'Product to add does not exist.');
       }
     } catch (e) {
       if (e instanceof NotFound) {
         throw e;
       } else {
-        throw { error: e.error, message: 'An error occurred when adding the product.' };
+        throw {
+          error: e.error,
+          message: 'An error occurred when adding the product.',
+        };
       }
     }
   }
@@ -59,7 +64,7 @@ export class CartModel {
       const cart = await fsPromises.readFile(cartPath, 'utf-8');
       const cartJSON = JSON.parse(cart);
       const productToDelete = cartJSON.products.find(
-        (item: IntItem) => item.id === id
+        (item: IntItem) => item.id === id,
       );
 
       if (productToDelete) {
@@ -69,17 +74,20 @@ export class CartModel {
         cartJSON.products.splice(productToDeleteIndex, 1);
         await fsPromises.writeFile(
           cartPath,
-          JSON.stringify(cartJSON, null, '\t')
+          JSON.stringify(cartJSON, null, '\t'),
         );
         return cartJSON.products;
       } else {
-        throw new NotFound('Product to delete does not exist on cart.');
+        throw new NotFound(404, 'Product to delete does not exist on cart.');
       }
     } catch (e) {
       if (e instanceof NotFound) {
         throw e;
       } else {
-        throw { error: e.error, message: 'An error occurred when deleting the product.' };
+        throw {
+          error: e.error,
+          message: 'An error occurred when deleting the product.',
+        };
       }
     }
   }

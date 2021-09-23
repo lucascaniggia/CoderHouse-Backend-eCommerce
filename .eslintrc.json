@@ -19,13 +19,12 @@
         "prettier"
     ],
     "rules": {
-        "semi": [
-            "error",
-            "always"
-        ],
-        "quotes": [
-            "error",
-            "single"
+        "prettier/prettier": ["error",
+            {
+                "trailingComma": "all",
+                "arrowParens": "avoid",
+                "endOfLine": "auto"
+            }
         ]
     }
 }

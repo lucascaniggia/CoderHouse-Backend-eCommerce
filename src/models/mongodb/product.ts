@@ -1,7 +1,7 @@
 import Config from 'config';
-import { IntItem, BaseIntItem } from 'common/interfaces';
+import { IntItem, BaseIntItem, QueryIntItem } from 'common/interfaces';
 import moment from 'moment';
-import mongoose from 'mongoose';
+import mongoose, { FilterQuery } from 'mongoose';
 import { NotFound } from 'errors';
 import { productsMock } from 'mocks/products';
 
@@ -20,10 +20,13 @@ ProductSchema.set('toJSON', {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
     delete returnedObject.__v;
-  }
+  },
 });
 
-export const productsModel = mongoose.model<BaseIntItem>('products', ProductSchema);
+export const productsModel = mongoose.model<BaseIntItem>(
+  'products',
+  ProductSchema,
+);
 
 export class ProductsModelMongoDB {
   private dbURL: string;
@@ -33,22 +36,24 @@ export class ProductsModelMongoDB {
     if (type === 'local') {
       this.dbURL = 'mongodb://0.0.0.0:27017/ecommerce';
     } else {
-      this.dbURL = `mongodb+srv://${Config.MONGO_ATLAS_USER}:${Config.MONGO_ATLAS_PASSWORD}@${Config.MONGO_ATLAS_CLUSTER}/${Config.MONGO_ATLAS_DB}?retryWrites=true&w=majority`;
+      this.dbURL = `mongodb+srv://${Config.MONGO_ATLAS_USER}:${Config.MONGO_ATLAS_PASSWORD}@${Config.MONGO_ATLAS_CLUSTER}/${Config.MONGO_ATLAS_DBNAME}?retryWrites=true&w=majority`;
     }
-    mongoose.connect(this.dbURL)
+    mongoose
+      .connect(this.dbURL)
       .then(() => {
         console.log('Mongo DB connected!');
         this.get()
-          .then((products) => {
+          .then(products => {
             if (products.length === 0) {
-              this.products.insertMany(productsMock)
+              this.products
+                .insertMany(productsMock)
                 .then(() => console.log('Products added successfully'))
-                .catch((e) => console.log(e));
+                .catch(e => console.log(e));
             }
           })
-          .catch((e) => console.log(e));
+          .catch(e => console.log(e));
       })
-      .catch((e) => console.log(e));
+      .catch(e => console.log(e));
   }
 
   async get(id?: string): Promise<IntItem | IntItem[]> {
@@ -56,15 +61,15 @@ export class ProductsModelMongoDB {
       let output: IntItem | IntItem[] = [];
       if (id) {
         const document = await this.products.find({ _id: id });
-        if (document) output = ((document as unknown) as IntItem);
+        if (document) output = document as unknown as IntItem;
       } else {
         const products = await this.products.find();
-        output = (products as unknown) as IntItem[];
+        output = products as unknown as IntItem[];
       }
       return output;
     } catch (e) {
       if (e instanceof mongoose.Error.CastError) {
-        throw new NotFound('Product not found.');
+        throw new NotFound(404, 'Product not found.');
       } else {
         throw { error: e, message: 'An error occurred when loading products.' };
       }
@@ -74,16 +79,20 @@ export class ProductsModelMongoDB {
   async save(data: IntItem): Promise<IntItem> {
     const newProduct = await new this.products(data);
     await newProduct.save();
-    return (newProduct as unknown) as IntItem;
+    return newProduct as unknown as IntItem;
   }
 
   async update(id: string, data: IntItem): Promise<IntItem> {
     try {
-      const updatedProduct = await this.products.findByIdAndUpdate(id, data, { new: true, runValidators: true, rawResult: true });
-      return (updatedProduct.value as unknown) as IntItem;
+      const updatedProduct = await this.products.findByIdAndUpdate(id, data, {
+        new: true,
+        runValidators: true,
+        rawResult: true,
+      });
+      return updatedProduct.value as unknown as IntItem;
     } catch (e) {
       if (e instanceof mongoose.Error.CastError) {
-        throw new NotFound('Product to update does not exist.');
+        throw new NotFound(404, 'Product to update does not exist.');
       } else {
         throw { error: e, message: 'Product could not be updated.' };
       }
@@ -95,10 +104,44 @@ export class ProductsModelMongoDB {
       await this.products.findByIdAndRemove(id);
     } catch (e) {
       if (e instanceof mongoose.Error.CastError) {
-        throw new NotFound('Product to delete does not exist.');
+        throw new NotFound(404, 'Product to delete does not exist.');
       } else {
         throw { error: e, message: 'Product could not be deleted.' };
       }
     }
+  }
+
+  async query(options: QueryIntItem): Promise<IntItem[]> {
+    const query: FilterQuery<BaseIntItem> = {};
+
+    if (options.name) query.name = options.name;
+
+    if (options.code) query.code = options.code;
+
+    if (options.minPrice && options.maxPrice) {
+      query.price = {
+        $gte: options.minPrice,
+        $lte: options.maxPrice,
+      };
+    } else if (options.minPrice) {
+      query.price = { $gte: options.minPrice };
+    } else if (options.maxPrice) {
+      query.price = { $lte: options.maxPrice };
+    }
+
+    if (options.minStock && options.maxStock) {
+      query.stock = {
+        $gte: options.minStock,
+        $lte: options.maxStock,
+      };
+    } else if (options.minStock) {
+      query.stock = { $gte: options.minStock };
+    } else if (options.maxStock) {
+      query.stock = { $lte: options.maxStock };
+    }
+
+    const products = await this.products.find(query);
+
+    return products as IntItem[];
   }
 }

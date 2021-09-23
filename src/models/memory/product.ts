@@ -1,44 +1,28 @@
-import { promises as fsPromises } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
-import path from 'path';
-import { IntItem, QueryIntItem } from '../../common/interfaces';
+import { IntItem, QueryIntItem } from 'common/interfaces';
 import { NotFound } from 'errors';
+import { productsMemoryMock } from 'mocks/products-memory';
 
-const productsPath = path.resolve(__dirname, '../products.json');
+let products = productsMemoryMock;
 
-export class ProductsModelFs {
-  // async getAll(): Promise<IntItem[]> {
-  //   try {
-  //     const products = await fsPromises.readFile(productsPath, 'utf-8');
-  //     return JSON.parse(products);
-  //   } catch (e) {
-  //     throw { error: e, message: 'An error occurred when loading products.' };
-  //   }
-  // }
-
+export class ProductsModel {
   async get(id?: string): Promise<IntItem | IntItem[]> {
     try {
-      const products = await fsPromises.readFile(productsPath, 'utf-8');
-      const productsJSON = JSON.parse(products);
-      if (id) return productsJSON.find((item: IntItem) => item.id === id);
-      return productsJSON;
+      if (id)
+        return products.find((item: IntItem) => item.id === id) as IntItem;
+      return products;
     } catch (e) {
-      throw { error: e, message: 'An error occurred when loading product.' };
+      throw { error: e, message: 'An error occurred when loading products.' };
     }
   }
 
   async save(product: IntItem): Promise<IntItem> {
     try {
-      const products = await fsPromises.readFile(productsPath, 'utf-8');
-      const productsJSON = JSON.parse(products);
       product.id = uuidv4();
       product.timestamp = moment().format('DD/MM/YYYY HH:mm:ss');
-      productsJSON.push(product);
-      await fsPromises.writeFile(
-        productsPath,
-        JSON.stringify(productsJSON, null, '\t'),
-      );
+
+      products.push(product);
       return product;
     } catch (e) {
       throw { error: e, message: 'Product could not be saved.' };
@@ -47,12 +31,7 @@ export class ProductsModelFs {
 
   async update(id: string, product: IntItem): Promise<IntItem> {
     try {
-      const products = await fsPromises.readFile(productsPath, 'utf-8');
-      const productsJSON = JSON.parse(products);
-
-      let productToUpdate = productsJSON.find(
-        (item: IntItem) => item.id === id,
-      );
+      let productToUpdate = products.find((item: IntItem) => item.id === id);
 
       if (productToUpdate) {
         productToUpdate = {
@@ -60,15 +39,11 @@ export class ProductsModelFs {
           ...product,
         };
 
-        const productToUpdateIndex = productsJSON
+        const productToUpdateIndex = products
           .map((item: IntItem) => item.id)
           .indexOf(id);
-        productsJSON.splice(productToUpdateIndex, 1, productToUpdate);
+        products.splice(productToUpdateIndex, 1, productToUpdate);
 
-        await fsPromises.writeFile(
-          productsPath,
-          JSON.stringify(productsJSON, null, '\t'),
-        );
         return productToUpdate;
       } else {
         throw new NotFound(404, 'Product to update does not exist.');
@@ -77,32 +52,20 @@ export class ProductsModelFs {
       if (e instanceof NotFound) {
         throw e;
       } else {
-        throw {
-          error: e,
-          message: 'An error occurred when updating the product.',
-        };
+        throw { error: e, message: 'Product could not be updated' };
       }
     }
   }
 
   async delete(id: string): Promise<void> {
     try {
-      const products = await fsPromises.readFile(productsPath, 'utf-8');
-      const productsJSON = JSON.parse(products);
-
-      const productToDelete = productsJSON.find(
-        (item: IntItem) => item.id === id,
-      );
+      const productToDelete = products.find((item: IntItem) => item.id === id);
 
       if (productToDelete) {
-        const newProductList = productsJSON.filter(
+        const newProductList = products.filter(
           (item: IntItem) => item.id !== id,
         );
-
-        await fsPromises.writeFile(
-          productsPath,
-          JSON.stringify(newProductList, null, '\t'),
-        );
+        products = newProductList;
       } else {
         throw new NotFound(404, 'Product to delete does not exist.');
       }

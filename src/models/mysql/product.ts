@@ -1,5 +1,5 @@
 import knex, { Knex } from 'knex';
-import { IntItem, IntKnex } from 'common/interfaces';
+import { IntItem, QueryIntItem, IntKnex } from 'common/interfaces';
 import { NotFound } from 'errors';
 import dbConfig from './../../../knexFile';
 import { productsMock } from 'mocks/products';
@@ -7,29 +7,35 @@ import { productsMock } from 'mocks/products';
 export class ProductsModelMySQL {
   private connection: Knex;
   constructor(dbType: 'mysql' | 'sqlite') {
-    const environment = dbType === 'mysql' ? process.env.NODE_ENV || 'development' : 'development2';
+    const environment =
+      dbType === 'mysql'
+        ? process.env.NODE_ENV || 'development'
+        : 'development2';
     const configDb: IntKnex = dbConfig;
     const options = configDb[environment];
     this.connection = knex(options);
     console.log(`MySQL DB ${environment} set up.`);
-    this.connection.schema.hasTable('products').then((exists) => {
+    this.connection.schema.hasTable('products').then(exists => {
       if (!exists) {
-        this.connection.schema.createTable('products', (productsTable) => {
-          productsTable.increments();
-          productsTable.string('name').notNullable();
-          productsTable.string('description').notNullable();
-          productsTable.string('code').notNullable();
-          productsTable.decimal('price', 5, 2).notNullable();
-          productsTable.string('photo').notNullable();
-          productsTable.timestamp('timestamp').defaultTo(this.connection.fn.now());
-          productsTable.integer('stock').notNullable();
-        })
-        .then(() => {
-          console.log('Product\'s Table has been created.');
-          this.connection('products').insert(productsMock);
-          console.log('Products added.');
-        })
-        .catch(e => console.log(e));
+        this.connection.schema
+          .createTable('products', productsTable => {
+            productsTable.increments();
+            productsTable.string('name').notNullable();
+            productsTable.string('description').notNullable();
+            productsTable.string('code').notNullable();
+            productsTable.decimal('price', 5, 2).notNullable();
+            productsTable.string('photo').notNullable();
+            productsTable
+              .timestamp('timestamp')
+              .defaultTo(this.connection.fn.now());
+            productsTable.integer('stock').notNullable();
+          })
+          .then(() => {
+            console.log("Product's Table has been created.");
+            this.connection('products').insert(productsMock);
+            console.log('Products added.');
+          })
+          .catch(e => console.log(e));
       }
     });
   }
@@ -37,7 +43,10 @@ export class ProductsModelMySQL {
   async get(id?: string): Promise<IntItem | IntItem[]> {
     try {
       if (id) {
-        const product = await this.connection('products').where('id', Number(id));
+        const product = await this.connection('products').where(
+          'id',
+          Number(id),
+        );
         return product[0];
       }
       return this.connection('products');
@@ -49,8 +58,8 @@ export class ProductsModelMySQL {
   async save(product: IntItem): Promise<IntItem> {
     try {
       const newProductID = await this.connection('products').insert(product);
-      const newProduct = this.get(((newProductID[0] as unknown) as string));
-      return (newProduct as unknown) as IntItem;
+      const newProduct = this.get(newProductID[0] as unknown as string);
+      return newProduct as unknown as IntItem;
     } catch (e) {
       throw { error: e, message: 'Product could not be saved.' };
     }
@@ -63,7 +72,7 @@ export class ProductsModelMySQL {
       if (updatedProduct) {
         return updatedProduct as IntItem;
       } else {
-        throw new NotFound('Product to update does not exist.');
+        throw new NotFound(404, 'Product to update does not exist.');
       }
     } catch (e) {
       if (e instanceof NotFound) {
@@ -76,9 +85,11 @@ export class ProductsModelMySQL {
 
   async delete(id: string): Promise<void> {
     try {
-      const deletedProduct = await this.connection('products').where('id', Number(id)).del();
+      const deletedProduct = await this.connection('products')
+        .where('id', Number(id))
+        .del();
       if (!deletedProduct) {
-        throw new NotFound('Product to update does not exist.');
+        throw new NotFound(404, 'Product to update does not exist.');
       }
     } catch (e) {
       if (e instanceof NotFound) {
@@ -86,6 +97,46 @@ export class ProductsModelMySQL {
       } else {
         throw { error: e, message: 'Product could not be deleted.' };
       }
+    }
+  }
+
+  async query(options: QueryIntItem): Promise<IntItem[]> {
+    try {
+      const products = await this.connection('productos')
+        .modify(queryBuilder => {
+          if (options.name) {
+            queryBuilder.where('name', options.name);
+          }
+        })
+        .modify(queryBuilder => {
+          if (options.code) {
+            queryBuilder.where('code', options.code);
+          }
+        })
+        .modify(queryBuilder => {
+          if (options.minPrice) {
+            queryBuilder.where('price', '>=', options.minPrice);
+          }
+        })
+        .modify(queryBuilder => {
+          if (options.maxPrice) {
+            queryBuilder.where('price', '<=', options.maxPrice);
+          }
+        })
+        .modify(queryBuilder => {
+          if (options.minStock) {
+            queryBuilder.where('stock', '>=', options.minStock);
+          }
+        })
+        .modify(queryBuilder => {
+          if (options.maxStock) {
+            queryBuilder.where('stock', '<=', options.maxStock);
+          }
+        });
+
+      return products;
+    } catch (e) {
+      throw { error: e, message: 'An error occurred during the search.' };
     }
   }
 }

@@ -4,13 +4,14 @@ import {
   getCartProduct,
   saveCartProduct,
   deleteCartProduct,
-} from '/controllers/cart';
+} from 'controllers/cart';
+import asyncHandler from 'express-async-handler';
 
 const cartRouter = express.Router();
 
-cartRouter.get('/list', getCart);
-cartRouter.get('/list/:id', getCartProduct);
-cartRouter.get('/save/:id', saveCartProduct);
-cartRouter.get('/delete/:id', deleteCartProduct);
+cartRouter.get('/list', asyncHandler(getCart));
+cartRouter.get('/list/:id', asyncHandler(getCartProduct));
+cartRouter.get('/save/:id', asyncHandler(saveCartProduct));
+cartRouter.get('/delete/:id', asyncHandler(deleteCartProduct));
 
 export default cartRouter;

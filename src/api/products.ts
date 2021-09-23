@@ -1,4 +1,4 @@
-import { IntItem } from 'common/interfaces';
+import { IntItem, QueryIntItem } from 'common/interfaces';
 import { ProductsModelFactory } from 'models/factory/products';
 import { modelTypeToUse } from './modelType';
 
@@ -11,9 +11,9 @@ class ProductsAPI {
     this.factory = ProductsModelFactory.model(modelTypeToUse);
   }
 
-  async get(id?: string) {
-    if (id) return await this.factory.get(id);
-    return await this.factory.get();
+  get(id?: string) {
+    if (id) return this.factory.get(id);
+    return this.factory.get();
   }
 
   async save(product: IntItem) {
@@ -28,6 +28,10 @@ class ProductsAPI {
 
   async delete(id: string) {
     await this.factory.delete(id);
+  }
+
+  async query(options: QueryIntItem) {
+    return this.factory.query(options);
   }
 }
 
