@@ -57,6 +57,7 @@ export interface QueryIntItem {
   maxPrice?: number;
   minStock?: number;
   maxStock?: number;
+  cant?: number;
 }
 
 // export interface IntMessage {
