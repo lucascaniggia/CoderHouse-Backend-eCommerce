@@ -1,15 +1,21 @@
 import express from 'express';
 import 'dotenv/config.js';
 import cors from 'cors';
+import http from 'http';
 import path from 'path';
 import routes from 'routes';
+import { initWsServer } from 'services/socket';
 import { unknownEndpoint } from 'middlewares/unknownEndpoint';
 import { errorHandler } from 'middlewares/errorHandler';
 
 const app: express.Application = express();
 const PORT = process.env.PORT || 8080;
 
-const server = app.listen(PORT, () => {
+// const server = app.listen(PORT, () => {
+const server: http.Server = http.createServer(app);
+initWsServer(server);
+
+server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
 server.on('error', error => console.log(`Server error: ${error}`));
