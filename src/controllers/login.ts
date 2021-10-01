@@ -7,7 +7,7 @@ declare module 'express-session' {
   }
 }
 
-const myUser = 'lucacaniggia';
+const myUser = 'lucascaniggia';
 const myPass = 'coderhouse';
 
 export const loginSession = (req: Request, res: Response): void => {
@@ -17,7 +17,7 @@ export const loginSession = (req: Request, res: Response): void => {
     req.session.loggedIn = true;
     res.json({
       data: {
-        name,
+        name: data.name,
       },
       msg: 'Welcome',
     });
