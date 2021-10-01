@@ -12,8 +12,6 @@ interface IntModel {
   delete: (id: string) => Promise<IntItem[]>;
 }
 
-// const models = [cartModel];
-
 export class CartModelFactory {
   static model(type: number): IntModel {
     switch (type) {

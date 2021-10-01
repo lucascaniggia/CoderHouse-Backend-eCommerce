@@ -57,23 +57,22 @@ export interface QueryIntItem {
   maxPrice?: number;
   minStock?: number;
   maxStock?: number;
-  cant?: number;
 }
 
-export interface IntMessage {
-  author: {
-    id: string;
-    name: string;
-    lastname: string;
-    age: number;
-    alias: string;
-    avatar: string;
-  };
-  text: string;
-  timestamp: string;
-  _id: string;
-}
+// export interface IntMessage {
+//   author: {
+//     id: string;
+//     name: string;
+//     lastname: string;
+//     age: number;
+//     alias: string;
+//     avatar: string;
+//   };
+//   text: string;
+//   timestamp: string;
+//   _id: string;
+// }
 
-export interface DocumentIntMessage extends Document {
-  _id: ObjectId;
-}
+// export interface DocumentIntMessage extends Document {
+//   _id: ObjectId;
+// }

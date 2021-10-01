@@ -5,7 +5,6 @@ import { ProductsModelFs } from 'models/fs/product';
 import { ProductsModelFirebase } from 'models/firebase/product';
 import { ProductsModelMongoDB } from 'models/mongodb/product';
 import { ProductsModelMySQL } from 'models/mysql/product';
-import { ProductsModelFaker } from 'models/faker/product';
 
 interface IntModel {
   get: (id?: string) => Promise<IntItem | IntItem[]>;
@@ -30,8 +29,6 @@ export class ProductsModelFactory {
         return new ProductsModelMongoDB('atlas');
       case ModelType.firebase:
         return new ProductsModelFirebase();
-      case ModelType.faker:
-        return new ProductsModelFaker();
       default:
         return new ProductsModel();
     }

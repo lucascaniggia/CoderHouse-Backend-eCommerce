@@ -30,9 +30,9 @@ class ProductsAPI {
     await this.factory.delete(id);
   }
 
-  async query(options: QueryIntItem) {
-    return this.factory.query(options);
-  }
+  // async query(options: QueryIntItem) {
+  //   return this.factory.query(options);
+  // }
 }
 
 export const productsAPI = new ProductsAPI();

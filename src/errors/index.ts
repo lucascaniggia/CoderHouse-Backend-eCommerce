@@ -34,7 +34,6 @@ export class NotFound extends BaseError {
   public error: string;
   constructor(statusCode: number, message: string) {
     super(statusCode, message);
-    this.message = message;
     this.error = `-${EnumErrorCodes.ProductNotFound}`;
   }
 }
