@@ -24,7 +24,7 @@ export class CartModelFactory {
       case ModelType.localMongo:
         return new CartModelMongoDB('local');
       case ModelType.mongoAtlas:
-        return new CartModelMongoDB('atlas');
+        return new CartModelMongoDB();
       case ModelType.firebase:
         return new CartModelFirebase();
       default:

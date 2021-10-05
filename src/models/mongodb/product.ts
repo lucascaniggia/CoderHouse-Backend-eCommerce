@@ -1,4 +1,3 @@
-import Config from 'config';
 import { IntItem, BaseIntItem, QueryIntItem } from 'common/interfaces';
 import moment from 'moment';
 import mongoose, { FilterQuery } from 'mongoose';
@@ -29,29 +28,17 @@ export const productsModel = mongoose.model<BaseIntItem>(
 );
 
 export class ProductsModelMongoDB {
-  private dbURL: string;
   private products;
-  constructor(type: 'local' | 'atlas') {
+  constructor() {
     this.products = productsModel;
-    if (type === 'local') {
-      this.dbURL = 'mongodb://0.0.0.0:27017/ecommerce';
-    } else {
-      this.dbURL = `mongodb+srv://${Config.MONGO_ATLAS_USER}:${Config.MONGO_ATLAS_PASSWORD}@${Config.MONGO_ATLAS_CLUSTER}/${Config.MONGO_ATLAS_DBNAME}?retryWrites=true&w=majority`;
-    }
-    mongoose
-      .connect(this.dbURL)
-      .then(() => {
-        console.log('Mongo DB connected!');
-        this.get()
-          .then(products => {
-            if (products.length === 0) {
-              this.products
-                .insertMany(productsMock)
-                .then(() => console.log('Products added successfully'))
-                .catch(e => console.log(e));
-            }
-          })
-          .catch(e => console.log(e));
+    this.get()
+      .then(products => {
+        if (products.length === 0) {
+          this.products
+            .insertMany(productsMock)
+            .then(() => console.log('Products added successfully.'))
+            .catch(e => console.log(e));
+        }
       })
       .catch(e => console.log(e));
   }

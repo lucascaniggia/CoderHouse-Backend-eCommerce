@@ -1,4 +1,3 @@
-import Config from 'config';
 import { IntItem, BaseIntItem } from 'common/interfaces';
 import { productsModel } from 'models/mongodb/product';
 import moment from 'moment';
@@ -24,23 +23,11 @@ ProductSchema.set('toJSON', {
 });
 
 export class CartModelMongoDB {
-  private dbURL: string;
   private cart;
   private products;
-  constructor(type: 'local' | 'atlas') {
+  constructor() {
     this.cart = mongoose.model<BaseIntItem>('cart', ProductSchema);
     this.products = productsModel;
-    if (type === 'local') {
-      this.dbURL = 'mongodb://0.0.0.0:27017/ecommerce';
-    } else {
-      this.dbURL = `mongodb+srv://${Config.MONGO_ATLAS_USER}:${Config.MONGO_ATLAS_PASSWORD}@${Config.MONGO_ATLAS_CLUSTER}/${Config.MONGO_ATLAS_DBNAME}?retryWrites=true&w=majority`;
-    }
-    mongoose
-      .connect(this.dbURL)
-      .then(() => {
-        console.log('Mongo DB connected!');
-      })
-      .catch(e => console.log(e));
   }
 
   async get(id?: string): Promise<IntItem | IntItem[]> {

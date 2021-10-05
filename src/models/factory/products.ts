@@ -26,7 +26,7 @@ export class ProductsModelFactory {
       case ModelType.localMongo:
         return new ProductsModelMongoDB('local');
       case ModelType.mongoAtlas:
-        return new ProductsModelMongoDB('atlas');
+        return new ProductsModelMongoDB();
       case ModelType.firebase:
         return new ProductsModelFirebase();
       default:
