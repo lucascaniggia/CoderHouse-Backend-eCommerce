@@ -2,12 +2,12 @@ import express from 'express';
 import productRouter from './product';
 import cartRouter from './cart';
 import loginRouter from './login';
-import { validateLogin } from 'middlewares/validLogin';
+import { isLoggedIn } from 'middlewares/auth';
 
 const Router = express.Router();
 
 Router.use('/', loginRouter);
-Router.use('/products', validateLogin, productRouter);
-Router.use('/cart', validateLogin, cartRouter);
+Router.use('/products', isLoggedIn, productRouter);
+Router.use('/cart', isLoggedIn, cartRouter);
 
 export default Router;

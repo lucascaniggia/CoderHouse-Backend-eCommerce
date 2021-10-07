@@ -37,3 +37,14 @@ export class NotFound extends BaseError {
     this.error = `-${EnumErrorCodes.ProductNotFound}`;
   }
 }
+
+export class UnauthorizedRoute extends BaseError {
+  public error: string;
+  public description: string;
+  constructor(statusCode: number, message: string, description?: string) {
+    super(statusCode, message);
+    this.error = `-${EnumErrorCodes.UnauthRoute}`;
+    this.description =
+      description || "You don't have permission to perform this action";
+  }
+}

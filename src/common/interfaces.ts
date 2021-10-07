@@ -59,6 +59,13 @@ export interface QueryIntItem {
   maxStock?: number;
 }
 
+export interface IntUser {
+  id: string;
+  username: string;
+  password: string;
+  isValidPassword: (password: string) => Promise<boolean>;
+}
+
 // export interface IntMessage {
 //   author: {
 //     id: string;

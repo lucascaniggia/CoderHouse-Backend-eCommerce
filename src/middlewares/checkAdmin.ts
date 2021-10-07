@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { EnumErrorCodes } from 'common/enums';
+import { UnauthorizedRoute } from 'errors';
 
 const admin = true;
 
@@ -11,10 +11,10 @@ export const isAdmin = (
   if (admin) {
     next();
   } else {
-    res.status(401).send({
-      error: `-${EnumErrorCodes.UnauthRoute}`,
-      description: `Unauthorized error on route ${req.originalUrl} method ${req.method}`,
-      message: 'User has no permissions to perform this action.',
-    });
+    throw new UnauthorizedRoute(
+      401,
+      'You do not have permission to perform this action.',
+      `Route ${req.originalUrl} method ${req.method} unauthorized.`,
+    );
   }
 };

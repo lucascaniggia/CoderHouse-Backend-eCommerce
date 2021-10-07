@@ -1,5 +1,5 @@
 import { IntItem, BaseIntItem } from 'common/interfaces';
-import { productsModel } from 'models/mongodb/product';
+import { ProductsModel } from 'models/mongodb/product';
 import moment from 'moment';
 import mongoose from 'mongoose';
 import { NotFound } from 'errors';
@@ -27,7 +27,7 @@ export class CartModelMongoDB {
   private products;
   constructor() {
     this.cart = mongoose.model<BaseIntItem>('cart', ProductSchema);
-    this.products = productsModel;
+    this.products = ProductsModel;
   }
 
   async get(id?: string): Promise<IntItem | IntItem[]> {

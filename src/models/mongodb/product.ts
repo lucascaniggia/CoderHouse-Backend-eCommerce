@@ -22,7 +22,7 @@ ProductSchema.set('toJSON', {
   },
 });
 
-export const productsModel = mongoose.model<BaseIntItem>(
+export const ProductsModel = mongoose.model<BaseIntItem>(
   'products',
   ProductSchema,
 );
@@ -30,7 +30,7 @@ export const productsModel = mongoose.model<BaseIntItem>(
 export class ProductsModelMongoDB {
   private products;
   constructor() {
-    this.products = productsModel;
+    this.products = ProductsModel;
     this.get()
       .then(products => {
         if (products.length === 0) {
