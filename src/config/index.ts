@@ -12,6 +12,9 @@ const env = {
   FIREBASE_CLIENT_EMAIL:
     process.env.FIREBASE_CLIENT_EMAIL || 'firebaseClientEmail',
   FIREBASE_PROJECTID: process.env.FIREBASE_PROJECTID || 'firebaseProjectID',
+
+  FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID || 'faceId',
+  FACEBOOK_APP_SECRET: process.env.FACEBOOK_APP_SECRET || 'faceSecret',
 };
 
 export default env;

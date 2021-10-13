@@ -6,7 +6,7 @@ import { isLoggedIn } from 'middlewares/auth';
 
 const Router = express.Router();
 
-Router.use('/', loginRouter);
+Router.use('/auth', loginRouter);
 Router.use('/products', isLoggedIn, productRouter);
 Router.use('/cart', isLoggedIn, cartRouter);
 
