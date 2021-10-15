@@ -2,6 +2,7 @@ import express from 'express';
 import 'dotenv/config.js';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
+import Config from 'config';
 import cors from 'cors';
 import path from 'path';
 import routes from 'routes';
@@ -11,7 +12,7 @@ import { clientPromise } from 'services/mongodb';
 import passport from 'middlewares/auth';
 
 const app: express.Application = express();
-const PORT = process.env.PORT || 8080;
+const PORT = Config.PORT;
 
 const server = app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
