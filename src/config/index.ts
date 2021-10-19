@@ -13,11 +13,20 @@ const options = [
     name: 'faceSecret',
     description: 'Facebook App secret',
   },
+  {
+    name: 'mode',
+    description: 'run in fork or cluster mode',
+  },
+  {
+    name: 'run',
+    description: 'forever or pm2',
+  },
 ];
 
 args.options(options);
 
 const flags = args.parse(process.argv);
+console.log('flags', flags);
 
 const env = {
   PORT: flags.port || process.env.PORT || 8080,
