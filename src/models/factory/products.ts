@@ -24,7 +24,6 @@ export class ProductsModelFactory {
       case ModelType.sqlite:
         return new ProductsModelMySQL('sqlite');
       case ModelType.localMongo:
-        return new ProductsModelMongoDB('local');
       case ModelType.mongoAtlas:
         return new ProductsModelMongoDB();
       case ModelType.firebase:

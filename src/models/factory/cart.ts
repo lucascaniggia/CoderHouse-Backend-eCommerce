@@ -22,7 +22,6 @@ export class CartModelFactory {
       case ModelType.sqlite:
         return new CartModelMySQL('sqlite');
       case ModelType.localMongo:
-        return new CartModelMongoDB('local');
       case ModelType.mongoAtlas:
         return new CartModelMongoDB();
       case ModelType.firebase:
