@@ -3,6 +3,7 @@ import moment from 'moment';
 import mongoose, { FilterQuery } from 'mongoose';
 import { NotFound } from 'errors';
 import { productsMock } from 'mocks/products';
+import { logger } from 'utils/logger';
 
 const ProductSchema = new mongoose.Schema<BaseIntItem>({
   name: { type: String, require: true, max: 100 },
@@ -36,11 +37,11 @@ export class ProductsModelMongoDB {
         if (products.length === 0) {
           this.products
             .insertMany(productsMock)
-            .then(() => console.log('Products added successfully.'))
-            .catch(e => console.log(e));
+            .then(() => logger.info('Products added successfully.'))
+            .catch(e => logger.error(e));
         }
       })
-      .catch(e => console.log(e));
+      .catch(e => logger.error(e));
   }
 
   async get(id?: string): Promise<IntItem | IntItem[]> {

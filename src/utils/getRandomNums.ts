@@ -1,4 +1,5 @@
 import { IntObject } from 'common/interfaces';
+import { logger } from 'utils/logger';
 
 export const getRandomNums = (numberQty?: number): IntObject => {
   const numberObject: IntObject = {};
@@ -16,7 +17,7 @@ export const getRandomNums = (numberQty?: number): IntObject => {
 
 process.on('message', msg => {
   if (msg === 'start') {
-    console.log('Start getRandomNums');
+    logger.info('Start getRandomNums');
     const result = getRandomNums();
 
     if (process && process.send) {
