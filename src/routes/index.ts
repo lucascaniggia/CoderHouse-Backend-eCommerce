@@ -28,6 +28,7 @@ Router.use('/info', (req: Request, res: Response) => {
     numCPUs: os.cpus().length,
   };
 
+  console.log(info);
   res.json({ data: info });
 });
 
