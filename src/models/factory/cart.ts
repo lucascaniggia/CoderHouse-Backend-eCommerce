@@ -12,8 +12,16 @@ interface IntModel {
   delete: (id: string) => Promise<IntItem[]>;
 }
 
+interface MongoIntModel {
+  get: (userEmail: string, id?: string) => Promise<IntItem | IntItem[]>;
+  save: (userEmail: string, id: string) => Promise<IntItem>;
+  delete: (userEmail: string, id: string) => Promise<IntItem[]>;
+}
+
+type IntModelType = IntModel | MongoIntModel;
+
 export class CartModelFactory {
-  static model(type: number): IntModel {
+  static model(type: number): IntModelType {
     switch (type) {
       case ModelType.fs:
         return new CartModelFs();

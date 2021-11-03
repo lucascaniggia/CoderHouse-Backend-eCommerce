@@ -1,20 +1,23 @@
-import { IntItem, BaseIntItem } from 'common/interfaces';
+import { IntItem, IntCart } from 'common/interfaces';
 import { ProductsModel } from 'models/mongodb/product';
-import moment from 'moment';
-import mongoose from 'mongoose';
+import { UserModel } from 'models/mongodb/user';
 import { NotFound } from 'errors';
+import mongoose from 'mongoose';
 
-const ProductSchema = new mongoose.Schema<BaseIntItem>({
-  name: { type: String, require: true, max: 100 },
-  description: { type: String, require: true, max: 500 },
-  code: { type: String, require: true, max: 14 },
-  price: { type: Number, require: true, max: 5000 },
-  photo: { type: String, require: true },
-  timestamp: { type: String, default: moment().format('DD/MM/YYYY HH:mm:ss') },
-  stock: { type: Number, default: 0 },
+const CartSchema = new mongoose.Schema<IntCart>({
+  user: {
+    type: 'ObjectId',
+    ref: 'User',
+  },
+  products: [
+    {
+      type: 'ObjectId',
+      ref: 'Product',
+    },
+  ],
 });
 
-ProductSchema.set('toJSON', {
+CartSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
@@ -22,28 +25,42 @@ ProductSchema.set('toJSON', {
   },
 });
 
+export const CartModel = mongoose.model<IntCart>('Cart', CartSchema);
+
 export class CartModelMongoDB {
-  private cart;
-  private products;
+  private cartModel;
+  private productsModel;
+  private userModel;
   constructor() {
-    this.cart = mongoose.model<BaseIntItem>('cart', ProductSchema);
-    this.products = ProductsModel;
+    this.cartModel = CartModel;
+    this.productsModel = ProductsModel;
+    this.userModel = UserModel;
   }
 
-  async get(id?: string): Promise<IntItem | IntItem[]> {
+  async get(userEmail: string, id?: string): Promise<IntItem | IntItem[]> {
     try {
       let output: IntItem | IntItem[] = [];
-      if (id) {
-        const document = await this.cart.findById(id);
-        if (document) output = document as unknown as IntItem;
+      const user = (
+        await this.userModel.find({
+          email: userEmail,
+        })
+      )[0];
+      const cart = await this.cartModel
+        .findById(user.cart)
+        .populate('products');
+      if (cart && id) {
+        const product = cart.products.find(item => item._id.toString() === id);
+        if (product) output = product as unknown as IntItem;
         else throw new NotFound(404, 'Product does not exist on cart.');
-      } else {
-        const products = await this.cart.find();
+      } else if (cart) {
+        const products = cart.products;
         output = products as unknown as IntItem[];
       }
       return output;
     } catch (e) {
-      if (e instanceof mongoose.Error.CastError) {
+      if (e instanceof NotFound) {
+        throw e;
+      } else if (e instanceof mongoose.Error.CastError) {
         throw new NotFound(404, 'Product not found.');
       } else {
         throw { error: e, message: 'An error occurred when loading products.' };
@@ -51,20 +68,20 @@ export class CartModelMongoDB {
     }
   }
 
-  async save(id: string): Promise<IntItem> {
+  async save(id: string, userEmail: string): Promise<IntItem> {
     try {
-      const addedProduct = await this.products.findById(id);
-      if (addedProduct) {
-        const productJSON = addedProduct.toJSON();
-        productJSON._id = productJSON.id;
-        delete productJSON.id;
+      const user = (
+        await this.userModel.find({
+          email: userEmail,
+        })
+      )[0];
+      const product = await this.productsModel.findById(id);
 
-        const newProduct = await new this.cart(productJSON as IntItem);
-        await newProduct.save();
-        return newProduct as IntItem;
-      } else {
-        throw new NotFound(404, 'Product to add does not exist on cart.');
+      if (product) {
+        const cart = (await this.cartModel.findById(user.cart)) as IntCart;
+        return cart as unknown as IntItem;
       }
+      throw new NotFound(404, 'Product to add does not exist.');
     } catch (e) {
       if (e instanceof NotFound) {
         throw e;
@@ -76,13 +93,35 @@ export class CartModelMongoDB {
     }
   }
 
-  async delete(id: string): Promise<IntItem[]> {
+  async delete(id: string, userEmail: string): Promise<IntItem[]> {
     try {
-      await this.cart.findByIdAndRemove(id);
-      const cartProducts = await this.get();
-      return cartProducts as IntItem[];
+      const user = (
+        await this.userModel.find({
+          email: userEmail,
+        })
+      )[0];
+      const cart = await this.cartModel
+        .findById(user.cart)
+        .populate('products');
+      if (cart) {
+        const productToDelete = cart.products.find(
+          item => item._id.toString() === id,
+        );
+        if (productToDelete) {
+          const newProductsInCart = cart.products.filter(
+            item => item._id.toString() !== id,
+          );
+          cart.products = newProductsInCart;
+          await cart.save();
+          return newProductsInCart as unknown as IntItem[];
+        }
+        throw new NotFound(404, 'Product to delete does not exist on cart');
+      }
+      throw new NotFound(404, 'Cart does not exist.');
     } catch (e) {
-      if (e instanceof mongoose.Error.CastError) {
+      if (e instanceof NotFound) {
+        throw e;
+      } else if (e instanceof mongoose.Error.CastError) {
         throw new NotFound(404, 'Product to delete does not exist.');
       } else {
         throw { error: e, message: 'Product could not be deleted.' };

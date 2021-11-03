@@ -8,18 +8,18 @@ class CartAPI {
     this.factory = CartModelFactory.model(modelTypeToUse);
   }
 
-  get(id?: string) {
-    if (id) return this.factory.get(id);
-    return this.factory.get();
+  get(userEmail: string, id?: string) {
+    if (id) return this.factory.get(userEmail, id);
+    return this.factory.get(userEmail);
   }
 
-  async save(id: string) {
-    const newProduct = await this.factory.save(id);
+  async save(id: string, userEmail: string) {
+    const newProduct = await this.factory.save(id, userEmail);
     return newProduct;
   }
 
-  async delete(id: string) {
-    return this.factory.delete(id);
+  async delete(id: string, userEmail: string) {
+    return this.factory.delete(id, userEmail);
   }
 }
 
