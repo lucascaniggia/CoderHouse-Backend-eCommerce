@@ -48,3 +48,35 @@ export class UnauthorizedRoute extends BaseError {
       description || "You don't have permission to perform this action";
   }
 }
+
+export class UserValidation extends BaseError {
+  public error: string;
+  constructor(statusCode: number, message: string) {
+    super(statusCode, message);
+    this.error = `-${EnumErrorCodes.UserSignUpValidation}`;
+  }
+}
+
+export class MissingFieldsUser extends UserValidation {
+  public description;
+  constructor(statusCode: number, message: string, description: string) {
+    super(statusCode, message);
+    this.description = description;
+  }
+}
+
+export class UserExists extends BaseError {
+  public error: string;
+  constructor(statusCode: number, message: string) {
+    super(statusCode, message);
+    this.error = `-${EnumErrorCodes.UserAlreadyExists}`;
+  }
+}
+
+export class UserNotLoggedIn extends BaseError {
+  public error: string;
+  constructor(statusCode: number, message: string) {
+    super(statusCode, message);
+    this.error = `-${EnumErrorCodes.UserNotLoggedIn}`;
+  }
+}

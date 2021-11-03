@@ -5,8 +5,17 @@ import { IntUser } from 'common/interfaces';
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema<IntUser>({
-  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  name: { type: String, required: true },
+  address: { type: String, required: true },
+  age: { type: Number, required: true },
+  phone: { type: String, required: true },
+  photo: { type: String, required: true },
+  cart: {
+    type: 'ObjectId',
+    ref: 'Cart',
+  },
 });
 
 UserSchema.pre('save', async function (next) {
@@ -28,4 +37,4 @@ UserSchema.set('toJSON', {
   },
 });
 
-export const UserModel = mongoose.model<IntUser>('user', UserSchema);
+export const UserModel = mongoose.model<IntUser>('User', UserSchema);

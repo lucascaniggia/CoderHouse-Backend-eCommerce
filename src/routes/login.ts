@@ -1,20 +1,12 @@
 import express from 'express';
 import passport from 'middlewares/auth';
-import { userData, logoutUser } from 'controllers/login';
+import { loginUser, logoutUser, signUpUser, userData } from 'controllers/login';
+import { imageUpload } from '/middlewares/uploadImg';
 
 const loginRouter = express.Router();
 
-loginRouter.get(
-  '/login',
-  passport.authenticate('facebook', { scope: ['email'] }),
-);
-loginRouter.get(
-  '/facebook/callback',
-  passport.authenticate('facebook', {
-    successRedirect: 'http://localhost:8080',
-    failureRedirect: 'http://localhost:8080',
-  }),
-);
+loginRouter.post('/login', passport.authenticate('login'), loginUser);
+loginRouter.post('/signup', imageUpload, signUpUser);
 loginRouter.get('/userdata', userData);
 loginRouter.get('/logout', logoutUser);
 

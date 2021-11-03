@@ -1,7 +1,12 @@
 import { isUrl, isValidCode } from 'utils/regEx';
-import { IntItem } from 'common/interfaces';
+import { IntItem, BaseIntUser } from 'common/interfaces';
 import { getEmptyFields } from 'utils/objects';
-import { MissingFieldsProduct, ProductValidation } from 'errors';
+import {
+  MissingFieldsProduct,
+  MissingFieldsUser,
+  ProductValidation,
+  UserValidation,
+} from 'errors';
 
 // @parameter -> product item
 // Check if product contains any invalid getEmptyFields. If having,
@@ -40,6 +45,31 @@ export const isValidProduct = (product: IntItem): boolean | Error => {
     throw new ProductValidation(
       400,
       'Please check data, stock must be a number.',
+    );
+  }
+
+  return true;
+};
+
+//  @param user user data to sign up
+//  @returns checks if the user data has empty fields or if 'edad' is not a number, if so throws a proper error
+//
+
+export const isValidUser = (user: BaseIntUser): boolean | Error => {
+  const emptyFields = getEmptyFields(user);
+
+  if (emptyFields.length !== 0) {
+    throw new MissingFieldsUser(
+      400,
+      'All fields are required',
+      `The following fields are missing: ${emptyFields.join(', ')}`,
+    );
+  }
+
+  if (isNaN(user.age) || user.edad === 0) {
+    throw new UserValidation(
+      400,
+      'Please check data, age must be a non-zero number.',
     );
   }
 

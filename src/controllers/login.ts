@@ -1,56 +1,58 @@
-import { Request, Response } from 'express';
-
-type Photos = {
-  value: string;
-};
-
-type Emails = {
-  value: string;
-};
+import { UserExists, UserNotLoggedIn } from 'errors';
+import { NextFunction, Request, Response } from 'express';
+import passport from 'middlewares/auth';
 
 interface User extends Express.User {
-  displayName?: string;
-  photos?: Photos[];
-  emails?: Emails[];
+  email: string;
+  name: string;
+  address: string;
+  age: number;
+  telephone: string;
+  photo: string;
 }
 
 export const loginUser = (req: Request, res: Response): void => {
-  res.json({ data: { message: 'Welcome.', user: req.user } });
-};
-
-export const signUpUser = (req: Request, res: Response): void => {
-  res.json({ data: { message: 'User sign up completed successfully.' } });
-};
-
-export const userData = (req: Request, res: Response): void => {
-  const userInfo = {
-    name: '',
-    photo: 'noPhotoFound',
-    email: 'noEmailFound',
-  };
-
-  if (req.isAuthenticated()) {
-    const userData: User = req.user;
-
-    if (userData.photos) userInfo.photo = userData.photos[0].value;
-
-    if (userData.emails) userInfo.email = userData.emails[0].value;
-
-    if (userData.displayName) userInfo.name = userData.displayName;
-
-    res.json({ data: userInfo });
-  } else {
-    res.json({ data: { message: 'Invalid user', error: true } });
+  let userData;
+  if (req.user) {
+    const { email, name, address, age, telephone, photo } = req.user as User;
+    userData = { email, name, address, age, telephone, photo };
   }
+  res.json({ data: { message: 'Welcome.', user: userData } });
+};
+
+export const signUpUser = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void => {
+  passport.authenticate('signup', function (err, user, info) {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      throw new UserExists(400, info.message);
+    }
+    res.json({ msg: 'Sign Up successful' });
+  })(req, res, next);
 };
 
 export const logoutUser = (req: Request, res: Response): void => {
-  req.logOut();
   req.session.destroy(err => {
     if (err)
-      res.status(500).json({ message: 'An error occurred unexpectedly.' });
+      res.status(500).json({ message: 'An error occurred unexpectedly' });
     else {
-      res.json({ message: 'Log out successfully.' });
+      res.clearCookie('connect.sid');
+      res.json({ message: 'Logout successful' });
     }
   });
+};
+
+export const userData = (req: Request, res: Response): void => {
+  if (req.isAuthenticated()) {
+    const { email, name, address, age, telephone, photo } = req.user as User;
+    const userData = { email, name, address, age, telephone, photo };
+    res.json({ data: userData });
+  } else {
+    throw new UserNotLoggedIn(404, 'User not logged in');
+  }
 };

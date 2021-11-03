@@ -3,6 +3,9 @@ export enum EnumErrorCodes {
   UnknownEndpoint,
   ProductValidation,
   ProductNotFound,
+  UserSignUpValidation,
+  UserAlreadyExists,
+  UserNotLoggedIn,
 }
 
 export enum ModelType {

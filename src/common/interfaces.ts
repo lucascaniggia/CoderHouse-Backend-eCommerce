@@ -1,4 +1,4 @@
-import { Document, ObjectId, Model } from 'mongoose';
+import { Document, Types, ObjectId, Model } from 'mongoose';
 
 export interface IntObject {
   [key: string]: string | number | boolean | unknown;
@@ -50,6 +50,12 @@ export interface MongoModelIntItem extends Model<MongoDocIntItem> {
   get: (id?: string) => Promise<MongoDocIntItem[]>;
 }
 
+export interface IntCart extends IntObject, Document {
+  id: string;
+  user: Types.ObjectId;
+  products: Types.ObjectId[];
+}
+
 export interface QueryIntItem {
   name?: string;
   code?: string;
@@ -59,27 +65,17 @@ export interface QueryIntItem {
   maxStock?: number;
 }
 
-export interface IntUser {
-  id: string;
-  username: string;
+export interface BaseIntUser extends IntObject {
+  email: string;
   password: string;
-  isValidPassword: (password: string) => Promise<boolean>;
+  name: string;
+  address: string;
+  age: number;
+  telephone: string;
+  photo: string;
 }
 
-// export interface IntMessage {
-//   author: {
-//     id: string;
-//     name: string;
-//     lastname: string;
-//     age: number;
-//     alias: string;
-//     avatar: string;
-//   };
-//   text: string;
-//   timestamp: string;
-//   _id: string;
-// }
-
-// export interface DocumentIntMessage extends Document {
-//   _id: ObjectId;
-// }
+export interface IntUser extends BaseIntUser {
+  id: string;
+  isValidPassword: (password: string) => Promise<boolean>;
+}
