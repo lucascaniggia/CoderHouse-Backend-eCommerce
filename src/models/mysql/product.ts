@@ -3,6 +3,7 @@ import { IntItem, QueryIntItem, IntKnex } from 'common/interfaces';
 import { NotFound } from 'errors';
 import dbConfig from './../../../knexFile';
 import { productsMock } from 'mocks/products';
+import { logger } from 'utils/logger';
 
 export class ProductsModelMySQL {
   private connection: Knex;
@@ -14,7 +15,7 @@ export class ProductsModelMySQL {
     const configDb: IntKnex = dbConfig;
     const options = configDb[environment];
     this.connection = knex(options);
-    console.log(`MySQL DB ${environment} set up.`);
+    logger.info(`MySQL DB ${environment} set up.`);
     this.connection.schema.hasTable('products').then(exists => {
       if (!exists) {
         this.connection.schema
@@ -31,11 +32,13 @@ export class ProductsModelMySQL {
             productsTable.integer('stock').notNullable();
           })
           .then(() => {
-            console.log("Product's Table has been created.");
-            this.connection('products').insert(productsMock);
-            console.log('Products added.');
+            logger.info("Product's Table has been created.");
+            this.connection('products')
+              .insert(productsMock)
+              .then(() => logger.info('Products added.'))
+              .catch(e => logger.error(e));
           })
-          .catch(e => console.log(e));
+          .catch(e => logger.error(e));
       }
     });
   }
@@ -102,7 +105,7 @@ export class ProductsModelMySQL {
 
   async query(options: QueryIntItem): Promise<IntItem[]> {
     try {
-      const products = await this.connection('productos')
+      const products = await this.connection('products')
         .modify(queryBuilder => {
           if (options.name) {
             queryBuilder.where('name', options.name);

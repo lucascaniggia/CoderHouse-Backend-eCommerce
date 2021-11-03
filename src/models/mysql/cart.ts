@@ -2,6 +2,7 @@ import knex, { Knex } from 'knex';
 import { IntItem, IntKnex } from 'common/interfaces';
 import { NotFound } from 'errors';
 import dbConfig from './../../../knexFile';
+import { logger } from 'utils/logger';
 
 export class CartModelMySQL {
   private connection: Knex;
@@ -14,7 +15,7 @@ export class CartModelMySQL {
     const configDB: IntKnex = dbConfig;
     const options = configDB[environment];
     this.connection = knex(options);
-    console.log(`MySQL DB ${environment} set up successfully`);
+    logger.info(`MySQL DB ${environment} set up successfully`);
     this.connection.schema.hasTable('cart').then(exists => {
       if (!exists) {
         this.connection.schema
@@ -31,9 +32,9 @@ export class CartModelMySQL {
             cartTable.integer('stock').notNullable();
           })
           .then(() => {
-            console.log('Cart Table created successfully');
+            logger.info('Cart Table created successfully');
           })
-          .catch(e => console.log(e));
+          .catch(e => logger.error(e));
       }
     });
   }

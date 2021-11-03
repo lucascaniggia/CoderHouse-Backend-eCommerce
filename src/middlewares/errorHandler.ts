@@ -20,6 +20,6 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   if (description) {
     errorInfo.description = description;
   }
-  logger.error(errorInfo.message);
+  logger.error(`Error: ${error}, Message: ${message}, Stack: ${stack} `);
   res.status(statusCode || 500).json(errorInfo);
 };

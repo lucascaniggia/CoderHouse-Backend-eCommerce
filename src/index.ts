@@ -1,15 +1,13 @@
-import 'dotenv/config.js';
 import os from 'os';
 import cluster from 'cluster';
-import args from 'args';
 import Config from 'config';
 import Server from 'services/server';
 import { logger } from 'utils/logger';
 
+const PORT = Config.PORT || 8080;
 const numCPUs = os.cpus().length;
-const flags = args.parse(process.argv);
 
-if (flags.mode === 'cluster' && flags.run !== 'pm2' && cluster.isMaster) {
+if (Config.MODE === 'cluster' && cluster.isMaster) {
   logger.info(`CPUs Number ==> ${numCPUs}`);
   logger.info(`PID MASTER ${process.pid}, ${new Date()}`);
   for (let i = 0; i < numCPUs; i++) {
@@ -20,7 +18,6 @@ if (flags.mode === 'cluster' && flags.run !== 'pm2' && cluster.isMaster) {
     cluster.fork();
   });
 } else {
-  const PORT = Config.PORT;
   Server.listen(PORT, () => {
     logger.info(
       `Server initialized in http://localhost:${PORT} - PID WORKER ${process.pid}`,

@@ -1,15 +1,33 @@
 import { IntItem, BaseIntItem, QueryIntItem } from 'common/interfaces';
 import moment from 'moment';
 import mongoose, { FilterQuery } from 'mongoose';
-import { NotFound } from 'errors';
 import { productsMock } from 'mocks/products';
+import { NotFound, ProductValidation } from 'errors';
+import uniqueValidator from 'mongoose-unique-validator';
 import { logger } from 'utils/logger';
 
 const ProductSchema = new mongoose.Schema<BaseIntItem>({
-  name: { type: String, require: true, max: 100 },
-  description: { type: String, require: true, max: 100 },
-  code: { type: String, require: true, max: 14 },
-  price: { type: Number, require: true, max: 5000 },
+  name: {
+    type: String,
+    require: true,
+    maxLength: [100, 'Name must have at least 100 characters'],
+  },
+  description: {
+    type: String,
+    require: true,
+    maxLength: [500, 'Description must have at least 500 characters'],
+  },
+  code: {
+    type: String,
+    require: true,
+    maxLength: [14, 'Code must have at least 14 characters'],
+    unique: true,
+  },
+  price: {
+    type: Number,
+    require: true,
+    max: [5000, 'Price cannot be greater than 5000'],
+  },
   photo: { type: String, require: true },
   timestamp: { type: String, default: moment().format('DD/MM/YYYY HH:mm:ss') },
   stock: { type: Number, default: 0 },
@@ -23,8 +41,12 @@ ProductSchema.set('toJSON', {
   },
 });
 
+ProductSchema.plugin(uniqueValidator, {
+  message: 'Field already exists, please enter another option.',
+});
+
 export const ProductsModel = mongoose.model<BaseIntItem>(
-  'products',
+  'Product',
   ProductSchema,
 );
 
@@ -65,9 +87,21 @@ export class ProductsModelMongoDB {
   }
 
   async save(data: IntItem): Promise<IntItem> {
-    const newProduct = await new this.products(data);
-    await newProduct.save();
-    return newProduct as unknown as IntItem;
+    try {
+      const newProduct = await new this.products(data);
+      await newProduct.save();
+      return newProduct as unknown as IntItem;
+    } catch (e) {
+      if (e instanceof mongoose.Error.ValidationError) {
+        const messages = Object.values(e.errors).map(prop => prop.message);
+        throw new ProductValidation(400, messages.join('. '));
+      } else {
+        throw {
+          error: e,
+          message: 'An error occurred when saving the product.',
+        };
+      }
+    }
   }
 
   async update(id: string, data: IntItem): Promise<IntItem> {
@@ -81,6 +115,9 @@ export class ProductsModelMongoDB {
     } catch (e) {
       if (e instanceof mongoose.Error.CastError) {
         throw new NotFound(404, 'Product to update does not exist.');
+      } else if (e instanceof mongoose.Error.ValidationError) {
+        const messages = Object.values(e.errors).map(prop => prop.message);
+        throw new ProductValidation(400, messages.join('. '));
       } else {
         throw { error: e, message: 'Product could not be updated.' };
       }
