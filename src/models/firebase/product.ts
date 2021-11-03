@@ -4,6 +4,7 @@ import { NotFound } from 'errors';
 import { productsMock } from 'mocks/products';
 import moment from 'moment';
 import Config from 'config';
+import { logger } from 'utils/logger';
 
 export class ProductsModelFirebase {
   public productsDb;
@@ -16,7 +17,7 @@ export class ProductsModelFirebase {
       }),
     });
     const db = admin.firestore();
-    console.log('Firebase DB set up successfully');
+    logger.info('Firebase DB set up successfully');
     this.productsDb = db.collection('products');
     this.get()
       .then(products => {
@@ -29,10 +30,10 @@ export class ProductsModelFirebase {
           });
           batch
             .commit()
-            .then(() => console.log('Products added successfully.'));
+            .then(() => logger.info('Products added successfully.'));
         }
       })
-      .catch(e => console.log(e));
+      .catch(e => logger.error(e));
   }
 
   async get(id?: string): Promise<IntItem[] | IntItem> {
