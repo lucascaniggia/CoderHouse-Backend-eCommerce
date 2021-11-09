@@ -79,3 +79,10 @@ export interface IntUser extends BaseIntUser {
   id: string;
   isValidPassword: (password: string) => Promise<boolean>;
 }
+
+export interface IntMessage {
+  _id: string;
+  email: string;
+  text: string;
+  date: string;
+}

@@ -3,13 +3,18 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import cors from 'cors';
 import path from 'path';
+import http from 'http';
 import routes from 'routes';
 import { unknownEndpoint } from 'middlewares/unknownEndpoint';
 import { errorHandler } from 'middlewares/errorHandler';
 import { clientPromise } from 'services/mongodb';
 import passport from 'middlewares/auth';
+import { initWsServer } from './socket';
 
 const app: express.Application = express();
+
+const server: http.Server = http.createServer(app);
+initWsServer(server);
 
 const tenMinutes = 1000 * 60;
 
@@ -48,4 +53,5 @@ app.use('/api', routes);
 app.use(errorHandler);
 app.use(unknownEndpoint);
 
-export default app;
+// export default app;
+export default server;
