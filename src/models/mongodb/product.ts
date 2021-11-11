@@ -5,6 +5,7 @@ import { productsMock } from 'mocks/products';
 import { NotFound, ProductValidation } from 'errors';
 import uniqueValidator from 'mongoose-unique-validator';
 import { logger } from 'utils/logger';
+import { validQuery } from 'utils/validations';
 
 const ProductSchema = new mongoose.Schema<BaseIntItem>({
   name: {
@@ -138,6 +139,8 @@ export class ProductsModelMongoDB {
 
   async query(options: QueryIntItem): Promise<IntItem[]> {
     const query: FilterQuery<BaseIntItem> = {};
+
+    validQuery(options);
 
     if (options.name) query.name = options.name;
 

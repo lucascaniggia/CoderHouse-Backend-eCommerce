@@ -1,5 +1,5 @@
 import { isUrl, isValidCode } from 'utils/regEx';
-import { IntItem, BaseIntUser } from 'common/interfaces';
+import { IntItem, QueryIntItem, BaseIntUser } from 'common/interfaces';
 import { getEmptyFields } from 'utils/objects';
 import {
   MissingFieldsProduct,
@@ -71,6 +71,21 @@ export const isValidUser = (user: BaseIntUser): boolean | Error => {
       400,
       'Please check data, age must be a non-zero number.',
     );
+  }
+
+  return true;
+};
+
+export const isQueryValid = (query: QueryIntItem): boolean | Error => {
+  const queryMap = ['minPrice', 'maxPrice', 'minStock', 'maxStock'];
+
+  for (const queryField of queryMap) {
+    if (query[queryField] !== undefined && isNaN(Number(query[queryField]))) {
+      throw new ProductValidation(
+        400,
+        'Price/minStock/maxStock must be numbers',
+      );
+    }
   }
 
   return true;

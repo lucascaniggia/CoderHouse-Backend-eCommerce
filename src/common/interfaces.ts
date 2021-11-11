@@ -56,7 +56,7 @@ export interface IntCart extends IntObject, Document {
   products: Types.ObjectId[];
 }
 
-export interface QueryIntItem {
+export interface QueryIntItem extends IntObject {
   name?: string;
   code?: string;
   minPrice?: number;
@@ -80,9 +80,9 @@ export interface IntUser extends BaseIntUser {
   isValidPassword: (password: string) => Promise<boolean>;
 }
 
-export interface IntMessage {
-  _id: string;
-  email: string;
-  text: string;
-  date: string;
-}
+// export interface IntMessage {
+//   _id: string;
+//   email: string;
+//   text: string;
+//   date: string;
+// }
