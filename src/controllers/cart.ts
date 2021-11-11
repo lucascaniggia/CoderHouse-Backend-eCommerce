@@ -44,3 +44,12 @@ export const deleteCartProduct = async (
   const newCartProductList = await cartAPI.delete(email, req.params.id);
   res.json({ data: newCartProductList });
 };
+
+export const deleteCartAllProducts = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const { email } = req.user as User;
+  const newCartProductList = await cartAPI.delete(email);
+  res.json({ data: newCartProductList });
+};

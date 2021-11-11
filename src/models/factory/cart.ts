@@ -15,7 +15,7 @@ interface IntModel {
 interface MongoIntModel {
   get: (userEmail: string, id?: string) => Promise<IntItem | IntItem[]>;
   save: (userEmail: string, id: string) => Promise<IntItem>;
-  delete: (userEmail: string, id: string) => Promise<IntItem[]>;
+  delete: (userEmail: string, id?: string) => Promise<IntItem[]>;
 }
 
 type IntModelType = IntModel | MongoIntModel;

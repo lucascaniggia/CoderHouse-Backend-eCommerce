@@ -93,7 +93,7 @@ export class CartModelMongoDB {
     }
   }
 
-  async delete(id: string, userEmail: string): Promise<IntItem[]> {
+  async delete(userEmail: string, id?: string): Promise<IntItem[]> {
     try {
       const user = (
         await this.userModel.find({
@@ -103,7 +103,7 @@ export class CartModelMongoDB {
       const cart = await this.cartModel
         .findById(user.cart)
         .populate('products');
-      if (cart) {
+      if (cart && id) {
         const productToDelete = cart.products.find(
           item => item._id.toString() === id,
         );
@@ -116,6 +116,11 @@ export class CartModelMongoDB {
           return newProductsInCart as unknown as IntItem[];
         }
         throw new NotFound(404, 'Product to delete does not exist on cart');
+      }
+      if (cart) {
+        cart.products = [];
+        await cart.save();
+        return cart.products as unknown as IntItem[];
       }
       throw new NotFound(404, 'Cart does not exist.');
     } catch (e) {
