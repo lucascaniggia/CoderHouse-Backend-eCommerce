@@ -80,3 +80,11 @@ export class UserNotLoggedIn extends BaseError {
     this.error = `-${EnumErrorCodes.UserNotLoggedIn}`;
   }
 }
+
+export class CartIsEmpty extends BaseError {
+  public error: string;
+  constructor(statusCode: number, message: string) {
+    super(statusCode, message);
+    this.error = `-${EnumErrorCodes.CartEmpty}`;
+  }
+}

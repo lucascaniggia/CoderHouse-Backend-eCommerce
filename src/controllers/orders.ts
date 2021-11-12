@@ -1,38 +1,56 @@
 import { Request, Response } from 'express';
 import Config from 'config';
-import { CartModel } from 'models/mongodb/cart';
 import { EmailService } from 'services/email';
+import { SmsService } from 'services/twilio';
 import { IntItem } from 'common/interfaces';
 import { cartAPI } from 'api/cart';
+import { isEmpty } from 'utils/others';
+import { CartIsEmpty } from 'errors';
 
 interface User {
-  cart?: string;
   name?: string;
   email: string;
+  telephone: string;
 }
 
 export const sendOrder = async (req: Request, res: Response): Promise<void> => {
-  const { email, name } = req.user as User;
+  const { email, name, telephone } = req.user as User;
   const products = (await cartAPI.get(email)) as IntItem[];
 
-  let emailContent = '<h2>Products</h2>';
+  if (!isEmpty(products)) {
+    let emailContent = '<h2>Products</h2>';
 
-  const total = products.reduce((total, item) => (total += item.price), 0);
-  products.forEach(item => {
-    emailContent += `
-        <span style="display: block">- ${item.name}, ${item.code}, $${item.price} </span>
-        `;
-  });
+    const total = products.reduce((total, item) => (total += item.price), 0);
+    products.forEach(item => {
+      emailContent += `
+          <span style="display: block">- ${item.name}, ${item.code}, $${item.price} </span>
+          `;
+    });
 
-  emailContent += `<h3>Total: $${total}</h3>`;
+    emailContent += `<h3>Total: $${total.toFixed(2)}</h3>`;
 
-  EmailService.sendEmail(
-    Config.GMAIL_EMAIL,
-    `New order from: ${name}, ${email}`,
-    emailContent,
-  );
+    EmailService.sendEmail(
+      Config.GMAIL_EMAIL,
+      `New order from: ${name}, ${email}`,
+      emailContent,
+    );
 
-  await cartAPI.delete(email);
+    SmsService.sendMessage(
+      Config.ADMIN_WHATSAPP,
+      `New order from: ${name}, ${email}`,
+      'whatsapp',
+    );
 
-  res.json({ data: 'Your order has been taken successfully' });
+    SmsService.sendMessage(
+      telephone,
+      `Your order has been taken and it's being processed`,
+      'sms',
+    );
+
+    await cartAPI.delete(email);
+
+    res.json({ data: 'Order sent successfully' });
+  } else {
+    throw new CartIsEmpty(404, 'Cart is empty!');
+  }
 };

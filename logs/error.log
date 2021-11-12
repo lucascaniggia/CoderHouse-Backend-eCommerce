@@ -3,3 +3,24 @@
 [31merror[39m | Oct-26-2021 10:54:51 | PID => 4998 will die
 [31merror[39m | Oct-26-2021 12:45:00 | PID => 11770 will die
 [31merror[39m | Oct-26-2021 12:45:46 | PID => 12066 will die
+[31merror[39m | Nov-09-2021 13:37:17 | Error: undefined, Message: Unknown authentication strategy "login", Stack: Error: Unknown authentication strategy "login"
+    at attempt (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/passport/lib/middleware/authenticate.js:184:39)
+    at authenticate (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/passport/lib/middleware/authenticate.js:361:7)
+    at Layer.handle [as handle_request] (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/index.js:281:22
+    at Function.process_params (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/index.js:275:10)
+    at Function.handle (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/index.js:174:3) 
+[31merror[39m | Nov-09-2021 17:12:09 | Error: undefined, Message: This authorization code has been used., Stack: FacebookTokenError: This authorization code has been used.
+    at Strategy.parseErrorResponse (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/passport-facebook/lib/strategy.js:198:12)
+    at Strategy.OAuth2Strategy._createOAuthError (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/passport-oauth2/lib/strategy.js:420:16)
+    at /Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/passport-oauth2/lib/strategy.js:177:45
+    at /Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/oauth/lib/oauth2.js:191:18
+    at passBackControl (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/oauth/lib/oauth2.js:132:9)
+    at IncomingMessage.<anonymous> (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/oauth/lib/oauth2.js:157:7)
+    at IncomingMessage.emit (events.js:327:22)
+    at endReadableNT (internal/streams/readable.js:1327:12)
+    at processTicksAndRejections (internal/process/task_queues.js:80:21) 

@@ -6,6 +6,7 @@ export enum EnumErrorCodes {
   UserSignUpValidation,
   UserAlreadyExists,
   UserNotLoggedIn,
+  CartEmpty,
 }
 
 export enum ModelType {
