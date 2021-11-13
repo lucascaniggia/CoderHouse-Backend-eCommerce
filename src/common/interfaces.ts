@@ -68,6 +68,7 @@ export interface QueryIntItem extends IntObject {
 export interface BaseIntUser extends IntObject {
   email: string;
   password: string;
+  repeatPassword: string;
   name: string;
   address: string;
   age: number;

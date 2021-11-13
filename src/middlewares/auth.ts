@@ -7,7 +7,7 @@ import { CartModel } from 'models/mongodb/cart';
 import { IntUser } from 'common/interfaces';
 import { UnauthorizedRoute } from 'errors';
 import { isValidUser } from 'utils/validations';
-import { logger } from 'utils/logger';
+import { logger } from 'services/logger';
 import { EmailService } from 'services/email';
 
 interface User {
@@ -34,9 +34,11 @@ const loginFunc = async (
 ) => {
   const user = (await UserModel.findOne({ email })) as IntUser;
   if (!user) {
+    logger.warn('Wrong user');
     return done(null, false);
   }
   if (!(await user.isValidPassword(password))) {
+    logger.warn('Wrong password');
     return done(null, false);
   }
   logger.info('Logged in successfully');
@@ -54,10 +56,12 @@ const signUpFunc = async (
   ) => void,
 ) => {
   try {
-    const { email, password, name, address, age, telephone } = req.body;
+    const { email, password, repeatPassword, name, address, age, telephone } =
+      req.body;
     const userData = {
       email,
       password,
+      repeatPassword,
       name,
       address,
       age: Number(age),
@@ -100,6 +104,7 @@ const signUpFunc = async (
         emailContent,
         userData.photo,
       );
+      logger.info('Email sent to administrator');
       return done(null, newUser);
     }
   } catch (error) {

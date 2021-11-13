@@ -66,6 +66,10 @@ export const isValidUser = (user: BaseIntUser): boolean | Error => {
     );
   }
 
+  if (user.password !== user.repeatPassword) {
+    throw new UserValidation(400, `Passwords don't match. Please check data`);
+  }
+
   if (isNaN(user.age) || user.edad === 0) {
     throw new UserValidation(
       400,

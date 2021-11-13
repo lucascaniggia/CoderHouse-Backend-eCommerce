@@ -35,6 +35,7 @@
     "express-session": "^1.17.2",
     "firebase-admin": "^9.11.1",
     "forever": "^4.0.1",
+    "helmet": "^4.6.0",
     "knex": "^0.95.10",
     "moment": "^2.29.1",
     "mongoose": "^6.0.5",

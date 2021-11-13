@@ -1,6 +1,7 @@
 import express from 'express';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
+import helmet from 'helmet';
 import cors from 'cors';
 import path from 'path';
 import http from 'http';
@@ -26,6 +27,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(helmet());
 
 app.use(
   session({
