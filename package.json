@@ -17,7 +17,8 @@
     "migrate:db": "npx knex migrate:latest --env development",
     "rollback:db": "npx knex migrate:rollback --env development",
     "seed:db": "npx knex seed:run --env development",
-    "init:db": "npm run rollback:db && npm run migrate:db && npm run seed:db"
+    "init:db": "npm run rollback:db && npm run migrate:db && npm run seed:db",
+    "artillery": "artillery run artillery/ecommerce-test.yml"
   },
   "author": "Lucas Caniggia",
   "license": "ISC",
