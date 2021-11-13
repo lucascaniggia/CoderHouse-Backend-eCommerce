@@ -5,8 +5,8 @@ import Config from 'config';
 import { UserModel } from 'models/mongodb/user';
 import { CartModel } from 'models/mongodb/cart';
 import { IntUser } from 'common/interfaces';
-import { UnauthorizedRoute } from 'errors';
-import { isValidUser } from 'utils/validations';
+import { UnauthorizedRoute, UserValidation } from 'errors';
+import { signUpValidation } from 'utils/validations';
 import { logger } from 'services/logger';
 import { EmailService } from 'services/email';
 
@@ -69,7 +69,11 @@ const signUpFunc = async (
       photo: req.file?.path || '',
     };
 
-    isValidUser(userData);
+    const { error } = signUpValidation(userData);
+
+    if (error) {
+      throw new UserValidation(400, error.details[0].message);
+    }
 
     const user = await UserModel.findOne({ email });
     if (user) {

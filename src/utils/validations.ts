@@ -1,4 +1,4 @@
-import { isUrl, isValidCode } from 'utils/regEx';
+import { isUrl, isEmail, isValidCode } from './regEx';
 import { IntItem, QueryIntItem, BaseIntUser } from 'common/interfaces';
 import { getEmptyFields } from 'utils/objects';
 import {
@@ -7,6 +7,7 @@ import {
   ProductValidation,
   UserValidation,
 } from 'errors';
+import Joi from 'joi';
 
 // @parameter -> product item
 // Check if product contains any invalid getEmptyFields. If having,
@@ -66,6 +67,10 @@ export const isValidUser = (user: BaseIntUser): boolean | Error => {
     );
   }
 
+  if (!isEmail(user.email)) {
+    throw new UserValidation(400, 'Email is invalid, please check data');
+  }
+
   if (user.password !== user.repeatPassword) {
     throw new UserValidation(400, `Passwords don't match. Please check data`);
   }
@@ -93,4 +98,53 @@ export const isQueryValid = (query: QueryIntItem): boolean | Error => {
   }
 
   return true;
+};
+
+export const signUpValidation = (data: BaseIntUser): Joi.ValidationResult => {
+  const schema = Joi.object({
+    email: Joi.string()
+      .pattern(new RegExp(/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/))
+      .required()
+      .messages({
+        'string.pattern.base': `Email is invalid`,
+        'string.empty': `All fields are required, please enter a valid email.`,
+      }),
+    password: Joi.string()
+      .pattern(
+        new RegExp(
+          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/,
+        ),
+      )
+      .required()
+      .messages({
+        'string.pattern.base': `Password must contain at least 8 characters, including 1 uppercase, 1 lowercase, 1 number and 1 special character.`,
+        'string.empty': `All fields are required, please enter a valid password`,
+      }),
+    repeatPassword: Joi.string()
+      .required()
+      .valid(Joi.ref('password'))
+      .messages({
+        'string.empty': `All fields are required, please confirm your password`,
+        'any.only': `Passwords don't match`,
+      }),
+    name: Joi.string().required().messages({
+      'string.empty': `All fields are required, please enter a valid name`,
+    }),
+    address: Joi.string().required().messages({
+      'string.empty': `All fields are required, please enter a valid address`,
+    }),
+    age: Joi.number().integer().positive().required().messages({
+      'number.base': `Age must be a number`,
+      'number.integer': `Age must be an integer`,
+      'number.positive': `Age is required, and must be a non-zero number`,
+    }),
+    telefono: Joi.string().required().messages({
+      'string.empty': `All fields are required, please enter a valid phone number`,
+    }),
+    foto: Joi.string().required().messages({
+      'string.empty': `All fields are required, please enter a valid photo`,
+    }),
+  });
+
+  return schema.validate(data);
 };
