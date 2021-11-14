@@ -1,14 +1,17 @@
 import { NextFunction, Request, Response } from 'express';
 import passport from 'passport';
-import passportLocal, { IStrategyOptionsWithRequest } from 'passport-local';
+import passportLocal, {
+  IStrategyOptionsWithRequest,
+  VerifyFunctionWithRequest,
+} from 'passport-local';
 import Config from 'config';
 import { UserModel } from 'models/mongodb/user';
-import { CartModel } from 'models/mongodb/cart';
-import { IntUser } from 'common/interfaces';
+import { IntUser, userJoiSchema } from 'common/interfaces/users';
 import { UnauthorizedRoute, UserValidation } from 'errors';
-import { signUpValidation } from 'utils/validations';
 import { logger } from 'services/logger';
 import { EmailService } from 'services/email';
+import { ValidationError } from 'joi';
+import { userAPI } from 'api/user';
 
 interface User {
   _id?: string;
@@ -22,38 +25,30 @@ const strategyOptions: IStrategyOptionsWithRequest = {
   passReqToCallback: true,
 };
 
-const loginFunc = async (
+const loginFunc: VerifyFunctionWithRequest = async (
   req: Request,
   email: string,
   password: string,
-  done: (
-    err: unknown,
-    user?: Express.User | false | null,
-    msg?: { message: string },
-  ) => void,
+  done,
 ) => {
   const user = (await UserModel.findOne({ email })) as IntUser;
   if (!user) {
-    logger.warn('Wrong user');
+    logger.warn(`Failed login. User ${email} does not exist.`);
     return done(null, false);
   }
   if (!(await user.isValidPassword(password))) {
-    logger.warn('Wrong password');
+    logger.warn(`Failed login. Password for ${email} ir wrong.`);
     return done(null, false);
   }
   logger.info('Logged in successfully');
   return done(null, user);
 };
 
-const signUpFunc = async (
+const signUpFunc: VerifyFunctionWithRequest = async (
   req: Request,
   email: string,
   password: string,
-  done: (
-    err: unknown,
-    user?: Express.User | false | null,
-    msg?: { message: string },
-  ) => void,
+  done,
 ) => {
   try {
     const { email, password, repeatPassword, name, address, age, telephone } =
@@ -69,13 +64,9 @@ const signUpFunc = async (
       photo: req.file?.path || '',
     };
 
-    const { error } = signUpValidation(userData);
+    await userJoiSchema.validateAsync(userData);
 
-    if (error) {
-      throw new UserValidation(400, error.details[0].message);
-    }
-
-    const user = await UserModel.findOne({ email });
+    const user = await userAPI.query(email);
     if (user) {
       logger.warn('User already exists');
       logger.info(user);
@@ -83,15 +74,7 @@ const signUpFunc = async (
         message: 'Email you chose already exists. Please enter another email',
       });
     } else {
-      const newUser = new UserModel(userData);
-      const cartUser = new CartModel({
-        user: newUser._id,
-        products: [],
-      });
-      newUser.cart = cartUser._id;
-
-      await newUser.save();
-      await cartUser.save();
+      const newUser = await userAPI.addUser(userData);
       logger.info('Signed Up successfully');
       const emailContent = `
         <h1>New User Registration</h1>
@@ -111,8 +94,12 @@ const signUpFunc = async (
       logger.info('Email sent to administrator');
       return done(null, newUser);
     }
-  } catch (error) {
-    done(error);
+  } catch (e) {
+    if (e instanceof ValidationError) {
+      done(new UserValidation(400, e.message));
+    } else {
+      done(e);
+    }
   }
 };
 

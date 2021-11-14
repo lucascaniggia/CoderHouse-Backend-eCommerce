@@ -5,6 +5,7 @@ export enum EnumErrorCodes {
   ProductNotFound,
   UserSignUpValidation,
   UserAlreadyExists,
+  UserDoesNotExist,
   UserNotLoggedIn,
   CartEmpty,
 }

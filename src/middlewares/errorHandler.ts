@@ -1,5 +1,5 @@
 import { ErrorRequestHandler } from 'express';
-import { logger } from 'utils/logger';
+import { logger } from 'services/logger';
 
 interface IntError {
   error: string;

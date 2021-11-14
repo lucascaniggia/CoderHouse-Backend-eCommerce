@@ -1,11 +1,11 @@
-import { IntItem, BaseIntItem, QueryIntItem } from 'common/interfaces';
+import { IntItem, BaseIntItem, QueryIntItem } from 'common/interfaces/products';
 import moment from 'moment';
 import mongoose, { FilterQuery } from 'mongoose';
 import { productsMock } from 'mocks/products';
 import { NotFound, ProductValidation } from 'errors';
 import uniqueValidator from 'mongoose-unique-validator';
-import { logger } from 'utils/logger';
-import { validQuery } from 'utils/validations';
+import { logger } from 'services/logger';
+import { isQueryValid } from 'utils/validations';
 
 const ProductSchema = new mongoose.Schema<BaseIntItem>({
   name: {
@@ -140,7 +140,7 @@ export class ProductsModelMongoDB {
   async query(options: QueryIntItem): Promise<IntItem[]> {
     const query: FilterQuery<BaseIntItem> = {};
 
-    validQuery(options);
+    isQueryValid(options);
 
     if (options.name) query.name = options.name;
 

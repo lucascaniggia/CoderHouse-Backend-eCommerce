@@ -2,7 +2,7 @@ import os from 'os';
 import cluster from 'cluster';
 import Config from 'config';
 import Server from 'services/server';
-import { logger } from 'utils/logger';
+import { logger } from 'services/logger';
 
 const PORT = Config.PORT || 8080;
 const numCPUs = os.cpus().length;

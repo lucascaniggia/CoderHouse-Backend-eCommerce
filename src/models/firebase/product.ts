@@ -1,10 +1,10 @@
-import { IntItem, QueryIntItem } from 'common/interfaces';
+import { IntItem, QueryIntItem } from 'common/interfaces/products';
 import admin, { firestore } from 'firebase-admin';
 import { NotFound } from 'errors';
 import { productsMock } from 'mocks/products';
 import moment from 'moment';
 import Config from 'config';
-import { logger } from 'utils/logger';
+import { logger } from 'services/logger';
 
 export class ProductsModelFirebase {
   public productsDb;

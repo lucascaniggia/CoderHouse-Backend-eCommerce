@@ -4,6 +4,11 @@ const env = {
   PORT: process.env.PORT || 8080,
   MODE: process.env.MODE || 'noCluster',
 
+  SESSION_SECRET: process.env.SESSION_SECRET || 'sessionSecret',
+  SESSION_COOKIE_TIMEOUT_MIN: parseInt(
+    process.env.SESSION_COOKIE_TIMEOUT_MIN || '10',
+  ),
+
   MONGO_ATLAS_USER: process.env.MONGO_ATLAS_USER || 'user',
   MONGO_ATLAS_PASSWORD: process.env.MONGO_ATLAS_PASSWORD || 'pass',
   MONGO_ATLAS_CLUSTER: process.env.MONGO_ATLAS_CLUSTER || 'clusterURL',

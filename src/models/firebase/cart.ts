@@ -1,4 +1,4 @@
-import { IntItem } from 'common/interfaces';
+import { IntItem } from 'common/interfaces/products';
 import admin from 'firebase-admin';
 import { NotFound } from 'errors';
 

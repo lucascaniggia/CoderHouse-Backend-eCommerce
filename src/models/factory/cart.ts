@@ -1,4 +1,5 @@
-import { IntItem } from 'common/interfaces';
+import { IntItem } from 'common/interfaces/products';
+import { IntCart } from 'common/interfaces/carts';
 import { ModelType } from 'common/enums';
 import { CartModel } from 'models/memory/cart';
 import { CartModelFs } from 'models/fs/cart';
@@ -13,9 +14,10 @@ interface IntModel {
 }
 
 interface MongoIntModel {
-  get: (userEmail: string, id?: string) => Promise<IntItem | IntItem[]>;
-  save: (userEmail: string, id: string) => Promise<IntItem>;
-  delete: (userEmail: string, id?: string) => Promise<IntItem[]>;
+  createCart: (userId: string) => Promise<IntCart>;
+  get: (userId: string, productId?: string) => Promise<IntItem | IntItem[]>;
+  save: (userId: string, productId: string) => Promise<IntItem>;
+  delete: (userId: string, productId?: string) => Promise<IntItem[]>;
 }
 
 type IntModelType = IntModel | MongoIntModel;

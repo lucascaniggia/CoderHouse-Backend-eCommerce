@@ -1,9 +1,10 @@
 import knex, { Knex } from 'knex';
-import { IntItem, QueryIntItem, IntKnex } from 'common/interfaces';
+import { IntKnex } from 'common/interfaces/others';
+import { IntItem, QueryIntItem } from 'common/interfaces/products';
 import { NotFound } from 'errors';
 import dbConfig from './../../../knexFile';
 import { productsMock } from 'mocks/products';
-import { logger } from 'utils/logger';
+import { logger } from 'services/logger';
 
 export class ProductsModelMySQL {
   private connection: Knex;

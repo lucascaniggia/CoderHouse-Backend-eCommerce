@@ -1,5 +1,8 @@
 import { CartModelFactory } from 'models/factory/cart';
 import { modelTypeToUse } from './modelType';
+import { UserNotExists } from 'errors';
+import { CartModelMongoDB } from 'models/mongodb/cart';
+import { userAPI } from './user';
 
 class CartAPI {
   private factory;
@@ -8,19 +11,36 @@ class CartAPI {
     this.factory = CartModelFactory.model(modelTypeToUse);
   }
 
-  get(userEmail: string, id?: string) {
-    if (id) return this.factory.get(userEmail, id);
-    return this.factory.get(userEmail);
+  async createCart(userId: string) {
+    const user = await userAPI.getUsers(userId);
+
+    if (!user)
+      throw new UserNotExists(
+        400,
+        'An error occurred when creating cart. User does not exist',
+      );
+
+    if (this.factory instanceof CartModelMongoDB) {
+      const newCart = await this.factory.createCart(userId);
+      return newCart;
+    } else {
+      throw new Error('Cart could not be created.');
+    }
   }
 
-  async save(id: string, userEmail: string) {
-    const newProduct = await this.factory.save(id, userEmail);
+  get(userId: string, productId?: string) {
+    if (productId) return this.factory.get(userId, productId);
+    return this.factory.get(userId);
+  }
+
+  async save(userId: string, productId: string) {
+    const newProduct = await this.factory.save(userId, productId);
     return newProduct;
   }
 
-  delete(userEmail: string, id?: string) {
-    if (id) return this.factory.delete(userEmail, id);
-    return this.factory.delete(userEmail);
+  delete(userId: string, productId?: string) {
+    if (productId) return this.factory.delete(userId, productId);
+    return this.factory.delete(userId);
   }
 }
 

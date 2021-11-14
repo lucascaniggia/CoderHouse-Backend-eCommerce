@@ -8,7 +8,7 @@ export const imageUpload = (
   res: Response,
   next: NextFunction,
 ): void => {
-  photoUpload(req, res, err => {
+  photoUpload(req, res, (err: unknown) => {
     if (err instanceof multer.MulterError) {
       next(new UserValidation(400, 'Image size must be at least 1mb'));
     } else if (err instanceof UserValidation) {

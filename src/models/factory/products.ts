@@ -1,4 +1,4 @@
-import { IntItem, QueryIntItem } from 'common/interfaces';
+import { IntItem, QueryIntItem } from 'common/interfaces/products';
 import { ModelType } from 'common/enums';
 import { ProductsModel } from 'models/memory/product';
 import { ProductsModelFs } from 'models/fs/product';

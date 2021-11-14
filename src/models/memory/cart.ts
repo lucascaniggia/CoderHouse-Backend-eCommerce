@@ -1,4 +1,4 @@
-import { IntItem } from 'common/interfaces';
+import { IntItem } from 'common/interfaces/products';
 import { NotFound } from 'errors';
 import { ProductsModel } from './product';
 

@@ -2,9 +2,10 @@ import express from 'express';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import helmet from 'helmet';
+import Config from 'config';
 import cors from 'cors';
 import path from 'path';
-import http from 'http';
+import * as http from 'http';
 import routes from 'routes';
 import { unknownEndpoint } from 'middlewares/unknownEndpoint';
 import { errorHandler } from 'middlewares/errorHandler';
@@ -16,8 +17,6 @@ const app: express.Application = express();
 
 const server: http.Server = http.createServer(app);
 initWsServer(server);
-
-const tenMinutes = 1000 * 60;
 
 app.use(express.static('public'));
 app.use(
@@ -31,7 +30,7 @@ app.use(helmet());
 
 app.use(
   session({
-    secret: 'b2xyddLPtfeK0ryUgbLZ',
+    secret: Config.SESSION_SECRET,
     resave: true,
     saveUninitialized: false,
     rolling: true,
@@ -42,7 +41,7 @@ app.use(
       autoRemoveInterval: 1,
     }),
     cookie: {
-      maxAge: tenMinutes,
+      maxAge: Config.SESSION_COOKIE_TIMEOUT_MIN * 1000 * 60,
     },
   }),
 );
@@ -55,5 +54,6 @@ app.use('/api', routes);
 app.use(errorHandler);
 app.use(unknownEndpoint);
 
-// export default app;
-export default server;
+const Server = new http.Server(app);
+
+export default Server;

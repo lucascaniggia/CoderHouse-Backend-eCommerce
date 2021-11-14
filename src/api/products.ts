@@ -1,4 +1,4 @@
-import { IntItem, QueryIntItem } from 'common/interfaces';
+import { IntItem, QueryIntItem } from 'common/interfaces/products';
 import { ProductsModelFactory } from 'models/factory/products';
 import { modelTypeToUse } from './modelType';
 

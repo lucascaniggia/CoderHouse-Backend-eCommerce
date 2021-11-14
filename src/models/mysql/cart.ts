@@ -1,8 +1,9 @@
 import knex, { Knex } from 'knex';
-import { IntItem, IntKnex } from 'common/interfaces';
+import { IntItem } from 'common/interfaces/products';
+import { IntKnex } from 'common/interfaces/others';
 import { NotFound } from 'errors';
 import dbConfig from './../../../knexFile';
-import { logger } from 'utils/logger';
+import { logger } from 'services/logger';
 
 export class CartModelMySQL {
   private connection: Knex;
