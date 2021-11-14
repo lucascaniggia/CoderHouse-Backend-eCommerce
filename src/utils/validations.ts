@@ -8,7 +8,6 @@ import {
   ProductValidation,
   UserValidation,
 } from 'errors';
-import Joi from 'joi';
 
 // @parameter -> product item
 // Check if product contains any invalid getEmptyFields. If having,

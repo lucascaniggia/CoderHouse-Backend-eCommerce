@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
-// import { CartModelFactory } from '../models/factory/cart';
 import { cartAPI } from 'api/cart';
-import { NotFound, UnauthorizedRoute } from 'errors';
+import { NotFound, ProductValidation, UnauthorizedRoute } from 'errors';
 
 interface User {
   _id: string;
@@ -37,6 +36,26 @@ export const saveCartProduct = async (
   }
 };
 
+export const editCartProduct = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const { _id } = req.user as User;
+  const { productId, amount } = req.body;
+
+  if (!productId) throw new ProductValidation(404, 'Product ID is required');
+
+  if (!amount) throw new ProductValidation(404, 'Product quantity is required');
+
+  if (Number(amount) === 0)
+    res.json({ data: await cartAPI.delete(_id, productId) });
+  else if (Number(amount) > 0)
+    res.json({
+      data: await cartAPI.update(_id, productId, Number(amount)),
+    });
+  else throw new ProductValidation(404, 'Quantity must be a non-zero number');
+};
+
 export const deleteCartProduct = async (
   req: Request,
   res: Response,
@@ -50,7 +69,7 @@ export const deleteCartAllProducts = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  const { email } = req.user as User;
-  const newCartProductList = await cartAPI.delete(email);
+  const { _id } = req.user as User;
+  const newCartProductList = await cartAPI.delete(_id);
   res.json({ data: newCartProductList });
 };

@@ -3,6 +3,7 @@ import {
   getCart,
   getCartProduct,
   saveCartProduct,
+  editCartProduct,
   deleteCartProduct,
   deleteCartAllProducts,
 } from 'controllers/cart';
@@ -10,10 +11,11 @@ import asyncHandler from 'express-async-handler';
 
 const cartRouter = express.Router();
 
-cartRouter.get('/list', asyncHandler(getCart));
-cartRouter.get('/list/:id', asyncHandler(getCartProduct));
-cartRouter.get('/save/:id', asyncHandler(saveCartProduct));
-cartRouter.delete('/delete/', asyncHandler(deleteCartAllProducts));
-cartRouter.get('/delete/:id', asyncHandler(deleteCartProduct));
+cartRouter.get('/', asyncHandler(getCart));
+cartRouter.get('/:id', asyncHandler(getCartProduct));
+cartRouter.post('/:id', asyncHandler(saveCartProduct));
+cartRouter.put('/', asyncHandler(editCartProduct));
+cartRouter.delete('/', asyncHandler(deleteCartAllProducts));
+cartRouter.delete('/:id', asyncHandler(deleteCartProduct));
 
 export default cartRouter;

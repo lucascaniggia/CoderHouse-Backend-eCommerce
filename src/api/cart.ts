@@ -1,6 +1,6 @@
-import { CartModelFactory } from 'models/factory/cart';
 import { modelTypeToUse } from './modelType';
 import { UserNotExists } from 'errors';
+import { CartModelFactory } from 'models/factory/cart';
 import { CartModelMongoDB } from 'models/mongodb/cart';
 import { userAPI } from './user';
 
@@ -36,6 +36,15 @@ class CartAPI {
   async save(userId: string, productId: string) {
     const newProduct = await this.factory.save(userId, productId);
     return newProduct;
+  }
+
+  async update(userId: string, productId: string, amount: number) {
+    if (this.factory instanceof CartModelMongoDB) {
+      const updatedCart = await this.factory.update(userId, productId, amount);
+      return updatedCart;
+    } else {
+      throw new Error('Cart could not be created');
+    }
   }
 
   delete(userId: string, productId?: string) {

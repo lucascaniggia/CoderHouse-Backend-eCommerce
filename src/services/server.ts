@@ -19,10 +19,7 @@ const server: http.Server = http.createServer(app);
 initWsServer(server);
 
 app.use(express.static('public'));
-app.use(
-  '/uploads',
-  express.static(path.resolve(__dirname, '../../', 'uploads')),
-);
+app.use('/uploads', express.static(path.resolve('uploads')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
