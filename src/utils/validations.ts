@@ -75,7 +75,7 @@ export const isValidUser = (user: BaseIntUser): boolean | Error => {
     throw new UserValidation(400, `Passwords don't match. Please check data`);
   }
 
-  if (isNaN(user.age) || user.edad === 0) {
+  if (isNaN(user.age) || user.age === 0) {
     throw new UserValidation(
       400,
       'Please check data, age must be a non-zero number.',

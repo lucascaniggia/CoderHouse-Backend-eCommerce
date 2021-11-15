@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import passport from 'middlewares/auth';
 import { logger } from 'services/logger';
 
-interface User extends Express.User {
+interface User {
   email: string;
   name: string;
   address: string;

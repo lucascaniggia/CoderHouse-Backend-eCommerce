@@ -8,15 +8,6 @@ import { NotFound } from 'errors';
 const productsPath = path.resolve(__dirname, '../products.json');
 
 export class ProductsModelFs {
-  // async getAll(): Promise<IntItem[]> {
-  //   try {
-  //     const products = await fsPromises.readFile(productsPath, 'utf-8');
-  //     return JSON.parse(products);
-  //   } catch (e) {
-  //     throw { error: e, message: 'An error occurred when loading products.' };
-  //   }
-  // }
-
   async get(id?: string): Promise<IntItem | IntItem[]> {
     try {
       const products = await fsPromises.readFile(productsPath, 'utf-8');

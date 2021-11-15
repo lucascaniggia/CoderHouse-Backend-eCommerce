@@ -24,7 +24,7 @@ export class ProductValidation extends BaseError {
 
 export class MissingFieldsProduct extends ProductValidation {
   public description;
-  constructor(statusCode: number, message: string, description?: string) {
+  constructor(statusCode: number, message: string, description: string) {
     super(statusCode, message);
     this.description = description;
   }

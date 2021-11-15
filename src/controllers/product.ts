@@ -20,9 +20,9 @@ export const getProducts = async (
     if (minStock) query.minStock = Number(minStock);
     if (maxStock) query.maxStock = Number(maxStock);
 
-    // res.json({
-    //   data: await productsAPI.query(query),
-    // });
+    res.json({
+      data: await productsAPI.query(query),
+    });
   } else {
     const products = await productsAPI.get();
     if (products.length !== 0) res.json({ data: products });
@@ -50,7 +50,7 @@ export const saveProduct = async (
 
   isValidProduct(product);
 
-  const newProduct = await productsAPI.save(product);
+  const newProduct: IntItem = await productsAPI.save(product);
   res.json({ data: newProduct });
 };
 

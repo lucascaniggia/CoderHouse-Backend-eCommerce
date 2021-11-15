@@ -15,14 +15,17 @@ interface IntModel {
 
 interface MongoIntModel {
   createCart: (userId: string) => Promise<IntCart>;
-  get: (userId: string, productId?: string) => Promise<IntItem | IntItem[]>;
+  get: (
+    userId: string,
+    productId?: string,
+  ) => Promise<CartIntItem | CartIntItem[]>;
   save: (userId: string, productId: string) => Promise<CartIntItem>;
   update: (
     userId: string,
     productId: string,
     amount: number,
   ) => Promise<CartIntItem[]>;
-  delete: (userId: string, productId?: string) => Promise<IntItem[]>;
+  delete: (userId: string, productId?: string) => Promise<CartIntItem[]>;
 }
 
 type IntModelType = IntModel | MongoIntModel;

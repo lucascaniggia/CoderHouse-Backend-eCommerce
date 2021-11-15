@@ -7,15 +7,6 @@ import { ProductsModelFs } from 'models/fs/product';
 const cartPath = path.resolve(__dirname, '../../cart.json');
 
 export class CartModelFs {
-  // async getAll(): Promise<IntItem[]> {
-  //   try {
-  //     const cart = await fsPromises.readFile(cartPath, 'utf-8');
-  //     return JSON.parse(cart).products;
-  //   } catch (e) {
-  //     throw { error: e, message: 'An error occurred when loading cart.' };
-  //   }
-  // }
-
   async get(id?: string): Promise<IntItem | IntItem[]> {
     try {
       const cart = await fsPromises.readFile(cartPath, 'utf-8');

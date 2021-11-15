@@ -11,12 +11,8 @@ import { unknownEndpoint } from 'middlewares/unknownEndpoint';
 import { errorHandler } from 'middlewares/errorHandler';
 import { clientPromise } from 'services/mongodb';
 import passport from 'middlewares/auth';
-import { initWsServer } from './socket';
 
 const app: express.Application = express();
-
-const server: http.Server = http.createServer(app);
-initWsServer(server);
 
 app.use(express.static('public'));
 app.use('/uploads', express.static(path.resolve('uploads')));
@@ -39,6 +35,7 @@ app.use(
     }),
     cookie: {
       maxAge: Config.SESSION_COOKIE_TIMEOUT_MIN * 1000 * 60,
+      httpOnly: false,
     },
   }),
 );

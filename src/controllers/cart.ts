@@ -20,7 +20,7 @@ export const getCartProduct = async (
   const { _id } = req.user as User;
   const product = await cartAPI.get(_id, req.params.id);
   if (product) res.json({ data: product });
-  else throw new NotFound(404, 'Products does not exist on cart.');
+  else throw new NotFound(404, 'Product does not exist on cart.');
 };
 
 export const saveCartProduct = async (
