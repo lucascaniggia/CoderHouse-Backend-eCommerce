@@ -33,7 +33,7 @@ export const userJoiSchema = Joi.object({
     )
     .required()
     .messages({
-      'string.pattern.base': `Password must contain at least 8 characters, including 1 uppercase, 1 lowercase, 1 number and 1 special character.`,
+      'string.pattern.base': `Password must contain at least 8 characters, including 1 uppercase, 1 lowercase, 1 number and 1 special character (#?!@$ %^&*-).`,
       'string.empty': `All fields are required, please enter a valid password`,
     }),
   repeatPassword: Joi.string().required().valid(Joi.ref('password')).messages({

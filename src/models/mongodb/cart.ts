@@ -99,11 +99,21 @@ export class CartModelMongoDB {
           const productInCartIndex = cart.products.findIndex(
             item => item.product.id.toString() === productId,
           );
-          if (productInCartIndex) {
-            logger.info('Item already in cart. Adding another unit.');
+
+          if (productInCartIndex === -1) {
+            // if it's not in the cart, add 1
+            cart.products = cart.products.concat({
+              product: product._id,
+              quantity: 1,
+            });
+
+            await cart.save();
             const updatedCart = await cart.populate('products.product');
-            return updatedCart.products[updatedCart.products.length];
+            return updatedCart.products[updatedCart.products.length - 1];
           } else {
+            // if it's in the cart then add 1 more
+            cart.products[productInCartIndex].quantity += 1;
+            logger.info('Product already in cart. Adding another unit.');
             await cart.save();
             return cart.products[productInCartIndex];
           }

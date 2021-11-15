@@ -24,3 +24,82 @@
     at IncomingMessage.emit (events.js:327:22)
     at endReadableNT (internal/streams/readable.js:1327:12)
     at processTicksAndRejections (internal/process/task_queues.js:80:21) 
+[31merror[39m | Nov-15-2021 09:21:26 | Error: -5, Message: Password must contain at least 8 characters, including 1 uppercase, 1 lowercase, 1 number and 1 special character., Stack: UserValidation: Password must contain at least 8 characters, including 1 uppercase, 1 lowercase, 1 number and 1 special character.
+    at new BaseError (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:13:11)
+    at new UserValidation (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:55:5)
+    at /Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/middlewares/auth.ts:99:12
+    at Generator.throw (<anonymous>)
+    at rejected (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/middlewares/auth.ts:6:65)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5) 
+[31merror[39m | Nov-15-2021 09:57:11 | Error: -5, Message: All fields are required, please enter a valid photo, Stack: UserValidation: All fields are required, please enter a valid photo
+    at new BaseError (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:13:11)
+    at new UserValidation (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:55:5)
+    at /Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/middlewares/auth.ts:99:12
+    at Generator.throw (<anonymous>)
+    at rejected (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/middlewares/auth.ts:6:65)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5) 
+[31merror[39m | Nov-15-2021 10:06:15 | Error: -6, Message: Missing credentials, Stack: UserExists: Missing credentials
+    at new BaseError (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:13:11)
+    at new UserExists (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:79:5)
+    at /Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/controllers/login.ts:35:13
+    at allFailed (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/passport/lib/middleware/authenticate.js:101:18)
+    at attempt (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/passport/lib/middleware/authenticate.js:174:28)
+    at Strategy.strategy.fail (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/passport/lib/middleware/authenticate.js:296:9)
+    at Strategy.authenticate (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/passport-local/lib/strategy.js:75:17)
+    at attempt (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/passport/lib/middleware/authenticate.js:360:16)
+    at authenticate (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/passport/lib/middleware/authenticate.js:361:7)
+    at signUpUser (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/controllers/login.ts:38:5) 
+[31merror[39m | Nov-15-2021 10:44:31 | Error: -8, Message: User not logged in, Stack: UserNotLoggedIn: User not logged in
+    at new BaseError (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:13:11)
+    at new UserNotLoggedIn (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:87:5)
+    at userData (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/controllers/login.ts:58:11)
+    at Layer.handle [as handle_request] (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/index.js:281:22
+    at Function.process_params (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/index.js:275:10) 
+[31merror[39m | Nov-15-2021 10:54:15 | Error: -4, Message: Product or Cart to add does not exist, Stack: NotFound: Product or Cart to add does not exist
+    at new BaseError (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:13:11)
+    at new NotFound (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:36:5)
+    at CartModelMongoDB.<anonymous> (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/models/mongodb/cart.ts:118:15)
+    at Generator.throw (<anonymous>)
+    at rejected (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/models/mongodb/cart.ts:6:65)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5) 
+[31merror[39m | Nov-15-2021 10:55:00 | Error: -4, Message: Product does not exist on cart., Stack: NotFound: Product does not exist on cart.
+    at new BaseError (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:13:11)
+    at new NotFound (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:36:5)
+    at CartModelMongoDB.<anonymous> (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/models/mongodb/cart.ts:72:20)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/models/mongodb/cart.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5) 
+[31merror[39m | Nov-15-2021 11:03:58 | Error: -4, Message: Product does not exist on cart., Stack: NotFound: Product does not exist on cart.
+    at new BaseError (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:13:11)
+    at new NotFound (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:36:5)
+    at CartModelMongoDB.<anonymous> (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/models/mongodb/cart.ts:72:20)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/models/mongodb/cart.ts:5:58)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5) 
+[31merror[39m | Nov-15-2021 11:25:22 | Error: -1, Message: Not Authorized., Stack: UnauthorizedRoute: Not Authorized.
+    at new BaseError (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:13:11)
+    at new UnauthorizedRoute (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:45:5)
+    at isLoggedIn (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/middlewares/auth.ts:125:11)
+    at Layer.handle [as handle_request] (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/index.js:317:13)
+    at /Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/index.js:335:12)
+    at next (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/index.js:275:10)
+    at Function.handle (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/index.js:174:3)
+    at router (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/node_modules/express/lib/router/index.js:47:12) 
+[31merror[39m | Nov-15-2021 11:26:27 | Error: -4, Message: Product does not exist on cart., Stack: NotFound: Product does not exist on cart.
+    at new BaseError (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:13:11)
+    at new NotFound (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:36:5)
+    at CartModelMongoDB.<anonymous> (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/models/mongodb/cart.ts:72:20)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/models/mongodb/cart.ts:5:58)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5) 
+
