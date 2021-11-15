@@ -68,7 +68,7 @@ export class UserModelMongoDb {
     return newUser;
   }
 
-  async update(id: string, data: BaseIntUser): Promise<IntUser> {
+  async update(id: string, data: BaseIntUser): Promise<IntUser | null> {
     return this.userModel.findByIdAndUpdate(id, data);
   }
 

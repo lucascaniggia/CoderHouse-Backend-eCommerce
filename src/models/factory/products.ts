@@ -11,7 +11,7 @@ interface IntModel {
   save: (product: IntItem) => Promise<IntItem>;
   update: (id: string, product: IntItem) => Promise<IntItem>;
   delete: (id: string) => Promise<void>;
-  query?: (options: QueryIntItem) => Promise<IntItem | IntItem[]>;
+  query: (options: QueryIntItem) => Promise<IntItem | IntItem[]>;
 }
 
 export class ProductsModelFactory {

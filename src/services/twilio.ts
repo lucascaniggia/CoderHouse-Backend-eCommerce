@@ -1,11 +1,11 @@
-import Config from 'config';
+import Config from '../config';
 import twilio from 'twilio';
 
 class Twilio {
   private twilio;
 
   constructor() {
-    this.twilio = twilio(Config.TWILIO_ACCOUNT_ID, Config.TWILIO_TOKEN);
+    this.twilio = twilio(Config.TWILIO_ACCOUNT_SID, Config.TWILIO_TOKEN);
   }
 
   async sendMessage(
