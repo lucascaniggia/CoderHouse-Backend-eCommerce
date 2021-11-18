@@ -1,8 +1,6 @@
-import { IntItem, QueryIntItem } from 'common/interfaces/products';
+import { IntItem, BaseIntItem, QueryIntItem } from 'common/interfaces/products';
 import { ProductsModelFactory } from 'models/factory/products';
 import { modelTypeToUse } from './modelType';
-
-// const type = ModelType.firebase;
 
 class ProductsAPI {
   private factory;
@@ -16,7 +14,7 @@ class ProductsAPI {
     return this.factory.get();
   }
 
-  async save(product: IntItem) {
+  async save(product: BaseIntItem) {
     const newProduct = await this.factory.save(product);
     return newProduct;
   }

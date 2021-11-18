@@ -1,4 +1,4 @@
-import { IntItem, QueryIntItem } from 'common/interfaces/products';
+import { IntItem, BaseIntItem, QueryIntItem } from 'common/interfaces/products';
 import admin, { firestore } from 'firebase-admin';
 import { NotFound } from 'errors';
 import { productsMock } from 'mocks/products';
@@ -67,7 +67,7 @@ export class ProductsModelFirebase {
     }
   }
 
-  async save(data: IntItem): Promise<IntItem> {
+  async save(data: BaseIntItem): Promise<IntItem> {
     try {
       data.timestamp = moment().format('DD/MM/YYYY HH:mm:ss');
       const productDocumentRef = await this.productsDb.add({

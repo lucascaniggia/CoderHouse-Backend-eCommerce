@@ -87,7 +87,7 @@ export class ProductsModelMongoDB {
     }
   }
 
-  async save(data: IntItem): Promise<IntItem> {
+  async save(data: BaseIntItem): Promise<IntItem> {
     try {
       const newProduct = await new this.products(data);
       await newProduct.save();

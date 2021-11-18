@@ -1,4 +1,4 @@
-import { IntItem, QueryIntItem } from 'common/interfaces/products';
+import { IntItem, BaseIntItem, QueryIntItem } from 'common/interfaces/products';
 import { ModelType } from 'common/enums';
 import { ProductsModel } from 'models/memory/product';
 import { ProductsModelFs } from 'models/fs/product';
@@ -8,7 +8,7 @@ import { ProductsModelMySQL } from 'models/mysql/product';
 
 interface IntModel {
   get: (id?: string) => Promise<IntItem | IntItem[]>;
-  save: (product: IntItem) => Promise<IntItem>;
+  save: (product: BaseIntItem) => Promise<IntItem>;
   update: (id: string, product: IntItem) => Promise<IntItem>;
   delete: (id: string) => Promise<void>;
   query: (options: QueryIntItem) => Promise<IntItem | IntItem[]>;

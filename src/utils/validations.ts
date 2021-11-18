@@ -1,5 +1,5 @@
 import { isUrl, isEmail, isValidCode } from './regEx';
-import { IntItem, QueryIntItem } from 'common/interfaces/products';
+import { IntItem, BaseIntItem, QueryIntItem } from 'common/interfaces/products';
 import { BaseIntUser } from 'common/interfaces/users';
 import { getEmptyFields } from 'utils/objects';
 import {
@@ -13,7 +13,9 @@ import {
 // Check if product contains any invalid getEmptyFields. If having,
 // returns proper error
 
-export const isValidProduct = (product: IntItem): boolean | Error => {
+export const isValidProduct = (
+  product: IntItem | BaseIntItem,
+): boolean | Error => {
   const emptyFields = getEmptyFields(product);
 
   if (emptyFields.length !== 0) {

@@ -2,7 +2,7 @@ import { promises as fsPromises } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 import path from 'path';
-import { IntItem, QueryIntItem } from 'common/interfaces/products';
+import { IntItem, BaseIntItem, QueryIntItem } from 'common/interfaces/products';
 import { NotFound } from 'errors';
 
 const productsPath = path.resolve(__dirname, '../products.json');
@@ -19,7 +19,7 @@ export class ProductsModelFs {
     }
   }
 
-  async save(product: IntItem): Promise<IntItem> {
+  async save(product: BaseIntItem): Promise<IntItem> {
     try {
       const products = await fsPromises.readFile(productsPath, 'utf-8');
       const productsJSON = JSON.parse(products);
@@ -30,7 +30,7 @@ export class ProductsModelFs {
         productsPath,
         JSON.stringify(productsJSON, null, '\t'),
       );
-      return product;
+      return product as IntItem;
     } catch (e) {
       throw { error: e, message: 'Product could not be saved.' };
     }

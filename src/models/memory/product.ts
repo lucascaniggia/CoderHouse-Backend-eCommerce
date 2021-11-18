@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
-import { IntItem, QueryIntItem } from 'common/interfaces/products';
+import { IntItem, BaseIntItem, QueryIntItem } from 'common/interfaces/products';
 import { NotFound } from 'errors';
 import { productsMemoryMock } from 'mocks/products-memory';
 
@@ -17,13 +17,13 @@ export class ProductsModel {
     }
   }
 
-  async save(product: IntItem): Promise<IntItem> {
+  async save(product: BaseIntItem): Promise<IntItem> {
     try {
       product.id = uuidv4();
       product.timestamp = moment().format('DD/MM/YYYY HH:mm:ss');
 
-      products.push(product);
-      return product;
+      products.push(product as IntItem);
+      return product as IntItem;
     } catch (e) {
       throw { error: e, message: 'Product could not be saved.' };
     }
