@@ -13,6 +13,8 @@ import { clientPromise } from 'services/mongodb';
 import passport from 'middlewares/auth';
 import { graphqlHTTP } from 'express-graphql';
 import { graphqlRoot, graphqlSchema } from './graphQL';
+import swaggerUi from 'swagger-ui-express';
+import docs from 'docs';
 
 const app: express.Application = express();
 
@@ -60,6 +62,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/api', routes);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));
 
 app.use(errorHandler);
 app.use(unknownEndpoint);
