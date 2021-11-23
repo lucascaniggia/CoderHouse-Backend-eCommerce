@@ -3,11 +3,15 @@ import components from './components';
 import products from './products';
 import servers from './server';
 import tags from './tags';
+import cart from './cart';
 
 export default {
   ...basicInfo,
   ...servers,
   ...tags,
   ...components,
-  ...products,
+  paths: {
+    ...products,
+    ...cart,
+  },
 };

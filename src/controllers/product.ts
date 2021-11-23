@@ -25,7 +25,7 @@ export const getProducts = async (
     });
   } else {
     const products = await productsAPI.get();
-    if (products.length !== 0) res.json({ data: products });
+    if (!isEmpty(products)) res.json({ data: products });
     else throw new NotFound(404, 'There is no products!');
   }
 };
@@ -35,7 +35,7 @@ export const getProduct = async (
   res: Response,
 ): Promise<void> => {
   const product = await productsAPI.get(req.params.id);
-  if (product) res.json({ data: product });
+  if (!isEmpty(product)) res.json({ data: product });
   else throw new NotFound(404, 'Product not found.');
 };
 

@@ -4,55 +4,18 @@ export default {
       id: {
         type: 'string',
         description: 'An id of a product',
-        example: '61717f366466441a1936e9fa',
+        example: 'fae019a0-a19c-4dc6-a0f3-056a14acf9c5',
       },
       Products: {
         type: 'array',
         items: {
-          type: 'object',
-          properties: {
-            id: {
-              type: 'string',
-              description: 'Product identification id',
-              example: '61717f366466441a1936e9fa',
-            },
-            name: {
-              type: 'string',
-              description: 'Product name',
-              example: 'Tahini Paste',
-            },
-            description: {
-              type: 'string',
-              description: 'Product description',
-              example:
-                'Ac nulla fringilla, suscipit justo in, facilisis velit. Vivamus ac tempus ligula. Donec facilisis augue quis felis vestibulum, vitae semper est egestas.',
-            },
-            code: {
-              type: 'string',
-              description: 'Product code',
-              example: 'PFCH-1234-1234',
-            },
-            price: {
-              type: 'number',
-              description: 'Product price',
-              example: '123.4',
-            },
-            photo: {
-              type: 'string',
-              description: 'Product image url',
-              example: 'https://picsum.photos/300?random=3',
-            },
-            timestamp: {
-              type: 'string',
-              description: 'Product time and date of creation',
-              example: '21/10/2021 11:54:40',
-            },
-            stock: {
-              type: 'number',
-              description: 'Product stock',
-              example: '21',
-            },
-          },
+          $ref: '#/components/schemas/Product',
+        },
+      },
+      ProductsCart: {
+        type: 'array',
+        items: {
+          $ref: '#/components/schemas/ProductCart',
         },
       },
       Product: {
@@ -61,28 +24,28 @@ export default {
           id: {
             type: 'string',
             description: 'Product identification id',
-            example: '61717f366466441a1936e9fa',
+            example: 'fae019a0-a19c-4dc6-a0f3-056a14acf9c5',
           },
           name: {
             type: 'string',
             description: 'Product name',
-            example: 'Tahini Paste',
+            example: 'PFCH-2856-2940',
           },
           description: {
             type: 'string',
             description: 'Product description',
             example:
-              'Ac nulla fringilla, suscipit justo in, facilisis velit. Vivamus ac tempus ligula. Donec facilisis augue quis felis vestibulum, vitae semper est egestas.',
+              'Lorem ipsum dolor sit amet, nam fierent perfecto ea, pro in albucius oportere accommodare. Ius everti consectetuer et, meis mutat.',
           },
           code: {
             type: 'string',
             description: 'Product code',
-            example: 'PFCH-1234-1234',
+            example: 'PFCH-2856-2940',
           },
           price: {
             type: 'number',
             description: 'Product price',
-            example: '123.4',
+            example: '120.68',
           },
           photo: {
             type: 'string',
@@ -107,23 +70,23 @@ export default {
           name: {
             type: 'string',
             description: 'Product name',
-            example: 'Tahini Paste',
+            example: 'Test Product',
           },
           description: {
             type: 'string',
             description: 'Product description',
             example:
-              'Ac nulla fringilla, suscipit justo in, facilisis velit. Vivamus ac tempus ligula. Donec facilisis augue quis felis vestibulum, vitae semper est egestas.',
+              'Lorem ipsum dolor sit amet, nam fierent perfecto ea, pro in albucius oportere accommodare. Ius everti consectetuer et, meis mutat.',
           },
           code: {
             type: 'string',
             description: 'Product code',
-            example: 'PFCH-1234-1234',
+            example: 'PFCH-2856-2940',
           },
           price: {
             type: 'number',
             description: 'Product price',
-            example: '123.4',
+            example: '120.68',
           },
           photo: {
             type: 'string',
@@ -137,13 +100,39 @@ export default {
           },
         },
       },
+      ProductCart: {
+        type: 'object',
+        properties: {
+          product: {
+            $ref: '#/components/schemas/Product',
+          },
+          quantity: {
+            type: 'number',
+            description: 'Amount of this product in the cart.',
+            example: '1',
+          },
+        },
+      },
+      ProductCartEdit: {
+        type: 'object',
+        properties: {
+          productId: {
+            $ref: '#/components/schemas/id',
+          },
+          amount: {
+            type: 'number',
+            description: 'New desired amount of product to add to cart',
+            example: '5',
+          },
+        },
+      },
       Error: {
         type: 'object',
         properties: {
           error: {
             type: 'string',
             description: 'Error internal code.',
-            example: '-1',
+            example: '-4',
           },
           name: {
             type: 'string',
@@ -159,12 +148,12 @@ export default {
             type: 'string',
             description: 'Error stack trace',
             example:
-              'Error: -4, Message: Product does not exist on cart., Stack: NotFound: Product does not exist on cart.    at new BaseError (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:13:11)    at new NotFound (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:36:5)    at CartModelMongoDB.<anonymous> (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/models/mongodb/cart.ts:72:20)    at Generator.next (<anonymous>)    at fulfilled (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/models/mongodb/cart.ts:5:58)    at runMicrotasks (<anonymous>)    at processTicksAndRejections (internal/process/task_queues.js:93:5)',
+              'Error: -4, Message: Product does not exist on cart., Stack: NotFound: Product does not exist on cart.     at new BaseError (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:13:11)     at new NotFound (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/errors/index.ts:36:5)    at CartModelMongoDB.<anonymous> (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/models/mongodb/cart.ts:72:20)    at Generator.next (<anonymous>)    at fulfilled (/Users/mac/Desktop/Prog BackEnd | Coderhouse/Proyecto Final/src/models/mongodb/cart.ts:5:58)    at runMicrotasks (<anonymous>)    at processTicksAndRejections (internal/process/task_queues.js:93:5)',
           },
           description: {
             type: 'string',
-            description: 'Error description, can be present or not.',
-            example: 'The following fields are missing: name',
+            description: 'Error description, it can exist or not.',
+            example: 'The following fields are missing: name.',
           },
         },
       },

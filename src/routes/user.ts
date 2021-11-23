@@ -12,7 +12,7 @@ const userRouter = Router();
 
 userRouter.get('/:id', asyncHandler(getUser));
 userRouter.post('/', validateUserInput, asyncHandler(addUser));
-userRouter.put('/', asyncHandler(updateUser));
-userRouter.delete('/', asyncHandler(deleteUser));
+userRouter.put('/:id', asyncHandler(updateUser));
+userRouter.delete('/:id', asyncHandler(deleteUser));
 
 export default userRouter;

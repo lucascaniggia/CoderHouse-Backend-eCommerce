@@ -43,7 +43,7 @@ ProductSchema.set('toJSON', {
 });
 
 ProductSchema.plugin(uniqueValidator, {
-  message: 'Field already exists, please enter another option.',
+  message: 'Code already exists, please enter another option.',
 });
 
 export const ProductsModel = mongoose.model<BaseIntItem>(
@@ -127,9 +127,13 @@ export class ProductsModelMongoDB {
 
   async delete(id: string): Promise<void> {
     try {
-      await this.products.findByIdAndRemove(id);
+      const productDeleted = await this.products.findByIdAndRemove(id);
+      if (productDeleted === null)
+        throw new NotFound(404, 'Product to update does not exist.');
     } catch (e) {
-      if (e instanceof mongoose.Error.CastError) {
+      if (e instanceof NotFound) {
+        throw e;
+      } else if (e instanceof mongoose.Error.CastError) {
         throw new NotFound(404, 'Product to delete does not exist.');
       } else {
         throw { error: e, message: 'Product could not be deleted.' };

@@ -1,3 +1,4 @@
+// Determines if item (passed as an argument) is empty or not.
 // @parameter -> string/number/array/object
 // Returns if item (passed as parameter) is empty
 

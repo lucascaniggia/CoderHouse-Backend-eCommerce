@@ -11,10 +11,10 @@ import asyncHandler from 'express-async-handler';
 
 const productRouter = express.Router();
 
-productRouter.get('/list', asyncHandler(getProducts));
-productRouter.get('/list/:id', asyncHandler(getProduct));
-productRouter.post('/save', isAdmin, asyncHandler(saveProduct));
-productRouter.put('/update/:id', isAdmin, asyncHandler(updateProduct));
-productRouter.delete('/delete/:id', isAdmin, asyncHandler(deleteProduct));
+productRouter.get('/', asyncHandler(getProducts));
+productRouter.get('/:id', asyncHandler(getProduct));
+productRouter.post('/', isAdmin, asyncHandler(saveProduct));
+productRouter.put('/:id', isAdmin, asyncHandler(updateProduct));
+productRouter.delete('/:id', isAdmin, asyncHandler(deleteProduct));
 
 export default productRouter;
