@@ -1,14 +1,15 @@
 export default {
-  delete: {
-    tags: ['Cart'],
-    description: 'Delete a product in the cart.',
-    operationId: 'deleteProductCart',
+  get: {
+    tags: ['User'],
+    description:
+      'Get an specific user. Only available for logged in admin user',
+    operationId: 'getUser',
     parameters: [
       {
         name: 'id',
         in: 'path',
         schema: {
-          $ref: '#/components/schemas/ProductId',
+          $ref: '#/components/schemas/UserId',
         },
         required: true,
         description: 'A single product id',
@@ -16,22 +17,18 @@ export default {
     ],
     responses: {
       200: {
-        description: 'Product was removed successfully from the cart.',
+        description: 'User was obtained.',
         content: {
           'application/json': {
             schema: {
-              type: 'array',
-              description: 'Array of products in cart.',
-              items: {
-                $ref: '#/components/schemas/CartProduct',
-              },
+              $ref: '#/components/schemas/User',
             },
           },
         },
       },
-      404: {
+      401: {
         description:
-          "The cart does not exists (there's no cart associated to the user) or the product you want to delete is not in the cart.",
+          'Unauthorized route, login as an admin first and try again.',
         content: {
           'application/json': {
             schema: {
@@ -40,8 +37,8 @@ export default {
           },
         },
       },
-      401: {
-        description: 'Unauthorized route, login first and try again',
+      404: {
+        description: 'There user does not exist.',
         content: {
           'application/json': {
             schema: {

@@ -1,27 +1,28 @@
 export default {
   get: {
-    tags: ['Cart'],
-    description: 'Get a list of all products in the cart.',
-    operationId: 'getProductsCart',
+    tags: ['User'],
+    description:
+      'Get a list of all users. Only available for logged in admin user',
+    operationId: 'getUsers',
     parameters: [],
     responses: {
       200: {
-        description: 'Products in the cart were obtained',
+        description: 'Users were obtained.',
         content: {
           'application/json': {
             schema: {
               type: 'array',
-              description: 'Array of products in cart.',
+              description: 'Array of products.',
               items: {
-                $ref: '#/components/schemas/CartProduct',
+                $ref: '#/components/schemas/User',
               },
             },
           },
         },
       },
-      404: {
+      401: {
         description:
-          "The cart does not exists (there's no cart associated to the user)",
+          'Unauthorized route, login as an admin first and try again.',
         content: {
           'application/json': {
             schema: {
@@ -30,8 +31,8 @@ export default {
           },
         },
       },
-      401: {
-        description: 'Unauthorized route, login first and try again',
+      404: {
+        description: 'There are no registered users.',
         content: {
           'application/json': {
             schema: {

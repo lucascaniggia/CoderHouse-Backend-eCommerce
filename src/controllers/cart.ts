@@ -32,7 +32,10 @@ export const saveCartProduct = async (
     const newProduct = await cartAPI.save(_id, req.params.id);
     res.json({ data: newProduct });
   } else {
-    throw new UnauthorizedRoute(401, 'Unauthorized');
+    throw new UnauthorizedRoute(
+      401,
+      'To add a product to cart, you must be logged in.',
+    );
   }
 };
 

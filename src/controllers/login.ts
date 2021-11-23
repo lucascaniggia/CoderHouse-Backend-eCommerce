@@ -28,13 +28,13 @@ export const signUpUser = (
 ): void => {
   passport.authenticate('signup', function (err, user, info) {
     if (err) {
-      logger.warn('An error occurred when signing up.');
+      logger.warn('An error occurred when registering user.');
       return next(err);
     }
     if (!user) {
       throw new UserExists(400, info.message);
     }
-    res.json({ msg: 'Sign Up successful' });
+    res.json({ message: 'Sign Up successful' });
   })(req, res, next);
 };
 

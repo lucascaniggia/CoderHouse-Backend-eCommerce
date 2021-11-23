@@ -122,7 +122,10 @@ export const isLoggedIn = (
   next: NextFunction,
 ): void => {
   if (!req.isAuthenticated())
-    throw new UnauthorizedRoute(401, 'Not Authorized.');
+    throw new UnauthorizedRoute(
+      401,
+      'You need to be logged-in to perform this action',
+    );
 
   next();
 };

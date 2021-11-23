@@ -3,7 +3,9 @@ import components from './components';
 import products from './products';
 import servers from './server';
 import tags from './tags';
+import login from './login';
 import cart from './cart';
+import users from './users';
 
 export default {
   ...basicInfo,
@@ -13,5 +15,7 @@ export default {
   paths: {
     ...products,
     ...cart,
+    ...login,
+    ...users,
   },
 };
