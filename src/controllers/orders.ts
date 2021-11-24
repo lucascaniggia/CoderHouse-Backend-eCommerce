@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import Config from 'config';
 import { EmailService } from 'services/email';
-import { SmsService } from 'services/twilio';
+// import { SmsService } from 'services/twilio';
 import { IntItem } from 'common/interfaces/products';
 import { CartIntItem } from 'common/interfaces/carts';
 import { cartAPI } from 'api/cart';
@@ -17,7 +17,7 @@ interface User {
 }
 
 export const sendOrder = async (req: Request, res: Response): Promise<void> => {
-  const { _id, email, name, telephone } = req.user as User;
+  const { _id, email, name } = req.user as User;
   const products = (await cartAPI.get(_id)) as CartIntItem[];
 
   // TS type guard to check if product property from products is populated
@@ -48,17 +48,17 @@ export const sendOrder = async (req: Request, res: Response): Promise<void> => {
       emailContent,
     );
 
-    SmsService.sendMessage(
-      Config.ADMIN_WHATSAPP,
-      `New order from: ${name}, ${email}`,
-      'whatsapp',
-    );
+    // SmsService.sendMessage(
+    //   Config.ADMIN_WHATSAPP,
+    //   `New order from: ${name}, ${email}`,
+    //   'whatsapp',
+    // );
 
-    SmsService.sendMessage(
-      telephone,
-      `Your order has been taken successfully and is being processed.`,
-      'sms',
-    );
+    // SmsService.sendMessage(
+    //   telephone,
+    //   `Your order has been taken successfully and is being processed.`,
+    //   'sms',
+    // );
 
     await cartAPI.delete(_id);
 

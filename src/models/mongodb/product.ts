@@ -1,10 +1,8 @@
 import { IntItem, BaseIntItem, QueryIntItem } from 'common/interfaces/products';
 import moment from 'moment';
 import mongoose, { FilterQuery } from 'mongoose';
-import { productsMock } from 'mocks/products';
 import { NotFound, ProductValidation } from 'errors';
 import uniqueValidator from 'mongoose-unique-validator';
-import { logger } from 'services/logger';
 import { isQueryValid } from 'utils/validations';
 
 const ProductSchema = new mongoose.Schema<BaseIntItem>({
@@ -55,16 +53,6 @@ export class ProductsModelMongoDB {
   private products;
   constructor() {
     this.products = ProductsModel;
-    this.get()
-      .then(products => {
-        if (products.length === 0) {
-          this.products
-            .insertMany(productsMock)
-            .then(() => logger.info('Products added successfully.'))
-            .catch(e => logger.error(e));
-        }
-      })
-      .catch(e => logger.error(e));
   }
 
   async get(id?: string): Promise<IntItem | IntItem[]> {

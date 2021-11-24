@@ -10,7 +10,7 @@ import { isAdmin } from 'middlewares/checkAdmin';
 const Router = express.Router();
 
 Router.use('/auth', loginRouter);
-Router.use('/products', isLoggedIn, productRouter);
+Router.use('/products', productRouter);
 Router.use('/cart', isLoggedIn, cartRouter);
 Router.use('/orders', isLoggedIn, ordersRouter);
 Router.use('/users', isLoggedIn, isAdmin, userRouter);

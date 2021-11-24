@@ -1,5 +1,6 @@
 import { ErrorRequestHandler } from 'express';
 import { logger } from 'services/logger';
+import Config from 'config';
 
 interface IntError {
   error: string;
@@ -20,6 +21,7 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   if (description) {
     errorInfo.description = description;
   }
-  logger.error(`Error: ${error}, Message: ${message}, Stack: ${stack} `);
+  if (Config.NODE_ENV !== 'test')
+    logger.error(`Error: ${error}, Message: ${message}, Stack: ${stack} `);
   res.status(statusCode || 500).json(errorInfo);
 };
