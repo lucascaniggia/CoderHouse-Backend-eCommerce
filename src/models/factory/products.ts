@@ -6,7 +6,7 @@ import { ProductsModelFirebase } from 'models/firebase/product';
 import { ProductsModelMongoDB } from 'models/mongodb/product';
 import { ProductsModelMySQL } from 'models/mysql/product';
 
-interface IntModel {
+export interface IntModel {
   get: (id?: string) => Promise<IntItem | IntItem[]>;
   save: (product: BaseIntItem) => Promise<IntItem>;
   update: (id: string, product: IntItem) => Promise<IntItem>;
@@ -15,21 +15,46 @@ interface IntModel {
 }
 
 export class ProductsModelFactory {
+  private static instance: IntModel;
+  private static value: number;
   static model(type: number): IntModel {
     switch (type) {
       case ModelType.fs:
-        return new ProductsModelFs();
+        if (!this.instance) this.instance = new ProductsModelFs();
+        if (!this.value) this.value = Math.random();
+        console.log(this.value);
+        return this.instance;
       case ModelType.mySql:
-        return new ProductsModelMySQL('mysql');
+        if (!this.instance) this.instance = new ProductsModelMySQL('mysql');
+        if (!this.value) this.value = Math.random();
+        console.log(this.value);
+        return this.instance;
       case ModelType.sqlite:
-        return new ProductsModelMySQL('sqlite');
+        if (!this.instance)
+          this.instance = this.instance = new ProductsModelMySQL('sqlite');
+        if (!this.value) this.value = Math.random();
+        console.log(this.value);
+        return this.instance;
       case ModelType.localMongo:
       case ModelType.mongoAtlas:
-        return new ProductsModelMongoDB();
+        if (!this.instance)
+          this.instance = this.instance = new ProductsModelMongoDB();
+        if (!this.value) this.value = Math.random();
+        console.log(this.value);
+        return this.instance;
       case ModelType.firebase:
-        return new ProductsModelFirebase();
+        if (!this.instance)
+          this.instance = this.instance = new ProductsModelFirebase();
+        if (!this.value) this.value = Math.random();
+        console.log(this.value);
+        return this.instance;
       default:
-        return new ProductsModel();
+        if (!this.instance) this.instance = this.instance = new ProductsModel();
+        if (!this.value) this.value = Math.random();
+        console.log(this.value);
+        return this.instance;
     }
   }
 }
+ProductsModelFactory.model(ModelType.memory);
+ProductsModelFactory.model(ModelType.memory);
