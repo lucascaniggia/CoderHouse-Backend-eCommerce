@@ -1,12 +1,12 @@
-import { v4 as uuidv4 } from 'uuid';
-import moment from 'moment';
 import { IntItem, BaseIntItem, QueryIntItem } from 'common/interfaces/products';
 import { NotFound } from 'errors';
 import { productsMemoryMock } from 'mocks/products-memory';
+import { IntModel } from 'models/factory/products';
+import { productDTO } from 'dto/products';
 
 let products = productsMemoryMock;
 
-export class ProductsModel {
+export class ProductsModel implements IntModel {
   async get(id?: string): Promise<IntItem | IntItem[]> {
     try {
       if (id)
@@ -19,11 +19,9 @@ export class ProductsModel {
 
   async save(product: BaseIntItem): Promise<IntItem> {
     try {
-      product.id = uuidv4();
-      product.timestamp = moment().format('DD/MM/YYYY HH:mm:ss');
-
-      products.push(product as IntItem);
-      return product as IntItem;
+      const newProduct = productDTO(product as IntItem);
+      products.push(newProduct);
+      return newProduct;
     } catch (e) {
       throw { error: e, message: 'Product could not be saved.' };
     }
