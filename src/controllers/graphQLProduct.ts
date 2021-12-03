@@ -27,3 +27,24 @@ export const saveProduct = async (args: {
   const newProduct: IntItem = await productsAPI.save(product);
   return newProduct;
 };
+
+export const updateProduct = async (args: {
+  id: string;
+  product: IntItem;
+}): Promise<IntItem> => {
+  console.log(args);
+  const dataToUpdate = args.product;
+
+  dataToUpdate.price = Number(dataToUpdate.price);
+  dataToUpdate.stock = Number(dataToUpdate.stock);
+
+  isValidProduct(dataToUpdate);
+
+  const product = await productsAPI.update(args.id, dataToUpdate);
+  return product;
+};
+
+export const deleteProduct = async (args: { id: string }): Promise<string> => {
+  await productsAPI.delete(args.id);
+  return 'Product deleted';
+};
