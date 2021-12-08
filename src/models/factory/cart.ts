@@ -1,5 +1,5 @@
 import { IntItem } from 'common/interfaces/products';
-import { IntCart, CartIntItem } from '/common/interfaces/cart';
+import { CartIntItem } from '/common/interfaces/cart';
 import { ModelType } from 'common/enums';
 import { CartModel } from 'models/memory/cart';
 import { CartModelFs } from 'models/fs/cart';

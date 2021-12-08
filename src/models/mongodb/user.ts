@@ -61,7 +61,10 @@ export class UserModelMongoDb {
       } else if (e instanceof mongoose.Error.CastError) {
         throw new NotFound(404, 'User not found');
       } else {
-        throw { error: e, message: 'An error occurred when loading products.' };
+        throw {
+          error: e,
+          message: 'An error occurred when loading users.',
+        };
       }
     }
   }

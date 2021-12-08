@@ -1,13 +1,16 @@
 import { IntMessage } from 'common/interfaces/messages';
 import mongoose from 'mongoose';
-import { BaseRepository } from './repository/baseMessages';
 
 const messagesCollection = 'messages';
 
 const MessageSchema = new mongoose.Schema<IntMessage>(
   {
-    email: { type: String, require: true },
+    user: {
+      type: 'ObjectId',
+      ref: 'User',
+    },
     text: { type: String, require: true },
+    type: { type: String, require: true },
   },
   {
     timestamps: {
@@ -29,24 +32,28 @@ const messagesModel = mongoose.model<IntMessage>(
   MessageSchema,
 );
 
-// class MessagesModelMongoDb {
-//   private messages;
-//   constructor() {
-//     this.messages = messagesModel;
-//   }
-//   async get(id?: string): Promise<IntMessage[]> {
-//     if (id) return this.messages.find({ _id: id });
-//     return this.messages.find({});
-//   }
+class MessagesModelMongoDb {
+  private messages;
+  constructor() {
+    this.messages = messagesModel;
+  }
+  async get(userId: string): Promise<IntMessage[]> {
+    const userMessages = this.messages.find({ user: userId }).populate('user');
+    return userMessages;
+  }
 
-//   async save(data: IntMessage): Promise<IntMessage> {
-//     const saveModel = new this.messages(data);
-//     return saveModel.save();
-//   }
-// }
-export class MessagesModelMongoDB extends BaseRepository<IntMessage> {}
+  async save(
+    userId: string,
+    text: string,
+    type: 'user' | 'system',
+  ): Promise<IntMessage> {
+    const saveModel = new this.messages({
+      user: userId,
+      text,
+      type,
+    });
+    return (await saveModel.save()).populate('user');
+  }
+}
 
-export const messagesModelMongoDb = new MessagesModelMongoDB(
-  messagesCollection,
-  MessageSchema,
-);
+export const messagesModelMongoDb = new MessagesModelMongoDb();

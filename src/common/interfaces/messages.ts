@@ -1,6 +1,9 @@
+import { Types } from 'mongoose';
+
 export interface IntMessage {
-  _id: string;
-  email: string;
+  id?: string;
+  user: Types.ObjectId;
   text: string;
-  date: string;
+  type: 'user' | 'system';
+  date?: string;
 }

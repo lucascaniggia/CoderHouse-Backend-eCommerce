@@ -1,13 +1,10 @@
 import { Request, Response } from 'express';
 import Config from 'config';
 import { EmailService } from 'services/email';
-// import { SmsService } from 'services/twilio';
-import { IntItem } from 'common/interfaces/products';
 import { CartIntItem } from '/common/interfaces/cart';
 import { cartAPI } from 'api/cart';
-import { isEmpty } from 'utils/others';
+import { isEmpty, isProductPopulated } from 'utils/others';
 import { CartIsEmpty } from 'errors';
-import { Types } from 'mongoose';
 
 interface User {
   _id: string;
@@ -19,11 +16,6 @@ interface User {
 export const sendOrder = async (req: Request, res: Response): Promise<void> => {
   const { _id, email, name } = req.user as User;
   const products = (await cartAPI.get(_id)) as CartIntItem[];
-
-  // TS type guard to check if product property from products is populated
-  function isProductPopulated(obj: IntItem | Types.ObjectId): obj is IntItem {
-    return (obj as IntItem).name !== undefined;
-  }
 
   if (!isEmpty(products)) {
     let emailContent = '<h2>Products</h2>';
