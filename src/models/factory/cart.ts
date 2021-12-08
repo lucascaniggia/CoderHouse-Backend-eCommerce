@@ -1,5 +1,5 @@
 import { IntItem } from 'common/interfaces/products';
-import { IntCart, CartIntItem } from 'common/interfaces/carts';
+import { IntCart, CartIntItem } from '/common/interfaces/cart';
 import { ModelType } from 'common/enums';
 import { CartModel } from 'models/memory/cart';
 import { CartModelFs } from 'models/fs/cart';
@@ -13,8 +13,7 @@ interface IntModel {
   delete: (id: string) => Promise<IntItem[]>;
 }
 
-interface MongoIntModel {
-  createCart: (userId: string) => Promise<IntCart>;
+export interface MongoCartIntModel {
   get: (
     userId: string,
     productId?: string,
@@ -28,7 +27,7 @@ interface MongoIntModel {
   delete: (userId: string, productId?: string) => Promise<CartIntItem[]>;
 }
 
-type IntModelType = IntModel | MongoIntModel;
+export type IntModelType = IntModel | MongoCartIntModel;
 
 export class CartModelFactory {
   static model(type: number): IntModelType {

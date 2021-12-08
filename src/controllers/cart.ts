@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { cartAPI } from 'api/cart';
 import { NotFound, ProductValidation, UnauthorizedRoute } from 'errors';
+import { CartIntItem } from 'common/interfaces/cart';
 
 interface User {
   _id: string;
@@ -29,7 +30,11 @@ export const saveCartProduct = async (
 ): Promise<void> => {
   if (req.user) {
     const { _id } = req.user as User;
-    const newProduct = await cartAPI.save(_id, req.params.id);
+    const newProduct = (await cartAPI.save(_id, req.params.id)) as CartIntItem;
+    res
+      .location(`/api/products/${newProduct.product.id}`)
+      .status(201)
+      .json({ data: newProduct });
     res.json({ data: newProduct });
   } else {
     throw new UnauthorizedRoute(

@@ -51,7 +51,10 @@ export const saveProduct = async (
   isValidProduct(product);
 
   const newProduct: IntItem = await productsAPI.save(product);
-  res.json({ data: newProduct });
+  res
+    .location(`/api/products/${newProduct.id}`)
+    .status(201)
+    .json({ data: newProduct });
 };
 
 export const updateProduct = async (

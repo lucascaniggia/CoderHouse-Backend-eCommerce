@@ -61,7 +61,7 @@ describe("API Product's tests", () => {
       (item: IntItem) => item.name === 'Test product',
     );
 
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(201);
     expect(response.body.data.name).toEqual('Test product');
     expect(productAddedToDb.name).toEqual('Test product');
   });

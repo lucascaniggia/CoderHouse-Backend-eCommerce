@@ -34,7 +34,10 @@ export const signUpUser = (
     if (!user) {
       throw new UserExists(400, info.message);
     }
-    res.json({ message: 'Sign Up successful' });
+    res
+      .location(`/api/users/${user.id}`)
+      .status(201)
+      .json({ message: 'Login successful' });
   })(req, res, next);
 };
 

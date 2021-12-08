@@ -1,28 +1,32 @@
-import { IntCart, CartIntItem } from 'common/interfaces/carts';
+import { IntCart, CartIntItem } from '/common/interfaces/cart';
 import { ProductsModel } from 'models/mongodb/product';
 import { NotFound } from 'errors';
 import mongoose from 'mongoose';
 import { logger } from 'services/logger';
+import { MongoCartIntModel } from 'models/factory/cart';
 
-const CartSchema = new mongoose.Schema<IntCart>({
-  user: {
-    type: 'ObjectId',
-    ref: 'User',
-  },
-  products: [
-    {
-      _id: false,
-      product: {
-        type: 'ObjectId',
-        ref: 'Product',
-      },
-      quantity: {
-        type: Number,
-        required: true,
-      },
+const CartSchema = new mongoose.Schema<IntCart>(
+  {
+    user: {
+      type: 'ObjectId',
+      ref: 'User',
     },
-  ],
-});
+    products: [
+      {
+        _id: false,
+        product: {
+          type: 'ObjectId',
+          ref: 'Product',
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+  },
+  { timestamps: true },
+);
 
 CartSchema.set('toJSON', {
   transform: (document, returnedObject) => {
@@ -34,7 +38,7 @@ CartSchema.set('toJSON', {
 
 export const CartModel = mongoose.model<IntCart>('Cart', CartSchema);
 
-export class CartModelMongoDB {
+export class CartModelMongoDB implements MongoCartIntModel {
   private cartModel;
   private productsModel;
   constructor() {

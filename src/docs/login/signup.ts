@@ -59,7 +59,7 @@ export default {
       },
     },
     responses: {
-      200: {
+      201: {
         description: 'Signed-up successfully .',
       },
       400: {

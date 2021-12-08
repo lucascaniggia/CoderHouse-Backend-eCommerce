@@ -3,7 +3,7 @@ import Config from 'config';
 import { EmailService } from 'services/email';
 // import { SmsService } from 'services/twilio';
 import { IntItem } from 'common/interfaces/products';
-import { CartIntItem } from 'common/interfaces/carts';
+import { CartIntItem } from '/common/interfaces/cart';
 import { cartAPI } from 'api/cart';
 import { isEmpty } from 'utils/others';
 import { CartIsEmpty } from 'errors';
