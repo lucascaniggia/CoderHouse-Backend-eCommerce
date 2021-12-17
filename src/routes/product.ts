@@ -4,6 +4,7 @@ import {
   deleteProduct,
   getProduct,
   getProducts,
+  getProductsByCategory,
   saveProduct,
   updateProduct,
 } from 'controllers/product';
@@ -13,6 +14,7 @@ const productRouter = express.Router();
 
 productRouter.get('/', asyncHandler(getProducts));
 productRouter.get('/:id', asyncHandler(getProduct));
+productRouter.get('/category/:category', asyncHandler(getProductsByCategory));
 productRouter.post('/', isAdmin, asyncHandler(saveProduct));
 productRouter.put('/:id', isAdmin, asyncHandler(updateProduct));
 productRouter.delete('/:id', isAdmin, asyncHandler(deleteProduct));

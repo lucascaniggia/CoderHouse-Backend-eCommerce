@@ -3,6 +3,7 @@ export enum EnumErrorCodes {
   UnknownEndpoint,
   ProductValidation,
   ProductNotFound,
+  NotImplemented,
   UserSignUpValidation,
   UserAlreadyExists,
   UserDoesNotExist,

@@ -5,6 +5,7 @@ export interface BaseIntItem extends IntObject {
   description: string;
   code: string;
   price: number;
+  category: string;
   photo: string;
   timestamp: string;
   stock: number;

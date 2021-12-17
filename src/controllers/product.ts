@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { isValidProduct } from 'utils/validations';
 import { IntItem, QueryIntItem } from 'common/interfaces/products';
 import { productsAPI } from 'api/products';
-import { NotFound } from 'errors';
+import { NotFound, NotImplemented } from 'errors';
 import { isEmpty } from 'utils/others';
 
 export const getProducts = async (
@@ -37,6 +37,15 @@ export const getProduct = async (
   const product = await productsAPI.get(req.params.id);
   if (!isEmpty(product)) res.json({ data: product });
   else throw new NotFound(404, 'Product not found.');
+};
+
+export const getProductsByCategory = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const products = await productsAPI.getByCategory(req.params.category);
+  if (products) res.json({ data: products });
+  else throw new NotImplemented(500, 'Method not implemented');
 };
 
 export const saveProduct = async (

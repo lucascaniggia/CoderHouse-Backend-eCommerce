@@ -118,6 +118,11 @@ export default {
             description: 'Product price',
             example: '120.68',
           },
+          category: {
+            type: 'string',
+            description: 'Product category',
+            example: 'Home',
+          },
           photo: {
             type: 'string',
             description: 'Product image url',
@@ -184,6 +189,37 @@ export default {
             type: 'number',
             description: 'Amount of this product in the cart.',
             example: '1',
+          },
+        },
+      },
+      Message: {
+        type: 'object',
+        description: 'A chat message.',
+        properties: {
+          user: {
+            $ref: '#/components/schemas/User',
+          },
+          text: {
+            type: 'string',
+            description: 'Text in the message.',
+            example: 'Hi!',
+          },
+          type: {
+            type: 'string',
+            description:
+              'Indicates if the message was sent by the user or by the system.',
+            example:
+              "Your order has been taken successfully and it's being processed",
+          },
+          date: {
+            type: 'string',
+            description: 'Creation date of the message.',
+            example: '2021-11-29T18:44:55.533Z',
+          },
+          id: {
+            type: 'string',
+            description: 'Message id.',
+            example: '61a51fa72e460752431763bd',
           },
         },
       },

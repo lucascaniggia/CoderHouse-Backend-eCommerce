@@ -27,6 +27,11 @@ const ProductSchema = new mongoose.Schema<BaseIntItem>({
     require: true,
     max: [5000, 'Price cannot be greater than 5000'],
   },
+  category: {
+    type: String,
+    require: true,
+    maxLength: [20, 'Category must have 20 characters max.'],
+  },
   photo: { type: String, require: true },
   timestamp: { type: String, default: moment().format('DD/MM/YYYY HH:mm:ss') },
   stock: { type: Number, default: 0 },
@@ -72,6 +77,15 @@ export class ProductsModelMongoDB {
       } else {
         throw { error: e, message: 'An error occurred when loading products.' };
       }
+    }
+  }
+
+  async getByCategory(category: string): Promise<IntItem[]> {
+    try {
+      const products = await this.products.find({ category: category });
+      return products as IItem[];
+    } catch (e) {
+      throw { error: e, message: 'An error occurred when loading products' };
     }
   }
 

@@ -6,6 +6,7 @@ import tags from './tags';
 import login from './login';
 import cart from './cart';
 import users from './users';
+import chat from './chat';
 
 export default {
   ...basicInfo,
@@ -17,5 +18,6 @@ export default {
     ...cart,
     ...login,
     ...users,
+    ...chat,
   },
 };

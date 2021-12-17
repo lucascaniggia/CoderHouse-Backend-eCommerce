@@ -8,6 +8,7 @@ import { ProductsModelMySQL } from 'models/mysql/product';
 
 export interface IntModel {
   get: (id?: string) => Promise<IntItem | IntItem[]>;
+  getByCategory?: (category: string) => Promise<IntItem[]>;
   save: (product: BaseIntItem) => Promise<IntItem>;
   update: (id: string, product: IntItem) => Promise<IntItem>;
   delete: (id: string) => Promise<void>;
