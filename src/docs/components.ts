@@ -15,6 +15,11 @@ export default {
         type: 'object',
         description: 'User data.',
         properties: {
+          id: {
+            type: 'string',
+            description: 'User id.',
+            example: '61855811efae7a5e849ebb9c',
+          },
           email: {
             type: 'string',
             description: 'User email.',
@@ -30,7 +35,22 @@ export default {
             description: 'User address.',
             example: 'Salta 1840',
           },
-          edad: {
+          number: {
+            type: 'string',
+            description: 'User address floor number, optional.',
+            example: '1',
+          },
+          apartment: {
+            type: 'string',
+            description: 'User department number, optional.',
+            example: '23',
+          },
+          postalCode: {
+            type: 'string',
+            description: 'User postal/ZIP code.',
+            example: '12345',
+          },
+          age: {
             type: 'number',
             description: 'User age.',
             example: '30',
@@ -44,11 +64,6 @@ export default {
             type: 'string',
             description: 'Path to where the user picture is stored.',
             example: 'uploads/foto-test1@example.com.png',
-          },
-          id: {
-            type: 'string',
-            description: 'User id.',
-            example: '61855811efae7a5e849ebb9c',
           },
         },
       },
@@ -71,7 +86,22 @@ export default {
             description: 'User address.',
             example: 'Salta 1840',
           },
-          edad: {
+          number: {
+            type: 'string',
+            description: 'User address floor number, optional.',
+            example: '1',
+          },
+          apartment: {
+            type: 'string',
+            description: 'User address department number, optional.',
+            example: '23',
+          },
+          postalCode: {
+            type: 'string',
+            description: 'User postal/ZIP code.',
+            example: '1234567',
+          },
+          age: {
             type: 'number',
             description: 'User age.',
             example: '30',

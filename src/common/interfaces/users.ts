@@ -7,6 +7,8 @@ export interface BaseIntUser extends IntObject {
   repeatPassword: string;
   name: string;
   address: string;
+  postalCode: string;
+  apartment?: string;
   age: number;
   telephone: string;
   photo: string;
@@ -37,24 +39,28 @@ export const userJoiSchema = Joi.object({
       'string.empty': `All fields are required, please enter a valid password`,
     }),
   repeatPassword: Joi.string().required().valid(Joi.ref('password')).messages({
-    'string.empty': `All fields are required, please confirm your password`,
+    'string.empty': `Please confirm your password`,
     'any.only': `Passwords don't match`,
   }),
   name: Joi.string().required().messages({
-    'string.empty': `All fields are required, please enter a valid name`,
+    'string.empty': `Please enter a valid name`,
   }),
   address: Joi.string().required().messages({
-    'string.empty': `All fields are required, please enter a valid address`,
+    'string.empty': `Please enter a valid address`,
   }),
+  postalCode: Joi.string().required().messages({
+    'string.empty': `Please insert your postal/ZIP code`,
+  }),
+  apartment: Joi.string().allow(''),
   age: Joi.number().integer().positive().required().messages({
     'number.base': `Age must be a number`,
     'number.integer': `Age must be an integer`,
     'number.positive': `Age is required, and must be a non-zero number`,
   }),
   telephone: Joi.string().required().messages({
-    'string.empty': `All fields are required, please enter a valid phone number`,
+    'string.empty': `Please enter a valid phone number`,
   }),
   photo: Joi.string().required().messages({
-    'string.empty': `All fields are required, please enter a valid photo`,
+    'string.empty': `Please enter a valid photo`,
   }),
 });

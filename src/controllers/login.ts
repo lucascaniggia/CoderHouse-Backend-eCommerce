@@ -7,6 +7,9 @@ interface User {
   email: string;
   name: string;
   address: string;
+  postalCode: string;
+  number: string;
+  apartment: string;
   age: number;
   telephone: string;
   photo: string;
@@ -15,8 +18,26 @@ interface User {
 export const loginUser = (req: Request, res: Response): void => {
   let userData;
   if (req.user) {
-    const { email, name, address, age, telephone, photo } = req.user as User;
-    userData = { email, name, address, age, telephone, photo };
+    const {
+      email,
+      name,
+      postalCode,
+      number,
+      apartment,
+      age,
+      telephone,
+      photo,
+    } = req.user as User;
+    userData = {
+      email,
+      name,
+      postalCode,
+      number,
+      apartment,
+      age,
+      telephone,
+      photo,
+    };
   }
   res.json({ data: { message: 'Welcome.', user: userData } });
 };
@@ -54,8 +75,26 @@ export const logoutUser = (req: Request, res: Response): void => {
 
 export const userData = (req: Request, res: Response): void => {
   if (req.isAuthenticated()) {
-    const { email, name, address, age, telephone, photo } = req.user as User;
-    const userData = { email, name, address, age, telephone, photo };
+    const {
+      email,
+      name,
+      postalCode,
+      number,
+      apartment,
+      age,
+      telephone,
+      photo,
+    } = req.user as User;
+    const userData = {
+      email,
+      name,
+      postalCode,
+      number,
+      apartment,
+      age,
+      telephone,
+      photo,
+    };
     res.json({ data: userData });
   } else {
     throw new UserNotLoggedIn(404, 'User not logged in');

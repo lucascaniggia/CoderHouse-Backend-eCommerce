@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { cartAPI } from 'api/cart';
-import { NotFound, ProductValidation, UnauthorizedRoute } from 'errors';
+import { NotFound, ProductValidation } from 'errors';
 import { CartIntItem } from 'common/interfaces/cart';
 
 interface User {
@@ -28,20 +28,12 @@ export const saveCartProduct = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  if (req.user) {
-    const { _id } = req.user as User;
-    const newProduct = (await cartAPI.save(_id, req.params.id)) as CartIntItem;
-    res
-      .location(`/api/products/${newProduct.product.id}`)
-      .status(201)
-      .json({ data: newProduct });
-    res.json({ data: newProduct });
-  } else {
-    throw new UnauthorizedRoute(
-      401,
-      'To add a product to cart, you must be logged in.',
-    );
-  }
+  const { _id } = req.user as User;
+  const newProduct = (await cartAPI.save(_id, req.params.id)) as CartIntItem;
+  res
+    .location(`/api/products/${newProduct.product.id}`)
+    .status(201)
+    .json({ data: newProduct });
 };
 
 export const editCartProduct = async (

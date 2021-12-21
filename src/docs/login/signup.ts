@@ -38,7 +38,22 @@ export default {
                 description: 'User address.',
                 example: 'Salta 1840',
               },
-              edad: {
+              number: {
+                type: 'string',
+                description: 'User address floor number, optional.',
+                example: '1',
+              },
+              apartment: {
+                type: 'string',
+                description: 'User address department number, optional.',
+                example: '23',
+              },
+              postalCode: {
+                type: 'string',
+                description: 'User postal/ZIP code.',
+                example: '1234567',
+              },
+              age: {
                 type: 'number',
                 description: 'User age.',
                 example: '30',

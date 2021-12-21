@@ -51,14 +51,27 @@ const signUpFunc: VerifyFunctionWithRequest = async (
   done,
 ) => {
   try {
-    const { email, password, repeatPassword, name, address, age, telephone } =
-      req.body;
+    const {
+      email,
+      password,
+      repeatPassword,
+      name,
+      address,
+      postalCode,
+      number,
+      apartment,
+      age,
+      telephone,
+    } = req.body;
     const userData = {
       email,
       password,
       repeatPassword,
       name,
       address,
+      postalCode,
+      number: number || '',
+      apartment: apartment || '',
       age: Number(age),
       telephone,
       photo: req.file?.path || '',
@@ -79,10 +92,11 @@ const signUpFunc: VerifyFunctionWithRequest = async (
       const emailContent = `
         <h1>New User Registration</h1>
         <span style="display: block"><span style="font-weight: bold">Email:</span> ${userData.email}</span>
-        <span style="display: block"><span style="font-weight: bold">Nombre:</span> ${userData.name}</span>
-        <span style="display: block"><span style="font-weight: bold">Direccion:</span> ${userData.address}</span>
-        <span style="display: block"><span style="font-weight: bold">Edad:</span> ${userData.age}</span>
-        <span style="display: block"><span style="font-weight: bold">Teléfono:</span> ${userData.telephone}</span>
+        <span style="display: block"><span style="font-weight: bold">Name:</span> ${userData.name}</span>
+        <span style="display: block"><span style="font-weight: bold">Address:</span> ${userData.address}, ${userData.number} ${userData.apartment}</span>
+        <span style="display: block"><span style="font-weight: bold">Código Postal:</span> ${userData.postalCode}</span>
+        <span style="display: block"><span style="font-weight: bold">Age:</span> ${userData.age}</span>
+        <span style="display: block"><span style="font-weight: bold">Telephone:</span> ${userData.telephone}</span>
       `;
 
       EmailService.sendEmail(

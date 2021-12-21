@@ -55,7 +55,7 @@ export const isValidProduct = (
 };
 
 //  @param user user data to sign up
-//  @returns checks if the user data has empty fields or if 'edad' is not a number, if so throws a proper error
+//  @returns checks if the user data has empty fields or if 'age' is not a number, if so throws a proper error
 //
 
 export const isValidUser = (user: BaseIntUser): boolean | Error => {
