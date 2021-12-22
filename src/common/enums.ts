@@ -9,6 +9,7 @@ export enum EnumErrorCodes {
   UserDoesNotExist,
   UserNotLoggedIn,
   CartEmpty,
+  OrderError,
 }
 
 export enum ModelType {

@@ -103,3 +103,11 @@ export class CartIsEmpty extends BaseError {
     this.error = `-${EnumErrorCodes.CartEmpty}`;
   }
 }
+
+export class OrderError extends BaseError {
+  public error: string;
+  constructor(statusCode: number, message: string) {
+    super(statusCode, message);
+    this.error = `-${EErrorCodes.OrderCreateError}`;
+  }
+}

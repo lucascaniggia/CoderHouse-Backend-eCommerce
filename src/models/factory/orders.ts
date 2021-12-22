@@ -4,8 +4,8 @@ import { OrdersModelMongoDb } from 'models/mongodb/orders';
 
 interface IntModel {
   save: (userId: string, data: BaseIntOrder) => Promise<IntOrder>;
-  // get: (id?: string) => Promise<IntUser | IntUser[]>;
-  // update: (id: string, userData: BaseIntUser) => Promise<IntUser>;
+  get: (userId: string, orderId?: string) => Promise<IntOrder | IntOrder[]>;
+  update: (orderId: string) => Promise<IntOrder>;
   // delete: (id: string) => Promise<void>;
   // query: (email: string) => Promise<IntUser>;
 }

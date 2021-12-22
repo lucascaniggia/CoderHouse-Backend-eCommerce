@@ -10,6 +10,8 @@ export const addUserAndLogin = async (
     repeatPassword: 'secretPassword',
     name: 'Test user',
     address: 'Test address',
+    number: '1220',
+    postalCode: '12345',
     age: 31,
     telephone: '+56912345678',
     photo: 'uploads/test-image.jpg',

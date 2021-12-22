@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
-import { IOrder, IOrderBase } from 'common/interfaces/orders';
+import { IntOrder, BaseIntOrder } from 'common/interfaces/orders';
+import { NotFound, OrderError } from 'errors';
 
 const Schema = mongoose.Schema;
 
-const OrderSchema = new Schema<IOrder>(
+const OrderSchema = new Schema<IntOrder>(
   {
     user: {
       type: 'ObjectId',
@@ -42,7 +43,7 @@ OrderSchema.set('toJSON', {
   },
 });
 
-const OrdersModel = mongoose.model<IOrder>('Order', OrderSchema);
+const OrdersModel = mongoose.model<IntOrder>('Order', OrderSchema);
 
 export class OrdersModelMongoDb {
   private ordersModel;
@@ -51,20 +52,103 @@ export class OrdersModelMongoDb {
     this.ordersModel = OrdersModel;
   }
 
-  async save(userId: string, order: IOrderBase): Promise<IOrder> {
-    const newOrder = new this.ordersModel({
-      user: userId,
-      ...order,
-    });
-    await newOrder.save();
-    return (
-      await newOrder.populate({
+  async save(userId: string, order: BaseIntOrder): Promise<IntOrder> {
+    try {
+      const newOrder = new this.ordersModel({
+        user: userId,
+        ...order,
+      });
+      await newOrder.save();
+      return await newOrder.populate({
         path: 'products.product',
         select: 'name description price',
-      })
-    ).populate({
-      path: 'user',
-      select: 'name email',
-    });
+      });
+    } catch (e) {
+      if (e instanceof mongoose.Error.CastError) {
+        throw new OrderError(
+          500,
+          'An error occurred when creating order, please try again.',
+        );
+      } else {
+        throw {
+          error: e,
+          message: 'An error occurred when creating order, please try again.',
+        };
+      }
+    }
+  }
+
+  async get(userId: string, orderId?: string): Promise<IntOrder | IntOrder[]> {
+    try {
+      let output: IntOrder | IntOrder[] = [];
+
+      if (orderId) {
+        const order = await this.ordersModel.findById(orderId).populate({
+          path: 'products.product',
+          select: 'name description price',
+        });
+        if (order && userId.toString() === order.user.toString())
+          output = order;
+        else
+          throw new NotFound(
+            400,
+            "Order not found, please check order's number",
+          );
+      } else {
+        const orders = await this.ordersModel.find({ user: userId }).populate({
+          path: 'products.product',
+          select: 'name description price',
+        });
+        output = orders;
+      }
+      return output;
+    } catch (e) {
+      if (e instanceof mongoose.Error.CastError) {
+        throw new NotFound(
+          404,
+          'Order could not be found, please check the data and try again',
+        );
+      } else if (e instanceof NotFound) {
+        throw e;
+      } else {
+        throw {
+          error: e,
+          message:
+            'An error occurred when searching for order/s, please try again',
+        };
+      }
+    }
+  }
+
+  async update(orderId: string): Promise<IntOrder> {
+    try {
+      const orderToUpdate = await this.ordersModel.findById(orderId).populate({
+        path: 'products.product',
+        select: 'name description price',
+      });
+
+      if (!orderToUpdate || orderToUpdate.status !== 'placed') {
+        throw new NotFound(
+          400,
+          "Order does not exist or has been completed, please check order's number",
+        );
+      }
+
+      orderToUpdate.status = 'completed';
+      await orderToUpdate.save();
+      return orderToUpdate;
+    } catch (e) {
+      if (e instanceof mongoose.Error.CastError) {
+        throw new NotFound(400, 'Order does not exist.');
+      } else if (e instanceof NotFound) {
+        throw e;
+      } else {
+        throw {
+          error: e,
+          message:
+            'An error occurred when completing the order, please try again.',
+        };
+      }
+    }
   }
 }

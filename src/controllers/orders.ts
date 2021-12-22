@@ -58,7 +58,7 @@ export const createOrder = async (
       if (isProductPopulated(item.product))
         emailContent += `
         <span style="display: block">- ${item.quantity} ${item.product.name}, ${item.product.code}, $${item.product.price} </span>
-        `;
+          `;
     });
 
     emailContent += `<h3>Total: $${total.toFixed(2)}</h3>`;
@@ -90,4 +90,52 @@ export const createOrder = async (
   } else {
     throw new CartIsEmpty(404, 'Cart is empty!');
   }
+};
+
+export const getOrders = async (req: Request, res: Response): Promise<void> => {
+  const { _id } = req.user as User;
+  const orders = await ordersAPI.get(_id);
+  res.json({ data: orders });
+};
+
+export const getOrder = async (req: Request, res: Response): Promise<void> => {
+  const { _id } = req.user as User;
+  const orders = await ordersAPI.get(_id, req.params.id);
+  res.json({ data: orders });
+};
+
+export const completeOrder = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const { email } = req.user as User;
+  const completedOrder = await ordersAPI.update(req.body.id);
+
+  const total = completedOrder.products.reduce((total, item) => {
+    if (isProductPopulated(item.product))
+      return (total += item.product.price * item.quantity);
+    else return total;
+  }, 0);
+
+  let emailContent = `
+    <h2>Order ${completedOrder.id}</h2>
+    <h4>Products:</h4>
+  `;
+
+  completedOrder.products.forEach(item => {
+    if (isProductPopulated(item.product))
+      emailContent += `
+        <span style="display: block">- ${item.quantity} ${item.product.name}, $${item.product.price} </span>
+        `;
+  });
+
+  emailContent += `<h3>Total: $${total.toFixed(2)}</h3>`;
+
+  EmailService.sendEmail(
+    email,
+    `Order completed: ${completedOrder.id}`,
+    emailContent,
+  );
+
+  res.json({ data: completedOrder });
 };
