@@ -1,36 +1,59 @@
 import { Request, Response, NextFunction } from 'express';
 import { userAPI } from 'api/user';
-import { userJoiSchema } from 'common/interfaces/users';
-import { NotFound, UserExists, UserValidation } from 'errors';
+import { NotFound, UserExists, UserNotLoggedIn } from 'errors';
 import { isEmpty } from 'utils/others';
-import { ValidationError } from 'joi';
+import passport from 'middlewares/auth';
+import { logger } from 'services/logger';
 
-export const validateUserInput = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  try {
-    await userJoiSchema.validateAsync(req.body);
-
-    const { email } = req.body;
-
-    const user = await userAPI.query(email);
-    if (!user) next();
-    else throw new UserExists(400, 'Email is already being used.');
-  } catch (e) {
-    if (e instanceof ValidationError) {
-      throw new UserValidation(400, e.message);
-    } else {
-      throw e;
-    }
-  }
-};
+interface User {
+  email: string;
+  name: string;
+  address: string;
+  postalCode: string;
+  number: string;
+  apartment: string;
+  age: number;
+  telephone: string;
+  photo: string;
+  admin: boolean;
+}
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   const data = await userAPI.getUsers();
   if (!isEmpty(data)) res.json({ data });
   else throw new NotFound(404, 'No registered users existing.');
+};
+
+export const getLoggedInUserData = (req: Request, res: Response): void => {
+  if (req.isAuthenticated()) {
+    const {
+      email,
+      name,
+      address,
+      postalCode,
+      number,
+      apartment,
+      age,
+      telephone,
+      photo,
+      admin,
+    } = req.user as User;
+    const userData = {
+      email,
+      name,
+      address,
+      postalCode,
+      number,
+      apartment,
+      age,
+      telephone,
+      photo,
+      admin,
+    };
+    res.json({ data: userData });
+  } else {
+    throw new UserNotLoggedIn(404, 'User not logged-in');
+  }
 };
 
 export const getUser = async (req: Request, res: Response): Promise<void> => {
@@ -39,9 +62,24 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
   res.json({ data });
 };
 
-export const addUser = async (req: Request, res: Response): Promise<void> => {
-  const newItem = await userAPI.addUser(req.body);
-  res.json({ data: newItem });
+export const addUser = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void => {
+  passport.authenticate('signup', function (err, user, info) {
+    if (err) {
+      logger.warn('An error occurred when registering user');
+      return next(err);
+    }
+    if (!user) {
+      throw new UserExists(400, info.message);
+    }
+    res
+      .location(`/api/users/${user.id}`)
+      .status(201)
+      .json({ message: 'Login successful' });
+  })(req, res, next);
 };
 
 export const updateUser = async (

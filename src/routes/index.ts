@@ -12,7 +12,7 @@ import { productRouterGraphQL } from './graphqlProduct';
 const Router = express.Router();
 
 Router.use('/auth', loginRouter);
-Router.use('/users', isLoggedIn, userRouter);
+Router.use('/users', userRouter);
 Router.use('/products', productRouter);
 Router.use('/products-graphql', productRouterGraphQL);
 Router.use('/cart', isLoggedIn, cartRouter);

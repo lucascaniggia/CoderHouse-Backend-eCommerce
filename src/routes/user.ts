@@ -1,20 +1,24 @@
 import asyncHandler from 'express-async-handler';
 import { Router } from 'express';
 import { isAdmin } from 'middlewares/checkAdmin';
+import { isLoggedIn } from 'middlewares/auth';
+import { imageUpload } from 'middlewares/uploadImg';
 import {
-  // validateUserInput,
   getUser,
   getUsers,
-  updateUser,
-  deleteUser,
+  addUser,
+  // updateUser,
+  // deleteUser,
+  getLoggedInUserData,
 } from 'controllers/users';
 
 const userRouter = Router();
 
-userRouter.get('/', asyncHandler(getUsers));
-userRouter.get('/:id', isAdmin, asyncHandler(getUser));
-// userRouter.post('/', validateUserInput, asyncHandler(addUser));
-userRouter.put('/:id', asyncHandler(updateUser));
-userRouter.delete('/:id', asyncHandler(deleteUser));
+userRouter.get('/', isLoggedIn, isAdmin, asyncHandler(getUsers));
+userRouter.get('/:id', isLoggedIn, isAdmin, asyncHandler(getUser));
+userRouter.get('/loggedUser/data', asyncHandler(getLoggedInUserData));
+userRouter.post('/signup', imageUpload, addUser);
+// userRouter.put('/:id', isLoggedIn, asyncHandler(updateUser));
+// userRouter.delete('/:id', isLoggedIn, asyncHandler(deleteUser));
 
 export default userRouter;

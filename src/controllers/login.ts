@@ -1,9 +1,7 @@
-import { UserExists, UserNotLoggedIn } from 'errors';
-import { NextFunction, Request, Response } from 'express';
-import passport from 'middlewares/auth';
-import { logger } from 'services/logger';
+import { Request, Response } from 'express';
 
 interface User {
+  admin: boolean;
   email: string;
   name: string;
   address: string;
@@ -19,6 +17,7 @@ export const loginUser = (req: Request, res: Response): void => {
   let userData;
   if (req.user) {
     const {
+      admin,
       email,
       name,
       postalCode,
@@ -29,6 +28,7 @@ export const loginUser = (req: Request, res: Response): void => {
       photo,
     } = req.user as User;
     userData = {
+      admin,
       email,
       name,
       postalCode,
@@ -42,25 +42,25 @@ export const loginUser = (req: Request, res: Response): void => {
   res.json({ data: { message: 'Welcome.', user: userData } });
 };
 
-export const signUpUser = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void => {
-  passport.authenticate('signup', function (err, user, info) {
-    if (err) {
-      logger.warn('An error occurred when registering user.');
-      return next(err);
-    }
-    if (!user) {
-      throw new UserExists(400, info.message);
-    }
-    res
-      .location(`/api/users/${user.id}`)
-      .status(201)
-      .json({ message: 'Login successful' });
-  })(req, res, next);
-};
+// export const signUpUser = (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction,
+// ): void => {
+//   passport.authenticate('signup', function (err, user, info) {
+//     if (err) {
+//       logger.warn('An error occurred when registering user.');
+//       return next(err);
+//     }
+//     if (!user) {
+//       throw new UserExists(400, info.message);
+//     }
+//     res
+//       .location(`/api/users/${user.id}`)
+//       .status(201)
+//       .json({ message: 'Login successful' });
+//   })(req, res, next);
+// };
 
 export const logoutUser = (req: Request, res: Response): void => {
   req.session.destroy(err => {
@@ -73,30 +73,30 @@ export const logoutUser = (req: Request, res: Response): void => {
   });
 };
 
-export const userData = (req: Request, res: Response): void => {
-  if (req.isAuthenticated()) {
-    const {
-      email,
-      name,
-      postalCode,
-      number,
-      apartment,
-      age,
-      telephone,
-      photo,
-    } = req.user as User;
-    const userData = {
-      email,
-      name,
-      postalCode,
-      number,
-      apartment,
-      age,
-      telephone,
-      photo,
-    };
-    res.json({ data: userData });
-  } else {
-    throw new UserNotLoggedIn(404, 'User not logged in');
-  }
-};
+// export const userData = (req: Request, res: Response): void => {
+//   if (req.isAuthenticated()) {
+//     const {
+//       email,
+//       name,
+//       postalCode,
+//       number,
+//       apartment,
+//       age,
+//       telephone,
+//       photo,
+//     } = req.user as User;
+//     const userData = {
+//       email,
+//       name,
+//       postalCode,
+//       number,
+//       apartment,
+//       age,
+//       telephone,
+//       photo,
+//     };
+//     res.json({ data: userData });
+//   } else {
+//     throw new UserNotLoggedIn(404, 'User not logged in');
+//   }
+// };
