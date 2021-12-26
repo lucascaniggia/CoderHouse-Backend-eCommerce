@@ -6,6 +6,7 @@ import tags from './tags';
 import login from './login';
 import cart from './cart';
 import users from './users';
+import orders from './orders';
 import chat from './chat';
 
 export default {
@@ -18,6 +19,7 @@ export default {
     ...cart,
     ...login,
     ...users,
+    ...orders,
     ...chat,
   },
 };

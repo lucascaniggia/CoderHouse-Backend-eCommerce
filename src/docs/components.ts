@@ -11,6 +11,11 @@ export default {
         description: 'An id of an user.',
         example: '6185584bc0d33bdb01a32966',
       },
+      OrderId: {
+        type: 'string',
+        description: 'An id of an order.',
+        example: '61a6bba3f5c7da3594512795',
+      },
       User: {
         type: 'object',
         description: 'User data.',
@@ -219,6 +224,87 @@ export default {
             type: 'number',
             description: 'Amount of this product in the cart.',
             example: '1',
+          },
+        },
+      },
+      ProductOrder: {
+        type: 'object',
+        description: 'A product in an order.',
+        properties: {
+          product: {
+            type: 'object',
+            properties: {
+              name: {
+                type: 'string',
+                description: 'Product name',
+                example: 'Test Product',
+              },
+              description: {
+                type: 'string',
+                description: 'Product description',
+                example:
+                  'Ac nulla fringilla, suscipit justo in, facilisis velit. Vivamus ac tempus ligula. Donec facilisis augue quis felis vestibulum, vitae semper est egestas.',
+              },
+              price: {
+                type: 'number',
+                description: 'Product price',
+                example: '123.4',
+              },
+              id: {
+                $ref: '#/components/schemas/ProductId',
+              },
+            },
+          },
+          quantity: {
+            type: 'number',
+            description: 'Amount of this product in the order.',
+            example: '1',
+          },
+        },
+      },
+      Order: {
+        type: 'object',
+        description: 'An Order.',
+        properties: {
+          user: {
+            $ref: '#/components/schemas/UserId',
+          },
+          products: {
+            $ref: '#/components/schemas/ProductOrder',
+          },
+          total: {
+            type: 'number',
+            description: 'Total price of the order.',
+            example: '1500',
+          },
+          status: {
+            type: 'string',
+            description:
+              'Order status, can be "placed" for generated but not completed orders, or "completed" for completed orders.',
+            example: 'completed',
+          },
+          shippingAddress: {
+            type: 'string',
+            description: 'Delivery Address.',
+            example: 'Test Address 1234, 1st floor, 121',
+          },
+          postalCode: {
+            type: 'string',
+            description: 'Postal/ZIP code.',
+            example: '12345678',
+          },
+          timestamp: {
+            type: 'string',
+            description: 'Date and time when the order was created.',
+            example: '2021-12-01T00:02:43.013Z',
+          },
+          updatedAt: {
+            type: 'string',
+            description: 'Date and time when the order was last updated.',
+            example: '2021-12-01T00:02:43.013Z',
+          },
+          id: {
+            $ref: '#/components/schemas/OrderId',
           },
         },
       },

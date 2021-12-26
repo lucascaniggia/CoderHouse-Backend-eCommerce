@@ -139,7 +139,7 @@ export class OrdersModelMongoDb {
       return orderToUpdate;
     } catch (e) {
       if (e instanceof mongoose.Error.CastError) {
-        throw new NotFound(400, 'Order does not exist.');
+        throw new NotFound(400, 'Order does not exist');
       } else if (e instanceof NotFound) {
         throw e;
       } else {
