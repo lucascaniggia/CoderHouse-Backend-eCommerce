@@ -1,7 +1,9 @@
 import { cartAPI } from 'api/cart';
 import { productsAPI } from 'api/products';
+import { ordersAPI } from 'api/orders';
 import { CartIntItem } from 'common/interfaces/cart';
 import { IntItem } from 'common/interfaces/products';
+import { IntOrder } from 'common/interfaces/orders';
 import { Types } from 'mongoose';
 
 // Determines if item (passed as an argument) is empty or not.
@@ -69,8 +71,28 @@ export const getSystemResponse = async (
       return message;
     }
     //TODO: Send proper order information
-    case 'order':
-      return "Your order has been taken successfully and it's being processed";
+    case 'order': {
+      const orders = (await ordersAPI.get(userId)) as IntOrder[];
+      let message = '';
+      if (isEmpty(orders)) {
+        message = 'You do not have pending orders';
+      } else {
+        const lastOrder = orders[orders.length - 1];
+        message = `Your order wit ID: ${lastOrder.id} is ${
+          lastOrder.status === 'placed' ? 'being placed' : 'completed'
+        } and ${
+          lastOrder.status === 'placed' ? 'will be delivered' : 'was shipped'
+        } to ${lastOrder.shippingAddress}. Products included in order: $nl`;
+        lastOrder.products.map(item => {
+          if (isProductPopulated(item.product))
+            message += `- Quantity: ${item.quantity}, Product: ${item.product.name}, Price: $${item.product.price} c/u.$nl`;
+        });
+        message += `Total: $${lastOrder.total}.$nl`;
+      }
+      return message;
+    }
+    // case 'order':
+    //   return "Your order has been taken successfully and it's being processed";
     case 'cart': {
       const cart = (await cartAPI.get(userId)) as CartIntItem[];
       let message = '';
