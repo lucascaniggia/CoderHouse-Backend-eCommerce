@@ -6,6 +6,7 @@ import { NotFound } from 'errors';
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema<IntUser>({
+  admin: { type: Boolean, default: false },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   name: { type: String, required: true },

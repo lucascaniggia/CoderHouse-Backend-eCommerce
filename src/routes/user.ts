@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import { Router } from 'express';
+import { isAdmin } from 'middlewares/checkAdmin';
 import {
   // validateUserInput,
   getUser,
@@ -11,7 +12,7 @@ import {
 const userRouter = Router();
 
 userRouter.get('/', asyncHandler(getUsers));
-userRouter.get('/:id', asyncHandler(getUser));
+userRouter.get('/:id', isAdmin, asyncHandler(getUser));
 // userRouter.post('/', validateUserInput, asyncHandler(addUser));
 userRouter.put('/:id', asyncHandler(updateUser));
 userRouter.delete('/:id', asyncHandler(deleteUser));

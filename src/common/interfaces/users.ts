@@ -5,6 +5,7 @@ export interface BaseIntUser extends IntObject {
   email: string;
   password: string;
   repeatPassword: string;
+  admin?: boolean;
   name: string;
   address: string;
   postalCode: string;
@@ -42,6 +43,7 @@ export const userJoiSchema = Joi.object({
     'string.empty': `Please confirm your password`,
     'any.only': `Passwords don't match`,
   }),
+  admin: Joi.boolean().default(false),
   name: Joi.string().required().messages({
     'string.empty': `Please enter a valid name`,
   }),

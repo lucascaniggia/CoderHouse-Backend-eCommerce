@@ -6,7 +6,7 @@ import passportLocal, {
 } from 'passport-local';
 import Config from 'config';
 import { UserModel } from 'models/mongodb/user';
-import { IntUser, userJoiSchema } from 'common/interfaces/users';
+import { IntUser, BaseIntUser, userJoiSchema } from 'common/interfaces/users';
 import { UnauthorizedRoute, UserValidation } from 'errors';
 import { logger } from 'services/logger';
 import { EmailService } from 'services/email';
@@ -15,6 +15,7 @@ import { userAPI } from 'api/user';
 
 interface User {
   _id?: string;
+  admin?: string;
 }
 
 const LocalStrategy = passportLocal.Strategy;
@@ -63,7 +64,7 @@ const signUpFunc: VerifyFunctionWithRequest = async (
       age,
       telephone,
     } = req.body;
-    const userData = {
+    const userData: BaseIntUser = {
       email,
       password,
       repeatPassword,
@@ -76,6 +77,14 @@ const signUpFunc: VerifyFunctionWithRequest = async (
       telephone,
       photo: req.file?.path || '',
     };
+
+    if (req.isAuthenticated()) {
+      const loggedInUser = req.user as User;
+      if (loggedInUser.admin) {
+        const { admin } = req.body;
+        userData.admin = admin === 'true';
+      }
+    }
 
     await userJoiSchema.validateAsync(userData);
 
