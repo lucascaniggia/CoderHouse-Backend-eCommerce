@@ -8,6 +8,7 @@ import cart from './cart';
 import users from './users';
 import orders from './orders';
 import chat from './chat';
+import info from './info';
 
 export default {
   ...basicInfo,
@@ -21,5 +22,6 @@ export default {
     ...users,
     ...orders,
     ...chat,
+    ...info,
   },
 };
