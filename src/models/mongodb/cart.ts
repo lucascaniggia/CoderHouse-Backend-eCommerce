@@ -90,7 +90,7 @@ export class CartModelMongoDB implements MongoCartIntModel {
     }
   }
 
-  async save(userId: string, productId: string): Promise<CartIntItem> {
+  async save(userId: string, productId: string): Promise<CartIntItem[]> {
     try {
       const product = await this.productsModel.findById(productId);
 
@@ -113,13 +113,13 @@ export class CartModelMongoDB implements MongoCartIntModel {
 
             await cart.save();
             const updatedCart = await cart.populate('products.product');
-            return updatedCart.products[updatedCart.products.length - 1];
+            return updatedCart.products;
           } else {
             // if it's in the cart then add 1 more
             cart.products[productInCartIndex].quantity += 1;
             logger.info('Product already in cart. Adding another unit.');
             await cart.save();
-            return cart.products[productInCartIndex];
+            return cart.products;
           }
         }
         throw new NotFound(404, 'Cart does not exist.');

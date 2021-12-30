@@ -29,11 +29,8 @@ export const saveCartProduct = async (
   res: Response,
 ): Promise<void> => {
   const { _id } = req.user as User;
-  const newProduct = (await cartAPI.save(_id, req.params.id)) as CartIntItem;
-  res
-    .location(`/api/products/${newProduct.product.id}`)
-    .status(201)
-    .json({ data: newProduct });
+  const newCart = (await cartAPI.save(_id, req.params.id)) as CartIntItem[];
+  res.status(200).json({ data: newCart });
 };
 
 export const editCartProduct = async (

@@ -18,7 +18,7 @@ export interface MongoCartIntModel {
     userId: string,
     productId?: string,
   ) => Promise<CartIntItem | CartIntItem[]>;
-  save: (userId: string, productId: string) => Promise<CartIntItem>;
+  save: (userId: string, productId: string) => Promise<CartIntItem[]>;
   update: (
     userId: string,
     productId: string,

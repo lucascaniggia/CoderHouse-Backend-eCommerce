@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { IntOrder, BaseIntOrder } from 'common/interfaces/orders';
 import { NotFound, OrderError } from 'errors';
+import { UserModel } from './user';
 
 const Schema = mongoose.Schema;
 
@@ -47,9 +48,11 @@ const OrdersModel = mongoose.model<IntOrder>('Order', OrderSchema);
 
 export class OrdersModelMongoDb {
   private ordersModel;
+  private userModel;
 
   constructor() {
     this.ordersModel = OrdersModel;
+    this.userModel = UserModel;
   }
 
   async save(userId: string, order: BaseIntOrder): Promise<IntOrder> {
@@ -78,16 +81,26 @@ export class OrdersModelMongoDb {
     }
   }
 
-  async get(userId: string, orderId?: string): Promise<IntOrder | IntOrder[]> {
+  async get(userId?: string, orderId?: string): Promise<IntOrder | IntOrder[]> {
     try {
       let output: IntOrder | IntOrder[] = [];
 
-      if (orderId) {
-        const order = await this.ordersModel.findById(orderId).populate({
-          path: 'products.product',
-          select: 'name description price',
-        });
-        if (order && userId.toString() === order.user.toString())
+      if (userId && orderId) {
+        const user = await this.userModel.findById(userId);
+        const order = await this.ordersModel
+          .findById(orderId)
+          .populate({
+            path: 'products.product',
+            select: 'name description price',
+          })
+          .populate({
+            path: 'user',
+            select: 'email',
+          });
+        if (
+          order &&
+          (userId.toString() === order.user.id.toString() || user?.admin)
+        )
           output = order;
         else
           throw new NotFound(
@@ -95,10 +108,16 @@ export class OrdersModelMongoDb {
             "Order not found, please check order's number",
           );
       } else {
-        const orders = await this.ordersModel.find({ user: userId }).populate({
-          path: 'products.product',
-          select: 'name description price',
-        });
+        const orders = await this.ordersModel
+          .find(userId ? { user: userId } : {})
+          .populate({
+            path: 'products.product',
+            select: 'name description price',
+          })
+          .populate({
+            path: 'user',
+            select: 'email',
+          });
         output = orders;
       }
       return output;
@@ -122,10 +141,16 @@ export class OrdersModelMongoDb {
 
   async update(orderId: string): Promise<IntOrder> {
     try {
-      const orderToUpdate = await this.ordersModel.findById(orderId).populate({
-        path: 'products.product',
-        select: 'name description price',
-      });
+      const orderToUpdate = await this.ordersModel
+        .findById(orderId)
+        .populate({
+          path: 'products.product',
+          select: 'name description price',
+        })
+        .populate({
+          path: 'user',
+          select: 'email',
+        });
 
       if (!orderToUpdate || orderToUpdate.status !== 'placed') {
         throw new NotFound(
