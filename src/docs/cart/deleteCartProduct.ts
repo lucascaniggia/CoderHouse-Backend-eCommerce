@@ -1,7 +1,7 @@
 export default {
   delete: {
     tags: ['Cart'],
-    description: 'Delete a product in the cart.',
+    description: 'Delete a specific product in the cart.',
     operationId: 'deleteProductCart',
     parameters: [
       {

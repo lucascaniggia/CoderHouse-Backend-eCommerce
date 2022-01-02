@@ -1,7 +1,7 @@
 export default {
   get: {
     tags: ['Authentication'],
-    description: 'Log in to the system.',
+    description: 'Log out of the system.',
     operationId: 'logout',
     parameters: [],
     responses: {

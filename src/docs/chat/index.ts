@@ -1,7 +1,7 @@
 import getMessages from './getMessages';
 
 export default {
-  '/chat/{userEmail}': {
+  '/api/chat/{userEmail}': {
     ...getMessages,
   },
 };

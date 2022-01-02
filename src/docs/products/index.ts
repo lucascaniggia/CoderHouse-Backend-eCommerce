@@ -5,11 +5,11 @@ import updateProduct from './updateProduct';
 import deleteProduct from './deleteProduct';
 
 export default {
-  '/products': {
+  '/api/products': {
     ...getProducts,
     ...saveProduct,
   },
-  '/products/{id}': {
+  '/api/products/{id}': {
     ...getProduct,
     ...updateProduct,
     ...deleteProduct,

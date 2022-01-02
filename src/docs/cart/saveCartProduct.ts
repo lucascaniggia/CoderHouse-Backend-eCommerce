@@ -1,7 +1,7 @@
 export default {
   post: {
     tags: ['Cart'],
-    description: 'Add a product to the cart.',
+    description: 'Add a specific product to the cart.',
     operationId: 'saveProductCart',
     parameters: [
       {

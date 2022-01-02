@@ -1,7 +1,7 @@
 export default {
   get: {
     tags: ['Orders'],
-    description: 'Get an specific order.',
+    description: 'Get a specific order.',
     operationId: 'getOrder',
     parameters: [
       {

@@ -4,14 +4,14 @@ import createOrder from './createOrder';
 import completeOrder from './completedOrder';
 
 export default {
-  '/orders': {
+  '/api/orders': {
     ...getOrders,
     ...createOrder,
   },
-  '/orders/{id}': {
+  '/api/orders/{id}': {
     ...getOrder,
   },
-  '/orders/complete': {
+  '/api/orders/complete': {
     ...completeOrder,
   },
 };

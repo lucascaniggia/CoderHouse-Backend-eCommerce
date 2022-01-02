@@ -1,7 +1,7 @@
 export default {
   get: {
     tags: ['Orders'],
-    description: "Get a list of the logged-in customer's orders.",
+    description: "Get a list of a logged-in customer's orders.",
     operationId: 'getOrders',
     parameters: [],
     responses: {

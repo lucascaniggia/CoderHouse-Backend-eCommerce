@@ -2,13 +2,13 @@ import login from './login';
 import logout from './logout';
 
 export default {
-  '/auth/login': {
+  '/api/auth/login': {
     ...login,
   },
   // '/auth/signup': {
   //   ...signup,
   // },
-  '/auth/logout': {
+  '/api/auth/logout': {
     ...logout,
   },
   // '/auth/userdata': {

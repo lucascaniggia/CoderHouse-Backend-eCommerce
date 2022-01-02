@@ -1,7 +1,7 @@
 export default {
   get: {
     tags: ['Chat'],
-    description: 'Get a list an user chat messages.',
+    description: "Get a list with user's chat messages.",
     operationId: 'getMessages',
     parameters: [
       {

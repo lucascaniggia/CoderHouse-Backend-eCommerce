@@ -4,17 +4,17 @@ import signup from './signup';
 import userData from './userData';
 
 export default {
-  '/users': {
+  '/api/users': {
     ...getUsers,
     //...addUser
   },
-  '/users/loggedUser/data': {
+  '/api/users/loggedUser/data': {
     ...userData,
   },
-  '/users/signup': {
+  '/api/users/signup': {
     ...signup,
   },
-  '/users/{id}': {
+  '/api/users/{id}': {
     ...getUser,
   },
 };

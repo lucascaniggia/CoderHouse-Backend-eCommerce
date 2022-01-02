@@ -1,7 +1,7 @@
 export default {
   post: {
     tags: ['Orders'],
-    description: 'Create an order from the products in the cart.',
+    description: 'Create an order from the products in cart.',
     operationId: 'createOrder',
     parameters: [],
     responses: {

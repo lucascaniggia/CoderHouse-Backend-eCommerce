@@ -1,7 +1,7 @@
 export default {
   get: {
     tags: ['Cart'],
-    description: 'Get a list of all products in the cart.',
+    description: 'Get a specific product of the cart.',
     operationId: 'getProductCart',
     parameters: [
       {

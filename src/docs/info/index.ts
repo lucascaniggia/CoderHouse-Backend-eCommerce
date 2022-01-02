@@ -1,5 +1,5 @@
 export default {
-  '/info': {
+  '/api/info': {
     get: {
       tags: ['Server Info'],
       description: 'Get server configuration info.',

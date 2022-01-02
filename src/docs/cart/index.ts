@@ -6,12 +6,12 @@ import saveCartProduct from './saveCartProduct';
 import updateCartProduct from './updateCartProduct';
 
 export default {
-  '/cart': {
+  '/api/cart': {
     ...getCartProducts,
     ...updateCartProduct,
     ...deleteCartProducts,
   },
-  '/cart/{id}': {
+  '/api/cart/{id}': {
     ...getCartProduct,
     ...saveCartProduct,
     ...deleteCartProduct,
