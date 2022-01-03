@@ -62,10 +62,11 @@ export class OrdersModelMongoDb {
         ...order,
       });
       await newOrder.save();
-      return await newOrder.populate({
+      const populatedOrder = await newOrder.populate({
         path: 'products.product',
         select: 'name description price',
       });
+      return populatedOrder.populate({ path: 'user', select: 'email' });
     } catch (e) {
       if (e instanceof mongoose.Error.CastError) {
         throw new OrderError(
@@ -99,7 +100,9 @@ export class OrdersModelMongoDb {
           });
         if (
           order &&
-          (userId.toString() === order.user.id.toString() || user?.admin)
+          (userId.toString() ===
+            (order.user as unknown as IntOrder).id.toString() ||
+            user?.admin)
         )
           output = order;
         else

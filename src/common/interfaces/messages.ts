@@ -1,8 +1,9 @@
-import { Types } from 'mongoose';
+import { PopulatedDoc } from 'mongoose';
+import { IntUser } from './users';
 
 export interface IntMessage {
   id?: string;
-  user: Types.ObjectId;
+  user: PopulatedDoc<IntUser>;
   text: string;
   type: 'user' | 'system';
   date?: string;

@@ -1,4 +1,4 @@
-import { UserModel } from 'models/mongoDb/user';
+import { UserModel } from 'models/mongodb/user';
 import { SuperAgentTest } from 'supertest';
 
 export const addUserAndLogin = async (

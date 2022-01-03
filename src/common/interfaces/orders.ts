@@ -1,5 +1,6 @@
-import { Types, Document } from 'mongoose';
+import { Document, PopulatedDoc } from 'mongoose';
 import { CartIntItem } from './cart';
+import { IntUser } from './users';
 
 export interface BaseIntOrder {
   products: CartIntItem[];
@@ -11,5 +12,5 @@ export interface BaseIntOrder {
 
 export interface IntOrder extends BaseIntOrder, Document {
   id: string;
-  user: Types.ObjectId;
+  user: PopulatedDoc<IntUser>;
 }
