@@ -1,13 +1,13 @@
 export default {
   post: {
     tags: ['Products'],
-    description: 'Save a new product.',
+    description: 'Save a new product. Feature only for logged-in admin user.',
     operationId: 'saveProduct',
     parameters: [],
     requestBody: {
       required: true,
       content: {
-        'application/json': {
+        'multipart/form-data': {
           schema: {
             $ref: '#/components/schemas/ProductInput',
           },

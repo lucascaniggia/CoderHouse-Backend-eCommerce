@@ -1,7 +1,8 @@
 export default {
   delete: {
     tags: ['Products'],
-    description: 'Deletes an existing product.',
+    description:
+      'Deletes an existing product. Feature only for logged-in admin user.',
     operationId: 'deleteProduct',
     parameters: [
       {

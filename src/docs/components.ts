@@ -70,11 +70,16 @@ export default {
             description: 'Path to where the user picture is stored.',
             example: 'uploads/foto-test1@example.com.png',
           },
+          admin: {
+            type: 'boolean',
+            description: 'Shows if an user is admin or not.',
+            example: false,
+          },
         },
       },
       UserData: {
         type: 'object',
-        description: 'User data.',
+        description: 'Logged-in user data.',
         properties: {
           email: {
             type: 'string',
@@ -120,6 +125,11 @@ export default {
             type: 'string',
             description: 'Path to where the user picture is stored.',
             example: 'uploads/foto-test1@example.com.png',
+          },
+          admin: {
+            type: 'boolean',
+            description: 'Shows if an user is admin or not.',
+            example: false,
           },
         },
       },
@@ -203,13 +213,18 @@ export default {
           },
           photo: {
             type: 'string',
-            description: 'Product image url',
-            example: 'https://picsum.photos/300?random=3',
+            description: 'Product image.',
+            format: 'binary',
           },
           stock: {
             type: 'number',
             description: 'Product stock',
             example: '21',
+          },
+          category: {
+            type: 'string',
+            description: "Product's category",
+            example: 'Games',
           },
         },
       },
@@ -323,9 +338,8 @@ export default {
           type: {
             type: 'string',
             description:
-              'Indicates if the message was sent by the user or by the system.',
-            example:
-              "Your order has been taken successfully and it's being processed",
+              'Indicates if message was sent by the user ("user") or by the system ("system").',
+            example: 'system',
           },
           date: {
             type: 'string',

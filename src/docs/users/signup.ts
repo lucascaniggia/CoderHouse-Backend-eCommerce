@@ -68,6 +68,12 @@ export default {
                 description: 'User profile photo.',
                 format: 'binary',
               },
+              admin: {
+                type: 'string',
+                description:
+                  'Shows if an user will be added as admin or not. It can be "true" or "false", but only admin users can create another admin user',
+                example: 'false',
+              },
             },
           },
         },

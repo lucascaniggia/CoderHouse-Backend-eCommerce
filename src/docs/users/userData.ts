@@ -1,12 +1,12 @@
 export default {
   get: {
     tags: ['User'],
-    description: "Loggedin user's data.",
+    description: "Logged-in user's data.",
     operationId: 'userData',
     parameters: [],
     responses: {
       200: {
-        description: 'Get logged in user data.',
+        description: 'Logged-in user data successfully obtained.',
         content: {
           'application/json': {
             schema: {
