@@ -11,6 +11,7 @@ interface User {
   age: number;
   telephone: string;
   photo: string;
+  photoId: string;
 }
 
 export const loginUser = (req: Request, res: Response): void => {
@@ -26,6 +27,7 @@ export const loginUser = (req: Request, res: Response): void => {
       age,
       telephone,
       photo,
+      photoId,
     } = req.user as User;
     userData = {
       admin,
@@ -37,6 +39,7 @@ export const loginUser = (req: Request, res: Response): void => {
       age,
       telephone,
       photo,
+      photoId,
     };
   }
   res.json({ data: { message: 'Welcome.', user: userData } });

@@ -16,6 +16,7 @@ interface User {
   telephone: string;
   photo: string;
   admin: boolean;
+  photoId: string;
 }
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
@@ -36,6 +37,7 @@ export const getLoggedInUserData = (req: Request, res: Response): void => {
       age,
       telephone,
       photo,
+      photoId,
       admin,
     } = req.user as User;
     const userData = {
@@ -48,6 +50,7 @@ export const getLoggedInUserData = (req: Request, res: Response): void => {
       age,
       telephone,
       photo,
+      photoId,
       admin,
     };
     res.json({ data: userData });
