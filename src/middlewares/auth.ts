@@ -10,6 +10,8 @@ import { IntUser, BaseIntUser, userJoiSchema } from 'common/interfaces/users';
 import { UnauthorizedRoute, UserValidation } from 'errors';
 import { logger } from 'services/logger';
 import { EmailService } from 'services/email';
+import { UploadedFile } from 'express-fileupload';
+import { uploadToCloudinary } from 'utils/cloudinaryImg';
 import { ValidationError } from 'joi';
 import { userAPI } from 'api/user';
 
@@ -52,31 +54,21 @@ const signUpFunc: VerifyFunctionWithRequest = async (
   done,
 ) => {
   try {
-    const {
-      email,
-      password,
-      repeatPassword,
-      name,
-      address,
-      postalCode,
-      number,
-      apartment,
-      age,
-      telephone,
-    } = req.body;
     const userData: BaseIntUser = {
-      email,
-      password,
-      repeatPassword,
-      name,
-      address,
-      postalCode,
-      number: number || '',
-      apartment: apartment || '',
-      age: Number(age),
-      telephone,
-      photo: req.file?.path || '',
+      ...req.body,
+      admin: false,
     };
+
+    await userJoiSchema.validateAsync(userData);
+
+    if (req.files) {
+      const file = req.files.photo as UploadedFile;
+      const { secure_url, public_id } = await uploadToCloudinary(file, 'Users');
+      userData.photo = secure_url;
+      userData.photoId = public_id;
+    } else {
+      throw new UserValidation(400, 'Please insert a profile picture.');
+    }
 
     if (req.isAuthenticated()) {
       const loggedInUser = req.user as User;
@@ -85,8 +77,6 @@ const signUpFunc: VerifyFunctionWithRequest = async (
         userData.admin = admin === 'true';
       }
     }
-
-    await userJoiSchema.validateAsync(userData);
 
     const user = await userAPI.query(email);
     if (user) {
@@ -100,12 +90,32 @@ const signUpFunc: VerifyFunctionWithRequest = async (
       logger.info('Signed Up successfully');
       const emailContent = `
         <h1>New User Registration</h1>
-        <span style="display: block"><span style="font-weight: bold">Email:</span> ${userData.email}</span>
-        <span style="display: block"><span style="font-weight: bold">Name:</span> ${userData.name}</span>
-        <span style="display: block"><span style="font-weight: bold">Address:</span> ${userData.address}, ${userData.number} ${userData.apartment}</span>
-        <span style="display: block"><span style="font-weight: bold">Código Postal:</span> ${userData.postalCode}</span>
-        <span style="display: block"><span style="font-weight: bold">Age:</span> ${userData.age}</span>
-        <span style="display: block"><span style="font-weight: bold">Telephone:</span> ${userData.telephone}</span>
+        <span style="display: block">
+          <span style="font-weight: bold">Email:</span>
+          ${userData.email}
+        </span>
+        <span style="display: block">
+          <span style="font-weight: bold">Name:</span>
+          ${userData.name}
+        </span>
+        <span style="display: block">
+          <span style="font-weight: bold">Address:</span>
+          ${userData.address}, 
+          ${`${userData.number ? 'Floor ' + userData.number : ''}`} 
+          ${`${userData.apartment ? 'Apartment.' + userData.apartment : ''}`}
+        </span>
+        <span style="display: block">
+          <span  style="font-weight: bold">Postal/ZIP Code:</span>
+          ${userData.postalCode}
+        </span>
+        <span style="display: block">
+          <span style="font-weight: bold">Age:</span>
+          ${userData.age}
+        </span>
+        <span style="display: block">
+          <span style="font-weight: bold">Telephone:</span>
+          ${userData.telephone}
+        </span>
       `;
 
       EmailService.sendEmail(

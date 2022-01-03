@@ -1,7 +1,14 @@
 import { UserValidation } from 'errors';
 import { NextFunction, Request, Response } from 'express';
 import multer from 'multer';
-import { photoUpload } from 'utils/multer';
+import { photoUpload } from '/utils/multerImg';
+
+/**
+ * Middleware for Multer image upload (now replaced for Express-fileupload)
+ * @param req express request
+ * @param res express response
+ * @param next express next function
+ */
 
 export const imageUpload = (
   req: Request,

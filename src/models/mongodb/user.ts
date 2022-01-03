@@ -17,6 +17,7 @@ const UserSchema = new Schema<IntUser>({
   age: { type: Number, required: true },
   telephone: { type: String, required: true },
   photo: { type: String, required: true },
+  photoId: { type: String, required: true },
 });
 
 UserSchema.pre('save', async function (next) {
@@ -79,7 +80,7 @@ export class UserModelMongoDb {
     return newUser;
   }
 
-  async update(id: string, data: BaseIntUser): Promise<IntUser | null> {
+  async update(id: string, data: BaseIntUser): Promise<IntUser> {
     return this.userModel.findByIdAndUpdate(id, data);
   }
 

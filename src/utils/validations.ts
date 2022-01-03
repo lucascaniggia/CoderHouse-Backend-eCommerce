@@ -33,12 +33,12 @@ export const isValidProduct = (
     );
   }
 
-  if (!isUrl(product.photo)) {
-    throw new ProductValidation(
-      400,
-      'Please check data, photo URL must be valid.',
-    );
-  }
+  // if (!isUrl(product.photo)) {
+  //   throw new ProductValidation(
+  //     400,
+  //     'Please check data, photo URL must be valid.',
+  //   );
+  // }
 
   if (!isValidCode(product.code)) {
     throw new ProductValidation(400, 'Please check data, code must be valid.');

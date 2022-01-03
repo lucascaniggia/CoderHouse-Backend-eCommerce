@@ -10,6 +10,7 @@ export enum EnumErrorCodes {
   UserNotLoggedIn,
   CartEmpty,
   OrderError,
+  FileValidation,
 }
 
 export enum ModelType {

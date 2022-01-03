@@ -111,3 +111,11 @@ export class OrderError extends BaseError {
     this.error = `-${EnumErrorCodes.OrderError}`;
   }
 }
+
+export class FileValidation extends BaseError {
+  public error: string;
+  constructor(statusCode: number, message: string) {
+    super(statusCode, message);
+    this.error = `-${EnumErrorCodes.FileValidation}`;
+  }
+}

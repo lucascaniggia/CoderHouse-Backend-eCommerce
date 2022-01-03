@@ -13,6 +13,7 @@ export interface BaseIntUser extends IntObject {
   age: number;
   telephone: string;
   photo: string;
+  photoId: string;
 }
 
 export interface IntUser extends BaseIntUser {
@@ -53,6 +54,7 @@ export const userJoiSchema = Joi.object({
   postalCode: Joi.string().required().messages({
     'string.empty': `Please insert your postal/ZIP code`,
   }),
+  number: Joi.string().allow(''),
   apartment: Joi.string().allow(''),
   age: Joi.number().integer().positive().required().messages({
     'number.base': `Age must be a number`,
@@ -61,8 +63,5 @@ export const userJoiSchema = Joi.object({
   }),
   telephone: Joi.string().required().messages({
     'string.empty': `Please enter a valid phone number`,
-  }),
-  photo: Joi.string().required().messages({
-    'string.empty': `Please enter a valid photo`,
   }),
 });

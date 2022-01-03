@@ -14,7 +14,7 @@ const args = minimist(process.argv.slice(2), {
 
 const env = {
   NODE_ENV: process.env.NODE_ENV || 'development',
-  MODEL_PERSISTANCE: process.env.MODEL_PERSISTANCE || 'memory',
+  MODEL_PERSISTANCE: process.env.MODEL_PERSISTANCE || 'mongoAtlas',
   PORT: args.p || 8080,
   MODE: process.env.MODE || 'noCluster',
 
@@ -53,6 +53,10 @@ const env = {
   TWILIO_CELLPHONE_WHATSAPP:
     process.env.TWILIO_CELLPHONE_WHATSAPP || '+123456789',
   ADMIN_WHATSAPP: process.env.ADMIN_WHATSAPP || '+123456789',
+
+  CLOUD_NAME: process.env.CLOUD_NAME || 'Cloudinary cloud name',
+  CLOUD_API_KEY: process.env.CLOUD_API_KEY || 'Cloudinary API key',
+  CLOUD_API_SECRET: process.env.CLOUD_API_SECRET || 'Cloudinary API secret',
 };
 
 export default env;

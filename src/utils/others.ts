@@ -70,7 +70,7 @@ export const getSystemResponse = async (
 
       return message;
     }
-    //TODO: Send proper order information
+
     case 'order': {
       const orders = (await ordersAPI.get(userId)) as IntOrder[];
       let message = '';
@@ -91,8 +91,7 @@ export const getSystemResponse = async (
       }
       return message;
     }
-    // case 'order':
-    //   return "Your order has been taken successfully and it's being processed";
+
     case 'cart': {
       const cart = (await cartAPI.get(userId)) as CartIntItem[];
       let message = '';
