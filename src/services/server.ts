@@ -18,6 +18,13 @@ import { initWsServer } from './socket';
 
 const app: express.Application = express();
 
+app.set('views', path.join(__dirname, '../views'));
+app.set('view engine', 'pug');
+
+app.get('/api/chat', (req, res) => {
+  res.render('index');
+});
+
 app.use(express.static('public'));
 app.use('/uploads', express.static(path.resolve('uploads')));
 app.use(express.json());
