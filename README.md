@@ -7,7 +7,7 @@
 
 - 🔭 This project consists in an **E-Commerce application for CoderHouse Backend Development Course.**
 
-- 🌱 Main tools used in this project: **NodeJs, TypeScript, MongoDB and WebSocketIO**
+- 🌱 Main tools used in this project: **NodeJs, TypeScript, Express and MongoDB**
 
 - 👨‍💻 All of my projects are available at [https://github.com/lucascaniggia](https://github.com/lucascaniggia)
 
