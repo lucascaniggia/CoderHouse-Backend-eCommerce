@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Config from 'config';
 import { EmailService } from 'services/email';
+import { SmsService } from 'services/twilio';
 import { CartIntItem } from '/common/interfaces/cart';
 import { cartAPI } from 'api/cart';
 import { isEmpty, isProductPopulated } from 'utils/others';
@@ -64,22 +65,22 @@ export const createOrder = async (
     emailContent += `<h3>Total: $${total.toFixed(2)}</h3>`;
 
     EmailService.sendEmail(
-      Config.GMAIL_EMAIL,
+      'lucascaniggia5@gmail.com',
       `New order from: ${name}, ${email}`,
       emailContent,
     );
 
-    // SmsService.sendMessage(
-    //   Config.ADMIN_WHATSAPP,
-    //   `New order from: ${name}, ${email}`,
-    //   'whatsapp',
-    // );
+    SmsService.sendMessage(
+      Config.ADMIN_WHATSAPP,
+      `New order from: ${name}, ${email}`,
+      'whatsapp',
+    );
 
-    // SmsService.sendMessage(
-    //   telephone,
-    //   `Your order has been taken successfully and is being processed.`,
-    //   'sms',
-    // );
+    SmsService.sendMessage(
+      telephone,
+      `Your order has been taken successfully and is being processed.`,
+      'sms',
+    );
 
     await cartAPI.delete(_id);
 

@@ -18,7 +18,24 @@ import { initWsServer } from './socket';
 
 const app: express.Application = express();
 
-app.set('views', path.join(__dirname, '../views'));
+export const sessionMiddleware = session({
+  secret: Config.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: false,
+  rolling: true,
+  store: MongoStore.create({
+    clientPromise: clientPromise(),
+    stringify: false,
+    autoRemove: 'interval',
+    autoRemoveInterval: 1,
+  }),
+  cookie: {
+    maxAge: Config.SESSION_COOKIE_TIMEOUT_MIN * 1000 * 60,
+    httpOnly: false,
+  },
+});
+
+app.set('views', path.join(__dirname, '../../views'));
 app.set('view engine', 'pug');
 
 app.get('/api/chat', (req, res) => {
@@ -38,25 +55,7 @@ app.use(
   }),
 );
 
-app.use(
-  session({
-    secret: Config.SESSION_SECRET,
-    resave: true,
-    saveUninitialized: false,
-    rolling: true,
-    store: MongoStore.create({
-      clientPromise: clientPromise(),
-      stringify: false,
-      autoRemove: 'interval',
-      autoRemoveInterval: 1,
-    }),
-    cookie: {
-      maxAge: Config.SESSION_COOKIE_TIMEOUT_MIN * 1000 * 60,
-      httpOnly: false,
-    },
-  }),
-);
-
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 

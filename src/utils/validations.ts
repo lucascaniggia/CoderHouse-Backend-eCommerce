@@ -1,4 +1,4 @@
-import { isUrl, isEmail, isValidCode } from './regEx';
+import { isEmail, isValidCode } from './regEx';
 import { IntItem, BaseIntItem, QueryIntItem } from 'common/interfaces/products';
 import { BaseIntUser } from 'common/interfaces/users';
 import { getEmptyFields } from 'utils/objects';
@@ -32,13 +32,6 @@ export const isValidProduct = (
       'Please check data, price must be a non-zero number.',
     );
   }
-
-  // if (!isUrl(product.photo)) {
-  //   throw new ProductValidation(
-  //     400,
-  //     'Please check data, photo URL must be valid.',
-  //   );
-  // }
 
   if (!isValidCode(product.code)) {
     throw new ProductValidation(400, 'Please check data, code must be valid.');
