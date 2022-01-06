@@ -22,7 +22,7 @@ const mongoTestServer = async () => {
 const getMongoUrl = async (type: number): Promise<string> => {
   if (Config.NODE_ENV === 'test') {
     const mongoServer = await mongoTestServer();
-    return `${mongoServer}/${Config.MONGO_ATLAS_DB}`;
+    return `${mongoServer}/${Config.MONGO_ATLAS_MODE}`;
   }
   switch (type) {
     case ModelType.localMongo:

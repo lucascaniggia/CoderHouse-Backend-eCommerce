@@ -57,5 +57,5 @@ export class ProductsModelFactory {
     }
   }
 }
-ProductsModelFactory.model(ModelType.memory);
+ProductsModelFactory.model(ModelType.mongoAtlas);
 ProductsModelFactory.model(ModelType.memory);
